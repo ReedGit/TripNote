@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_main_page"
+            android:checked="true"
+            android:icon="@mipmap/home"
+            android:title="@string/main_page"/>
+        <item
+            android:id="@+id/drawer_trip_note"
+            android:icon="@mipmap/note"
+            android:title="@string/trip_note"/>
+        <item
+            android:id="@+id/drawer_collection"
+            android:icon="@mipmap/collection"
+            android:title="@string/collection"/>
+        <item
+            android:id="@+id/drawer_liked"
+            android:icon="@mipmap/like"
+            android:title="@string/liked"/>
+        <item
+            android:id="@+id/drawer_commented"
+            android:icon="@mipmap/comment"
+            android:title="@string/commented"/>
+        <item
+            android:id="@+id/drawer_about"
+            android:icon="@mipmap/about"
+            android:title="@string/about"/>
+    </group>
+</menu>

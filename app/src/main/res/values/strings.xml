@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">TripNote</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="email">邮箱</string>
+    <string name="password">密码</string>
+    <string name="re_password">确认密码</string>
+    <string name="register">注册</string>
+    <string name="login">登录</string>
+    <string name="new_password">新密码</string>
+    <string name="email_hint">请输入邮箱</string>
+    <string name="password_hint">请输入密码</string>
+    <string name="re_password_hint">请再次输入密码</string>
+    <string name="new_password_hint">请输入新密码</string>
+    <string name="main_page">首页</string>
+    <string name="trip_note">游记</string>
+    <string name="collection">收藏</string>
+    <string name="liked">赞过</string>
+    <string name="commented">评论过</string>
+    <string name="about">关于</string>
+    <string name="forget_password">？忘记密码</string>
+    <string name="register_user">注册账号</string>
+</resources>

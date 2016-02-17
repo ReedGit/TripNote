@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -27,7 +28,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView drawerNGV;
     private TextView nameTV;
     private CircleImageView headCIV;
-    private TripNoteApplication app;
     private UserBean user;
     private DrawerLayout mainDrawerLayout;
     private long exitTime;
@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        initListener();
 
 
 
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        app = (TripNoteApplication) getApplication();
+        TripNoteApplication app = (TripNoteApplication) getApplication();
         user = app.getUser();
         if (user != null) {
             nameTV.setText(user.getUsername());
@@ -112,11 +113,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //主界面左上角的icon点击反应
                 mainDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.create_note:
+                Toast.makeText(MainActivity.this,"新建游记",Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -180,6 +190,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.drawer_about:
                 item.setChecked(true);
+                Intent intent = new Intent(MainActivity.this,PersonalActivity.class);
+                startActivity(intent);
                 break;
         }
         return false;
@@ -211,8 +223,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, mainDrawerLayout, mainToolbar, R.string.open, R.string.close);
         drawerToggle.syncState();
         mainDrawerLayout.setDrawerListener(drawerToggle);
-        drawerNGV.setNavigationItemSelectedListener(this);
-        drawerLL.setOnClickListener(this);
+
     }
 
     /**
@@ -221,6 +232,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void intentToLogin() {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    private void initListener(){
+        drawerNGV.setNavigationItemSelectedListener(this);
+        drawerLL.setOnClickListener(this);
     }
 
 }

@@ -4,22 +4,15 @@
     android:layout_height="match_parent">
 
     <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView_home"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="8dp" />
+            android:layout_height="match_parent" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp" />
 </android.support.design.widget.CoordinatorLayout>

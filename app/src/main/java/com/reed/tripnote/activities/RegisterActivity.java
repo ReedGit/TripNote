@@ -12,16 +12,28 @@ import android.widget.Toast;
 import com.reed.tripnote.R;
 import com.reed.tripnote.tools.FormatTool;
 
+import butterknife.Bind;
+
 /**
+ * 注册页面
  * Created by 伟 on 2016/2/14.
  */
 public class RegisterActivity extends AppCompatActivity {
 
-    private Toolbar registerToolBar;
-    private Button registerBtn;
-    private EditText emailEt;
-    private EditText passwordEt;
-    private EditText rePasswordEt;
+    @Bind(R.id.toolbar_register)
+    public Toolbar registerToolBar;
+
+    @Bind(R.id.btn_register)
+    public Button registerBtn;
+
+    @Bind(R.id.et_register_email)
+    public EditText emailEt;
+
+    @Bind(R.id.et_register_password)
+    public EditText passwordEt;
+
+    @Bind(R.id.et_register_re_password)
+    public EditText rePasswordEt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,22 +44,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        registerToolBar = (Toolbar) findViewById(R.id.toolbar_register);
-        registerBtn = (Button) findViewById(R.id.btn_register);
-        emailEt = (EditText) findViewById(R.id.et_register_email);
-        passwordEt = (EditText) findViewById(R.id.et_register_password);
-        rePasswordEt = (EditText) findViewById(R.id.et_register_re_password);
-
         registerToolBar.setTitle(R.string.register);
         registerToolBar.setTitleTextColor(Color.WHITE);
         registerToolBar.setNavigationIcon(R.mipmap.toolbar_back);
         setSupportActionBar(registerToolBar);
-        registerToolBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     private void initListener() {

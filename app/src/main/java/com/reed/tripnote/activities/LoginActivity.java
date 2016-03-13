@@ -15,36 +15,41 @@ import android.widget.Toast;
 import com.reed.tripnote.R;
 import com.reed.tripnote.tools.FormatTool;
 
-import java.text.Format;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
+/**
+ * 登录页面
+ * Created by 伟 on 2016/2/14.
+ */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button loginBtn;
-    private TextView forgetTV;
-    private TextView registerTV;
-    private EditText emailET;
-    private EditText passwordET;
-    private TextInputLayout emailTIL;
-    private TextInputLayout passwordTIL;
-    private Toolbar loginToolbar;
+    @Bind(R.id.btn_login)
+    public Button loginBtn;
+    @Bind(R.id.tv_login_forget)
+    public TextView forgetTV;
+    @Bind(R.id.tv_login_register)
+    public TextView registerTV;
+    @Bind(R.id.et_login_email)
+    public EditText emailET;
+    @Bind(R.id.et_login_password)
+    public EditText passwordET;
+    @Bind(R.id.til_login_email)
+    public TextInputLayout emailTIL;
+    @Bind(R.id.til_login_password)
+    public TextInputLayout passwordTIL;
+    @Bind(R.id.toolbar_login)
+    public Toolbar loginToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
         initView();
     }
 
-    private void initView(){
-        loginBtn = (Button) findViewById(R.id.btn_login);
-        forgetTV = (TextView) findViewById(R.id.tv_login_forget);
-        registerTV = (TextView) findViewById(R.id.tv_login_register);
-        emailET = (EditText) findViewById(R.id.et_login_email);
-        passwordET = (EditText) findViewById(R.id.et_login_password);
-        emailTIL = (TextInputLayout) findViewById(R.id.til_login_email);
-        passwordTIL = (TextInputLayout) findViewById(R.id.til_login_password);
-        loginToolbar = (Toolbar) findViewById(R.id.toolbar_login);
-
+    private void initView() {
         loginToolbar.setTitle(R.string.login);
         loginToolbar.setTitleTextColor(Color.WHITE);
         loginToolbar.setNavigationIcon(R.mipmap.toolbar_back);
@@ -62,29 +67,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tv_login_forget:
                 break;
             case R.id.tv_login_register:
-                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btn_login:
                 String email = emailET.getText().toString().trim();
                 String password = passwordET.getText().toString().trim();
-                if (email.isEmpty()){
+                if (email.isEmpty()) {
                     emailET.setError("邮箱不能为空");
                     return;
                 }
-                if (password.isEmpty()){
+                if (password.isEmpty()) {
                     passwordET.setError("密码不能为空");
                     return;
                 }
-                if (!FormatTool.isEmail(email)){
+                if (!FormatTool.isEmail(email)) {
                     emailET.setError("邮箱格式不正确");
                     return;
                 }
-                Toast.makeText(LoginActivity.this,"没有问题",Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "没有问题", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

@@ -21,81 +21,39 @@ import com.reed.tripnote.R;
 import com.reed.tripnote.TripNoteApplication;
 import com.reed.tripnote.beans.UserBean;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    private NavigationView drawerNGV;
-    private TextView nameTV;
-    private CircleImageView headCIV;
-    private UserBean user;
-    private DrawerLayout mainDrawerLayout;
-    private long exitTime;
-    private Toolbar mainToolbar;
-    private LinearLayout drawerLL;
+    @Bind(R.id.navigationView)
+    public NavigationView drawerNGV;
+
+    public TextView nameTV;
+
+    public CircleImageView headCIV;
+
+    public UserBean user;
+
+    @Bind(R.id.dl_main)
+    public DrawerLayout mainDrawerLayout;
+
+    public long exitTime;
+
+    @Bind(R.id.toolbar_main)
+    public Toolbar mainToolbar;
+
+    public LinearLayout drawerLL;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         initView();
         initListener();
-
-
-
-        /*AMapLocationClient mLocationClient;
-        AMapLocationListener mLocationListener = new AMapLocationListener() {
-            @Override
-            public void onLocationChanged(AMapLocation aMapLocation) {
-                if (aMapLocation != null) {
-                    if (aMapLocation.getErrorCode() == 0) {
-                        //定位成功回调信息，设置相关消息
-                        aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-                        aMapLocation.getLatitude();//获取纬度
-                        aMapLocation.getLongitude();//获取经度
-                        aMapLocation.getAccuracy();//获取精度信息
-                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        Date date = new Date(aMapLocation.getTime());
-                        df.format(date);//定位时间
-                        aMapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果
-                        aMapLocation.getCountry();//国家信息
-                        aMapLocation.getProvince();//省信息
-                        aMapLocation.getCity();//城市信息
-                        aMapLocation.getDistrict();//城区信息
-                        aMapLocation.getRoad();//街道信息
-                        aMapLocation.getCityCode();//城市编码
-                        aMapLocation.getAdCode();//地区编码
-                        Log.i("info",aMapLocation.getLatitude()+","+aMapLocation.getLongitude()+" "+aMapLocation.getAddress());
-                    } else {
-                        //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
-                        Log.e("AmapError", "location Error, ErrCode:"
-                                + aMapLocation.getErrorCode() + ", errInfo:"
-                                + aMapLocation.getErrorInfo());
-                    }
-                }
-            }
-        };
-        mLocationClient = new AMapLocationClient(getApplicationContext());
-        mLocationClient.setLocationListener(mLocationListener);
-
-        AMapLocationClientOption aMapLocationClientOption = new AMapLocationClientOption();
-        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
-        aMapLocationClientOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        //设置是否返回地址信息（默认返回地址信息）
-        aMapLocationClientOption.setNeedAddress(true);
-        //设置是否只定位一次,默认为false
-        aMapLocationClientOption.setOnceLocation(false);
-        //设置是否强制刷新WIFI，默认为强制刷新
-        aMapLocationClientOption.setWifiActiveScan(true);
-        //设置是否允许模拟位置,默认为false，不允许模拟位置
-        aMapLocationClientOption.setMockEnable(false);
-        //设置定位间隔,单位毫秒,默认为2000ms
-        aMapLocationClientOption.setInterval(2000);
-        //给定位客户端对象设置定位参数
-        mLocationClient.setLocationOption(aMapLocationClientOption);
-        //启动定位
-        mLocationClient.startLocation();*/
 
     }
 
@@ -126,7 +84,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mainDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.create_note:
-                Toast.makeText(MainActivity.this,"新建游记",Toast.LENGTH_SHORT).show();
+                /*if (user == null){
+                    intentToLogin();
+                } else {
+                    Toast.makeText(MainActivity.this, "新建游记", Toast.LENGTH_SHORT).show();
+                }*/
+                Intent intent = new Intent(MainActivity.this, ContentActivity.class);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -158,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.drawer_trip_note:
                 if (user == null) {
-                        Toast.makeText(MainActivity.this, " 请先登录账号", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, " 请先登录账号", Toast.LENGTH_SHORT).show();
                     intentToLogin();
                 } else {
                     item.setChecked(true);
@@ -190,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.drawer_about:
                 item.setChecked(true);
-                Intent intent = new Intent(MainActivity.this,PersonalActivity.class);
+                Intent intent = new Intent(MainActivity.this, PersonalActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -211,18 +175,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initView() {
-        mainDrawerLayout = (DrawerLayout) findViewById(R.id.dl_main);
-        mainToolbar = (Toolbar) findViewById(R.id.toolbar_main);
         mainToolbar.setTitleTextColor(Color.BLACK);
         setSupportActionBar(mainToolbar);
-        drawerNGV = (NavigationView) findViewById(R.id.navigationView);
         View drawerHeader = drawerNGV.inflateHeaderView(R.layout.drawer_header);
         drawerLL = (LinearLayout) drawerHeader.findViewById(R.id.ll_drawer);
         nameTV = (TextView) drawerHeader.findViewById(R.id.tv_user_name);
         headCIV = (CircleImageView) drawerHeader.findViewById(R.id.civ_user_head);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, mainDrawerLayout, mainToolbar, R.string.open, R.string.close);
         drawerToggle.syncState();
-        mainDrawerLayout.setDrawerListener(drawerToggle);
+        mainDrawerLayout.addDrawerListener(drawerToggle);
 
     }
 
@@ -234,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
 
-    private void initListener(){
+    private void initListener() {
         drawerNGV.setNavigationItemSelectedListener(this);
         drawerLL.setOnClickListener(this);
     }

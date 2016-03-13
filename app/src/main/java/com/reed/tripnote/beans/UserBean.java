@@ -6,6 +6,7 @@ public class UserBean {
     private long userId;
     private String username;
     private String password;
+    private String nickname;
     private String headImage;
     private int sex;
     private String introduction;
@@ -24,6 +25,14 @@ public class UserBean {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getPassword() {

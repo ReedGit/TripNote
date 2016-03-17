@@ -22,16 +22,16 @@ android {
         //调试版的keystore
         debug {
             storeFile file("E:\\文件\\keystore.jks")
-            storePassword "dongweiReed"
+            storePassword "******"
             keyAlias "key"
-            keyPassword "dongweiReed"
+            keyPassword "*******"
         }
         //发布版的keystore
         release {
             storeFile file("E:\\文件\\keystore.jks")
-            storePassword "dongweiReed"
+            storePassword "*****"
             keyAlias "key"
-            keyPassword "dongweiReed"
+            keyPassword "*******"
         }
     }
 }
@@ -54,4 +54,5 @@ dependencies {
     compile rootProject.ext.dependencies["gson"]
     compile rootProject.ext.dependencies["butterknife"]
     compile rootProject.ext.dependencies["glide"]
+    compile rootProject.ext.dependencies["converter-scalars"]
 }

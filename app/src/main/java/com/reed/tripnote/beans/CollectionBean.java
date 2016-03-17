@@ -5,6 +5,8 @@ public class CollectionBean {
     private long collectionId;
     private long userId;
     private long travelId;
+    private String nickname;
+    private String userImage;
 
     public long getCollectionId() {
         return collectionId;
@@ -30,12 +32,30 @@ public class CollectionBean {
         this.travelId = travelId;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
+
     @Override
     public String toString() {
         return "CollectionBean{" +
                 "collectionId=" + collectionId +
                 ", userId=" + userId +
                 ", travelId=" + travelId +
+                ", nickname='" + nickname + '\'' +
+                ", userImage='" + userImage + '\'' +
                 '}';
     }
 }

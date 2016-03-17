@@ -34,4 +34,7 @@
     <string name="personal">个人信息</string>
     <string name="modify_personal">修改信息</string>
     <string name="complete">完成</string>
+    <string name="create_content">新建内容</string>
+    <string name="article_hint">分享你的旅游经历......</string>
+    <string name="publish">发布</string>
 </resources>

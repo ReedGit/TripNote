@@ -3,12 +3,11 @@ package com.reed.tripnote.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,13 +30,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.tv_login_register)
     public TextView registerTV;
     @Bind(R.id.et_login_email)
-    public EditText emailET;
+    public TextInputEditText emailET;
     @Bind(R.id.et_login_password)
-    public EditText passwordET;
-    @Bind(R.id.til_login_email)
-    public TextInputLayout emailTIL;
-    @Bind(R.id.til_login_password)
-    public TextInputLayout passwordTIL;
+    public TextInputEditText passwordET;
     @Bind(R.id.toolbar_login)
     public Toolbar loginToolbar;
 

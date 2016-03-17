@@ -12,6 +12,7 @@ import com.reed.tripnote.beans.TravelBean;
 import java.util.List;
 
 /**
+ * 首页游记Adapter
  * Created by 伟 on 2016/2/14.
  */
 public class HomeAdapter extends RecyclerView.Adapter {
@@ -21,7 +22,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
     private int TYPE_FOOT = 0;
     private int TYPE_NORMAL = 1;
 
-    public HomeAdapter(List<TravelBean> travelBeans) {
+    public void setTravelBeans(List<TravelBean> travelBeans) {
         this.travelBeans = travelBeans;
     }
 
@@ -45,7 +46,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return travelBeans == null ? 1 : travelBeans.size() + 1;
+        return travelBeans == null ? 0 : travelBeans.size() + 1;
     }
 
     @Override

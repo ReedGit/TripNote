@@ -11,6 +11,8 @@ public class TravelBean {
     private long userId;
     private String introduction;
     private String label;
+    private String nickname;
+    private String userImage;
 
     public long getTravelId() {
         return travelId;
@@ -68,6 +70,22 @@ public class TravelBean {
         this.label = label;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
+
     @Override
     public String toString() {
         return "TravelBean{" +
@@ -78,6 +96,8 @@ public class TravelBean {
                 ", userId=" + userId +
                 ", introduction='" + introduction + '\'' +
                 ", label='" + label + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", userImage='" + userImage + '\'' +
                 '}';
     }
 }

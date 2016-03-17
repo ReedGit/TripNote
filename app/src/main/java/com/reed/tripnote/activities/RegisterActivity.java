@@ -2,6 +2,7 @@ package com.reed.tripnote.activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.reed.tripnote.R;
 import com.reed.tripnote.tools.FormatTool;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * 注册页面
@@ -27,18 +29,19 @@ public class RegisterActivity extends AppCompatActivity {
     public Button registerBtn;
 
     @Bind(R.id.et_register_email)
-    public EditText emailEt;
+    public TextInputEditText emailEt;
 
     @Bind(R.id.et_register_password)
-    public EditText passwordEt;
+    public TextInputEditText passwordEt;
 
     @Bind(R.id.et_register_re_password)
-    public EditText rePasswordEt;
+    public TextInputEditText rePasswordEt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        ButterKnife.bind(this);
         initView();
         initListener();
     }

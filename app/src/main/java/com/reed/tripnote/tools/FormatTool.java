@@ -1,6 +1,7 @@
 package com.reed.tripnote.tools;
 
 /**
+ * 数据格式转换工具类
  * Created by 伟 on 2016/2/14.
  */
 public class FormatTool {

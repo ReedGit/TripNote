@@ -15,10 +15,10 @@ import com.reed.tripnote.ViewHolders.FootViewHolder;
 import com.reed.tripnote.adapters.HomeAdapter;
 import com.reed.tripnote.beans.TravelBean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 首页fragment
  * Created by 伟 on 2016/2/12.
  */
 public class HomeFragment extends Fragment {
@@ -37,8 +37,7 @@ public class HomeFragment extends Fragment {
             mView = inflater.inflate(R.layout.fragment_home, container, false);
             homeSRL = (SwipeRefreshLayout) mView.findViewById(R.id.srl_home);
             homeRecycler = (RecyclerView) mView.findViewById(R.id.recyclerView_home);
-            travelBeans = new ArrayList<>();
-            mAdapter = new HomeAdapter(travelBeans);
+            mAdapter = new HomeAdapter();
             mManager = new LinearLayoutManager(getActivity());
             homeRecycler.setLayoutManager(mManager);
             homeRecycler.setAdapter(mAdapter);

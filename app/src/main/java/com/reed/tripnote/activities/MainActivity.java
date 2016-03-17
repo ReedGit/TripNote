@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TripNoteApplication app = (TripNoteApplication) getApplication();
         user = app.getUser();
         if (user != null) {
-            nameTV.setText(user.getUsername());
+            nameTV.setText(user.getEmail());
         } else {
             nameTV.setText("登录/注册");
         }

@@ -22,23 +22,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="bottom"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="45dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="25dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginEnd="20dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/mail" />
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_register_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/et_register_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -53,23 +52,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:gravity="bottom"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginEnd="20dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/password" />
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_register_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/et_register_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -84,23 +82,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:gravity="bottom"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginEnd="20dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/password" />
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_register_re_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/et_register_re_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

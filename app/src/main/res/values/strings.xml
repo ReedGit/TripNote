@@ -17,7 +17,7 @@
     <string name="collection">收藏</string>
     <string name="liked">赞过</string>
     <string name="commented">评论过</string>
-    <string name="about">关于</string>
+    <string name="about">开发者</string>
     <string name="forget_password">？忘记密码</string>
     <string name="register_user">注册账号</string>
     <string name="create_note">新建游记</string>
@@ -37,4 +37,12 @@
     <string name="create_content">新建内容</string>
     <string name="article_hint">分享你的旅游经历......</string>
     <string name="publish">发布</string>
+    <string name="about_name">Reed</string>
+    <string name="about_university">南京信息工程大学</string>
+    <string name="about_academy">计算机与软件学院</string>
+    <string name="about_major">计算机科学与技术</string>
+    <string name="about_weiBo">\@苇博世界</string>
+    <string name="about_email">350099287@qq.com</string>
+    <string name="about_motto">明德格物、立己达人、追求真理、自强不息</string>
+    
 </resources>

@@ -3,6 +3,7 @@ package com.reed.tripnote.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,6 +21,9 @@ import android.widget.Toast;
 import com.reed.tripnote.R;
 import com.reed.tripnote.TripNoteApplication;
 import com.reed.tripnote.beans.UserBean;
+import com.reed.tripnote.fragments.AboutFragment;
+import com.reed.tripnote.fragments.CollectionFragment;
+import com.reed.tripnote.fragments.HomeFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,6 +50,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public LinearLayout drawerLL;
 
+    private AboutFragment aboutFragment;
+    private HomeFragment homeFragment;
+    private CollectionFragment collectionFragment;
+    private FragmentManager manager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ButterKnife.bind(this);
         initView();
         initListener();
+        initFragment();
 
     }
 
@@ -119,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.drawer_main_page:
                 item.setChecked(true);
+                mainToolbar.setTitle(R.string.main_page);
+                manager.beginTransaction().replace(R.id.main_frame, homeFragment).commit();
                 break;
             case R.id.drawer_trip_note:
                 if (user == null) {
@@ -126,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     intentToLogin();
                 } else {
                     item.setChecked(true);
+                    mainToolbar.setTitle(R.string.trip_note);
                 }
                 break;
             case R.id.drawer_collection:
@@ -134,6 +147,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     intentToLogin();
                 } else {
                     item.setChecked(true);
+                    mainToolbar.setTitle(R.string.collection);
+                    manager.beginTransaction().replace(R.id.main_frame, collectionFragment).commit();
                 }
                 break;
             case R.id.drawer_liked:
@@ -142,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     intentToLogin();
                 } else {
                     item.setChecked(true);
+                    mainToolbar.setTitle(R.string.liked);
                 }
                 break;
             case R.id.drawer_commented:
@@ -150,12 +166,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     intentToLogin();
                 } else {
                     item.setChecked(true);
+                    mainToolbar.setTitle(R.string.commented);
                 }
                 break;
             case R.id.drawer_about:
                 item.setChecked(true);
-                Intent intent = new Intent(MainActivity.this, PersonalActivity.class);
-                startActivity(intent);
+                mainToolbar.setTitle(R.string.about);
+                manager.beginTransaction().replace(R.id.main_frame, aboutFragment).commit();
                 break;
         }
         return false;
@@ -176,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void initView() {
         mainToolbar.setTitleTextColor(Color.BLACK);
+        mainToolbar.setTitle(R.string.main_page);
         setSupportActionBar(mainToolbar);
         View drawerHeader = drawerNGV.inflateHeaderView(R.layout.drawer_header);
         drawerLL = (LinearLayout) drawerHeader.findViewById(R.id.ll_drawer);
@@ -198,6 +216,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initListener() {
         drawerNGV.setNavigationItemSelectedListener(this);
         drawerLL.setOnClickListener(this);
+    }
+
+    private void initFragment(){
+        homeFragment = new HomeFragment();
+        aboutFragment = new AboutFragment();
+        collectionFragment = new CollectionFragment();
+        manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.main_frame, homeFragment).commit();
     }
 
 }

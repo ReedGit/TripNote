@@ -9,7 +9,7 @@
         android:id="@+id/pb_foot"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_foot"

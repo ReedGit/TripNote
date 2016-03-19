@@ -24,6 +24,8 @@ import com.reed.tripnote.beans.UserBean;
 import com.reed.tripnote.fragments.AboutFragment;
 import com.reed.tripnote.fragments.CollectionFragment;
 import com.reed.tripnote.fragments.HomeFragment;
+import com.reed.tripnote.fragments.TravelFragment;
+import com.reed.tripnote.tools.ToastTool;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AboutFragment aboutFragment;
     private HomeFragment homeFragment;
     private CollectionFragment collectionFragment;
+    private TravelFragment travelFragment;
     private FragmentManager manager;
 
 
@@ -111,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
             if ((System.currentTimeMillis() - exitTime) > 2000)  //System.currentTimeMillis()无论何时调用，肯定大于2000
             {
-                Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                ToastTool.show(MainActivity.this, "再按一次退出程序");
                 exitTime = System.currentTimeMillis();
             } else {
                 finish();
@@ -134,16 +137,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.drawer_trip_note:
                 if (user == null) {
-                    Toast.makeText(MainActivity.this, " 请先登录账号", Toast.LENGTH_SHORT).show();
+                    ToastTool.show(MainActivity.this, R.string.please_login);
                     intentToLogin();
                 } else {
                     item.setChecked(true);
                     mainToolbar.setTitle(R.string.trip_note);
+                    manager.beginTransaction().replace(R.id.main_frame, travelFragment).commit();
                 }
                 break;
             case R.id.drawer_collection:
                 if (user == null) {
-                    Toast.makeText(MainActivity.this, " 请先登录账号", Toast.LENGTH_SHORT).show();
+                    ToastTool.show(MainActivity.this, R.string.please_login);
                     intentToLogin();
                 } else {
                     item.setChecked(true);
@@ -151,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     manager.beginTransaction().replace(R.id.main_frame, collectionFragment).commit();
                 }
                 break;
-            case R.id.drawer_liked:
+            /*case R.id.drawer_liked:
                 if (user == null) {
                     Toast.makeText(MainActivity.this, "请先登录账号", Toast.LENGTH_SHORT).show();
                     intentToLogin();
@@ -168,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     item.setChecked(true);
                     mainToolbar.setTitle(R.string.commented);
                 }
-                break;
+                break;*/
             case R.id.drawer_about:
                 item.setChecked(true);
                 mainToolbar.setTitle(R.string.about);
@@ -220,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void initFragment(){
         homeFragment = new HomeFragment();
+        travelFragment = new TravelFragment();
         aboutFragment = new AboutFragment();
         collectionFragment = new CollectionFragment();
         manager = getSupportFragmentManager();

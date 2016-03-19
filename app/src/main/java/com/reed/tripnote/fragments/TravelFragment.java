@@ -2,9 +2,20 @@ package com.reed.tripnote.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.reed.tripnote.R;
+import com.reed.tripnote.ViewHolders.FootViewHolder;
+import com.reed.tripnote.adapters.TravelAdapter;
+import com.reed.tripnote.beans.TravelBean;
+
+import java.util.List;
 
 /**
  * 我的游记列表
@@ -12,8 +23,52 @@ import android.view.ViewGroup;
  */
 public class TravelFragment extends Fragment {
 
+    private View mView;
+    private SwipeRefreshLayout travelRefresh;
+    private RecyclerView travelRecycler;
+    private TravelAdapter mAdapter;
+    private List<TravelBean> travelBeans;
+    private int visibleLastIndex = 0;
+    private LinearLayoutManager mManager;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        if (mView == null) {
+            mView = inflater.inflate(R.layout.layout_recycler, container, false);
+            travelRefresh = (SwipeRefreshLayout) mView.findViewById(R.id.refresh);
+            travelRecycler = (RecyclerView) mView.findViewById(R.id.recycler_view);
+            mAdapter = new TravelAdapter();
+            mManager = new LinearLayoutManager(getActivity());
+            travelRecycler.setLayoutManager(mManager);
+            travelRecycler.setAdapter(mAdapter);
+            travelRecycler.setItemAnimator(new DefaultItemAnimator());
+            initListener();
+        }
+        return mView;
+    }
+
+    private void initListener() {
+        travelRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+            }
+        });
+        travelRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int itemLastIndex = mAdapter.getItemCount() - 1;
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && visibleLastIndex == itemLastIndex) {
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                visibleLastIndex = mManager.findLastCompletelyVisibleItemPosition();
+            }
+        });
     }
 }

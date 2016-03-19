@@ -5,7 +5,7 @@
     android:padding="10dp">
 
     <ImageView
-        android:id="@+id/iv_home_first"
+        android:id="@+id/iv_travel_first"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="#000000"
@@ -18,7 +18,7 @@
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/tv_home_title"
+            android:id="@+id/tv_travel_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="古都南京之旅"
@@ -27,7 +27,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_home_date"
+            android:id="@+id/tv_travel_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -42,14 +42,14 @@
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/civ_home_head"
+                android:id="@+id/civ_travel_head"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:scaleType="centerCrop"
                 android:src="#FFFFFF" />
 
             <TextView
-                android:id="@+id/tv_home_author"
+                android:id="@+id/tv_travel_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"

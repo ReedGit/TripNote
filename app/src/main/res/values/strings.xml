@@ -44,5 +44,6 @@
     <string name="about_weiBo">\@苇博世界</string>
     <string name="about_email">350099287@qq.com</string>
     <string name="about_motto">明德格物、立己达人、追求真理、自强不息</string>
+    <string name="please_login">请先登录账号</string>
     
 </resources>

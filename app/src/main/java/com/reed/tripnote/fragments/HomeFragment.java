@@ -12,8 +12,9 @@ import android.view.ViewGroup;
 
 import com.reed.tripnote.R;
 import com.reed.tripnote.ViewHolders.FootViewHolder;
-import com.reed.tripnote.adapters.HomeAdapter;
+import com.reed.tripnote.adapters.TravelAdapter;
 import com.reed.tripnote.beans.TravelBean;
+import com.reed.tripnote.tools.LogTool;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class HomeFragment extends Fragment {
     private View mView;
     private SwipeRefreshLayout homeSRL;
     private RecyclerView homeRecycler;
-    private HomeAdapter mAdapter;
+    private TravelAdapter mAdapter;
     private List<TravelBean> travelBeans;
     private int visibleLastIndex = 0;
     private LinearLayoutManager mManager;
@@ -34,10 +35,10 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mView == null) {
-            mView = inflater.inflate(R.layout.fragment_home, container, false);
-            homeSRL = (SwipeRefreshLayout) mView.findViewById(R.id.srl_home);
-            homeRecycler = (RecyclerView) mView.findViewById(R.id.recyclerView_home);
-            mAdapter = new HomeAdapter();
+            mView = inflater.inflate(R.layout.layout_recycler, container, false);
+            homeSRL = (SwipeRefreshLayout) mView.findViewById(R.id.refresh);
+            homeRecycler = (RecyclerView) mView.findViewById(R.id.recycler_view);
+            mAdapter = new TravelAdapter();
             mManager = new LinearLayoutManager(getActivity());
             homeRecycler.setLayoutManager(mManager);
             homeRecycler.setAdapter(mAdapter);
@@ -61,8 +62,6 @@ public class HomeFragment extends Fragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 int itemLastIndex = mAdapter.getItemCount() - 1;
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && visibleLastIndex == itemLastIndex) {
-                    FootViewHolder.footTV.setText(R.string.loading);
-                    FootViewHolder.footPB.setVisibility(View.VISIBLE);
                 }
             }
 

@@ -15,14 +15,14 @@
             android:id="@+id/drawer_collection"
             android:icon="@mipmap/collection"
             android:title="@string/collection"/>
-        <item
+        <!--<item
             android:id="@+id/drawer_liked"
             android:icon="@mipmap/like"
             android:title="@string/liked"/>
         <item
             android:id="@+id/drawer_commented"
             android:icon="@mipmap/comment"
-            android:title="@string/commented"/>
+            android:title="@string/commented"/>-->
         <item
             android:id="@+id/drawer_about"
             android:icon="@mipmap/about"

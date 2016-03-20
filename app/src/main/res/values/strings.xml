@@ -45,5 +45,7 @@
     <string name="about_email">350099287@qq.com</string>
     <string name="about_motto">明德格物、立己达人、追求真理、自强不息</string>
     <string name="please_login">请先登录账号</string>
-    
+    <string name="travel_name">游记名称</string>
+    <string name="confirm">创建</string>
+
 </resources>

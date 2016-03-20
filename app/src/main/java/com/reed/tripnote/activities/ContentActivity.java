@@ -27,6 +27,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.reed.tripnote.R;
+import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.tools.LogTool;
 
 import butterknife.Bind;
@@ -53,12 +54,14 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     private AMapLocationClient mLocationClient;
     private double latitude;
     private double longitude;
+    private String travelName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
         ButterKnife.bind(this);
+        travelName = getIntent().getStringExtra(ConstantTool.TRAVEL_NAME);
         contentMap.onCreate(savedInstanceState);
         init();
     }
@@ -99,6 +102,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
         switch (item.getItemId()) {
             case R.id.create_content:
                 Intent intent = new Intent(ContentActivity.this, CreateContentActivity.class);
+                intent.putExtra(ConstantTool.TRAVEL_NAME, travelName);
                 startActivity(intent);
                 break;
         }
@@ -179,7 +183,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
             aMap = contentMap.getMap();
             setUpMap();
         }
-        contentToolbar.setTitle("详情");
+        contentToolbar.setTitle(travelName);
         contentToolbar.setNavigationIcon(R.mipmap.toolbar_back);
         setSupportActionBar(contentToolbar);
         contentToolbar.setNavigationOnClickListener(new View.OnClickListener() {

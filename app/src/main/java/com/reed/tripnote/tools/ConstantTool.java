@@ -29,4 +29,6 @@ public class ConstantTool {
     public static final String ADDITION = "addition";
 
     public static final int RESULT_OK = 0;
+
+    public static final String TRAVEL_NAME = "travel_name";
 }

@@ -1,16 +1,21 @@
 package com.reed.tripnote.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +30,7 @@ import com.reed.tripnote.fragments.AboutFragment;
 import com.reed.tripnote.fragments.CollectionFragment;
 import com.reed.tripnote.fragments.HomeFragment;
 import com.reed.tripnote.fragments.TravelFragment;
+import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.tools.ToastTool;
 
 import butterknife.Bind;
@@ -57,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CollectionFragment collectionFragment;
     private TravelFragment travelFragment;
     private FragmentManager manager;
+
+    private TextInputEditText nameET;
 
 
     @Override
@@ -102,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     Toast.makeText(MainActivity.this, "新建游记", Toast.LENGTH_SHORT).show();
                 }*/
-                Intent intent = new Intent(MainActivity.this, ContentActivity.class);
+                Intent intent = new Intent(MainActivity.this, TravelActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -112,8 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-            if ((System.currentTimeMillis() - exitTime) > 2000)  //System.currentTimeMillis()无论何时调用，肯定大于2000
-            {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
                 ToastTool.show(MainActivity.this, "再按一次退出程序");
                 exitTime = System.currentTimeMillis();
             } else {

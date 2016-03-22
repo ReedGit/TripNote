@@ -1,5 +1,6 @@
 package com.reed.tripnote.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,19 +10,33 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.reed.tripnote.R;
+import com.reed.tripnote.beans.UserBean;
+import com.reed.tripnote.controller.UserManager;
+import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.tools.FormatTool;
+import com.reed.tripnote.tools.LogTool;
+import com.reed.tripnote.tools.MD5Tool;
+import com.reed.tripnote.tools.RetrofitTool;
+import com.reed.tripnote.tools.ToastTool;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 登录页面
  * Created by 伟 on 2016/2/14.
  */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String TAG = LoginActivity.class.toString();
 
     @Bind(R.id.btn_login)
     public Button loginBtn;
@@ -35,6 +50,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public TextInputEditText passwordET;
     @Bind(R.id.toolbar_login)
     public Toolbar loginToolbar;
+
+    private ProgressDialog mDlg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.btn_login:
                 String email = emailET.getText().toString().trim();
-                String password = passwordET.getText().toString().trim();
+                final String password = passwordET.getText().toString().trim();
                 if (email.isEmpty()) {
                     emailET.setError("邮箱不能为空");
                     return;
@@ -84,7 +101,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     emailET.setError("邮箱格式不正确");
                     return;
                 }
-                Toast.makeText(LoginActivity.this, "没有问题", Toast.LENGTH_SHORT).show();
+                Call<JSONObject> call = RetrofitTool.getService().login(email, MD5Tool.compute(password));
+                mDlg = ProgressDialog.show(LoginActivity.this, null, "加载中", true);
+                call.enqueue(new Callback<JSONObject>() {
+                    @Override
+                    public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                        mDlg.cancel();
+                        LogTool.i(TAG, response.body().toString());
+                        JSONObject result = response.body();
+                        try {
+                            if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
+                                ToastTool.show(LoginActivity.this, result.getString(ConstantTool.MSG));
+                                return;
+                            }
+                            UserBean user = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.USER)), UserBean.class);
+                            user.setPassword(MD5Tool.compute(password));
+                            UserManager.loginUser(LoginActivity.this, user);
+                            finish();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<JSONObject> call, Throwable t) {
+                        mDlg.cancel();
+                        ToastTool.show(LoginActivity.this, "服务器出现问题: " + t.getMessage());
+                    }
+                });
                 break;
         }
     }

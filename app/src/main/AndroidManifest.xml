@@ -46,7 +46,8 @@
             android:value="b46b35fa01da19045811bcbd7b03836e" />
 
         <activity android:name=".activities.CreateContentActivity" />
-        <activity android:name=".activities.TravelActivity"></activity>
+        <activity android:name=".activities.TravelActivity" />
+        <activity android:name=".activities.ContentDetail"></activity>
     </application>
 
 </manifest>

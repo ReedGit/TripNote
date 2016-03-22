@@ -22,16 +22,16 @@ android {
         //调试版的keystore
         debug {
             storeFile file("E:\\文件\\keystore.jks")
-            storePassword "dongweiReed"
+            storePassword "******"
             keyAlias "key"
-            keyPassword "dongweiReed"
+            keyPassword "******"
         }
         //发布版的keystore
         release {
             storeFile file("E:\\文件\\keystore.jks")
-            storePassword "dongweiReed"
+            storePassword "******"
             keyAlias "key"
-            keyPassword "dongweiReed"
+            keyPassword "******"
         }
     }
 }

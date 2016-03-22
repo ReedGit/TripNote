@@ -8,8 +8,10 @@ import com.reed.tripnote.beans.UserBean;
 import com.reed.tripnote.controller.UserManager;
 import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.tools.FormatTool;
+import com.reed.tripnote.tools.LogTool;
 import com.reed.tripnote.tools.RetrofitTool;
 import com.reed.tripnote.tools.SharedPreferenceTool;
+import com.reed.tripnote.tools.ToastTool;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +42,7 @@ public class TripNoteApplication extends Application {
         if (user == null) {
             return;
         }
+        LogTool.i("user", user.toString());
         String email = user.getEmail();
         String password = user.getPassword();
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
@@ -50,6 +53,8 @@ public class TripNoteApplication extends Application {
                     JSONObject result = response.body();
                     try {
                         if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
+                            ToastTool.show(context, "用户信息过期，请重新登录");
+                            UserManager.exitLogin(context);
                             return;
                         }
                         UserBean user = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.DATA)), UserBean.class);

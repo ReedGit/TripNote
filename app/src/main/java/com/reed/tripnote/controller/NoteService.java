@@ -18,8 +18,9 @@ import retrofit2.http.Query;
  */
 public interface NoteService {
 
-    @GET("user/login")
-    Call<JSONObject> login(@Query("email") String email, @Query("password") String password);
+    @FormUrlEncoded
+    @POST("user/login")
+    Call<JSONObject> login(@Field("email") String email, @Field("password") String password);
 
     @FormUrlEncoded
     @POST("user/register")

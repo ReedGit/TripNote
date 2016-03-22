@@ -22,8 +22,7 @@ public class RetrofitTool {
                     retrofit = new Retrofit.Builder()
                             .baseUrl(ConstantTool.baseUrl)
                                     //解析结果为需要的类型
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
+                            .addConverterFactory(JsonConverterFactory.create())
                             .build();
                 }
             }

@@ -39,8 +39,8 @@ public class SharedPreferenceTool {
 
     public UserBean getUserPref() {
         UserBean user = new UserBean();
-        user.setUserId(pref.getLong(ConstantTool.USER_ID, 0));
-        if (user.getUserId() == 0) {
+        user.setUserId(pref.getLong(ConstantTool.USER_ID, -1));
+        if (user.getUserId() == -1) {
             return null;
         }
         user.setEmail(pref.getString(ConstantTool.EMAIL, null));

@@ -1,30 +1,26 @@
 package com.reed.tripnote.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.reed.tripnote.R;
-import com.reed.tripnote.TripNoteApplication;
+import com.reed.tripnote.App;
 import com.reed.tripnote.beans.UserBean;
 import com.reed.tripnote.fragments.AboutFragment;
 import com.reed.tripnote.fragments.CollectionFragment;
@@ -64,9 +60,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TravelFragment travelFragment;
     private FragmentManager manager;
 
-    private TextInputEditText nameET;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,10 +74,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        TripNoteApplication app = (TripNoteApplication) getApplication();
+        App app = (App) getApplication();
         user = app.getUser();
         if (user != null) {
-            nameTV.setText(user.getEmail());
+            nameTV.setText(TextUtils.isEmpty(user.getNickName()) ? "" : user.getNickName());
+            if (!TextUtils.isEmpty(user.getHeadImage())) {
+                Glide.with(this).load(ConstantTool.baseUrl + user.getHeadImage()).into(headCIV);
+            }
         } else {
             nameTV.setText("登录/注册");
         }
@@ -105,13 +101,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mainDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.create_note:
-                /*if (user == null){
+                if (user == null){
                     intentToLogin();
                 } else {
-                    Toast.makeText(MainActivity.this, "新建游记", Toast.LENGTH_SHORT).show();
-                }*/
-                Intent intent = new Intent(MainActivity.this, TravelActivity.class);
-                startActivity(intent);
+                    ToastTool.show(MainActivity.this, R.string.please_login);
+                    Intent intent = new Intent(MainActivity.this, TravelActivity.class);
+                    startActivity(intent);
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -194,7 +190,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (v.getId()) {
             case R.id.ll_drawer:
                 if (user != null) {
-                    Toast.makeText(MainActivity.this, "跳转个人资料界面", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, InformationActivity.class);
+                    startActivity(intent);
                 } else {
                     intentToLogin();
                 }

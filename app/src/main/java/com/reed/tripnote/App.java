@@ -20,7 +20,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TripNoteApplication extends Application {
+public class App extends Application {
+
+    private static final String TAG = App.class.toString();
 
     private UserBean user;
 
@@ -32,7 +34,7 @@ public class TripNoteApplication extends Application {
         this.user = user;
     }
 
-    public Context context;
+    private Context context;
 
     @Override
     public void onCreate() {
@@ -42,22 +44,29 @@ public class TripNoteApplication extends Application {
         if (user == null) {
             return;
         }
-        LogTool.i("user", user.toString());
+        LogTool.i(TAG, user.toString());
         String email = user.getEmail();
-        String password = user.getPassword();
+        final String password = user.getPassword();
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
             Call<JSONObject> call = RetrofitTool.getService().login(email, password);
             call.enqueue(new Callback<JSONObject>() {
                 @Override
                 public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                    if (response.code() != 200) {
+                        LogTool.e(TAG, response.message());
+                        ToastTool.show(context, response.message());
+                        return;
+                    }
                     JSONObject result = response.body();
                     try {
                         if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
                             ToastTool.show(context, "用户信息过期，请重新登录");
+                            LogTool.i(TAG, result.toString());
                             UserManager.exitLogin(context);
                             return;
                         }
                         UserBean user = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.DATA)), UserBean.class);
+                        user.setPassword(password);
                         UserManager.loginUser(context, user);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -70,8 +79,7 @@ public class TripNoteApplication extends Application {
                 }
             });
         } else {
-            user = null;
-            UserManager.exitLogin(this);
+            UserManager.exitLogin(context);
         }
 
     }

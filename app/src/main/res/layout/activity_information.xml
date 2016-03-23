@@ -42,20 +42,23 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#F9FBE7"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_information_introduction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="这是一条个人介绍\n\n\n\n\n\n"
+                android:background="#FFFFFF"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="50dp"
+                android:paddingBottom="50dp"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -63,104 +66,93 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
-                android:orientation="vertical">
+                android:paddingRight="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <LinearLayout
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginStart="12dp"
+                    android:drawableLeft="@mipmap/note"
+                    android:drawablePadding="16dp"
+                    android:drawableStart="@mipmap/note"
+                    android:text="@string/trip_note"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_information_travel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:gravity="end"
+                    android:text="12"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
 
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/note" />
+            </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginStart="20dp"
-                        android:text="@string/trip_note"
-                        android:textColor="#000000"
-                        android:textSize="20sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:paddingRight="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:text="12"
-                        android:textColor="#000000"
-                        android:textSize="16sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginStart="12dp"
+                    android:drawableLeft="@mipmap/like"
+                    android:drawablePadding="16dp"
+                    android:drawableStart="@mipmap/like"
+                    android:text="@string/liked"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
 
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tv_information_like"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:gravity="end"
+                    android:text="12"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
 
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/like" />
+            </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginStart="20dp"
-                        android:text="@string/liked"
-                        android:textColor="#000000"
-                        android:textSize="20sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:paddingRight="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:text="12"
-                        android:textColor="#000000"
-                        android:textSize="16sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginStart="12dp"
+                    android:drawableLeft="@mipmap/collection"
+                    android:drawablePadding="16dp"
+                    android:drawableStart="@mipmap/collection"
+                    android:text="@string/collection"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
 
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tv_information_collection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/collection" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginStart="20dp"
-                        android:text="@string/collection"
-                        android:textColor="#000000"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:text="12"
-                        android:textColor="#000000"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
+                    android:gravity="end"
+                    android:text="12"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -169,13 +161,14 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_information_head"
-        android:layout_height="75dp"
         android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_marginRight="50dp"
-        android:src="@mipmap/drawer_head"
+        android:layout_marginEnd="50dp"
         android:scaleType="centerCrop"
+        android:src="@mipmap/default_head"
         app:layout_anchor="@id/app_bar_information"
-        app:layout_behavior="com.reed.tripnote.views.HeadImageBehavior"
-        app:layout_anchorGravity="bottom|right|end"/>
+        app:layout_anchorGravity="bottom|right|end"
+        app:layout_behavior="com.reed.tripnote.views.HeadImageBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -6,14 +6,11 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.reed.tripnote.R;
-import com.reed.tripnote.beans.UserBean;
-import com.reed.tripnote.controller.UserManager;
 import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.tools.FormatTool;
 import com.reed.tripnote.tools.LogTool;
@@ -84,11 +81,11 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = emailEt.getText().toString().trim();
                 final String password = passwordEt.getText().toString().trim();
                 String rePassword = rePasswordEt.getText().toString().trim();
-                if (email.isEmpty()) {
+                if (TextUtils.isEmpty(email)) {
                     emailEt.setError("邮箱不能为空");
                     return;
                 }
-                if (password.isEmpty()) {
+                if (TextUtils.isEmpty(password)) {
                     passwordEt.setError("密码不能为空");
                     return;
                 }
@@ -110,6 +107,11 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                         mDlg.cancel();
+                        if (response.code() != 200) {
+                            ToastTool.show(RegisterActivity.this, response.message());
+                            LogTool.e(TAG, "请求出错：" + response.message());
+                            return;
+                        }
                         LogTool.i(TAG, response.body().toString());
                         JSONObject result = response.body();
                         try {
@@ -117,9 +119,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 ToastTool.show(RegisterActivity.this, result.getString(ConstantTool.MSG));
                                 return;
                             }
-                            UserBean user = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.USER)), UserBean.class);
-                            user.setPassword(MD5Tool.compute(password));
-                            UserManager.loginUser(RegisterActivity.this, user);
+                            ToastTool.show(RegisterActivity.this, "注册成功");
                             finish();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -129,6 +129,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<JSONObject> call, Throwable t) {
                         mDlg.cancel();
+                        LogTool.e(TAG, t.getMessage());
                         ToastTool.show(RegisterActivity.this, "服务器出现问题: " + t.getMessage());
                     }
                 });

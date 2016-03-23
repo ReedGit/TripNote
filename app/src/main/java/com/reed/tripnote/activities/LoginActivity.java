@@ -79,11 +79,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.tv_login_forget:
+                intent = new Intent(LoginActivity.this, ForgetActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_login_register:
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btn_login:
@@ -102,11 +105,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     return;
                 }
                 Call<JSONObject> call = RetrofitTool.getService().login(email, MD5Tool.compute(password));
-                mDlg = ProgressDialog.show(LoginActivity.this, null, "加载中", true);
+                mDlg = ProgressDialog.show(LoginActivity.this, null, "正在登陆，请稍后......", true);
                 call.enqueue(new Callback<JSONObject>() {
                     @Override
                     public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                         mDlg.cancel();
+                        if (response.code() != 200) {
+                            ToastTool.show(LoginActivity.this, response.message());
+                            LogTool.e(TAG, "请求出错：" + response.message());
+                            return;
+                        }
                         LogTool.i(TAG, response.body().toString());
                         JSONObject result = response.body();
                         try {
@@ -114,8 +122,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 ToastTool.show(LoginActivity.this, result.getString(ConstantTool.MSG));
                                 return;
                             }
-                            UserBean user = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.USER)), UserBean.class);
+                            UserBean user = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.DATA)), UserBean.class);
                             user.setPassword(MD5Tool.compute(password));
+                            LogTool.i(TAG,user.toString());
                             UserManager.loginUser(LoginActivity.this, user);
                             finish();
                         } catch (JSONException e) {

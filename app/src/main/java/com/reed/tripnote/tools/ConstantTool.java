@@ -17,10 +17,12 @@ public class ConstantTool {
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final String USER_ID = "userId";
-    public static final String NICKNAME = "nickname";
+    public static final String NICKNAME = "nicName";
     public static final String HEAD_IMAGE = "headImage";
     public static final String SEX = "sex";
     public static final String INTRODUCTION = "introduction";
+    public static final String TOKEN = "token";
+    public static final String NEW_PASSWORD = "newpassword";
 
     public static final String CODE = "code";
     public static final String MSG = "msg";

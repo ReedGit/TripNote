@@ -3,8 +3,6 @@ package com.reed.tripnote.tools;
 import com.reed.tripnote.controller.NoteService;
 
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * retrofit工具类

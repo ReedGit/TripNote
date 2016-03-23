@@ -3,13 +3,17 @@ package com.reed.tripnote.beans;
 
 public class UserBean {
 
+    public static final int MALE = 0;
+    public static final int FEMALE = 1;
+
     private long userId;
     private String email;
     private String password;
-    private String nickname;
+    private String nickName;
     private String headImage;
     private int sex;
     private String introduction;
+    private String token;
 
     public long getUserId() {
         return userId;
@@ -27,12 +31,12 @@ public class UserBean {
         this.email = email;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getPassword() {
@@ -67,15 +71,25 @@ public class UserBean {
         this.introduction = introduction;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     @Override
     public String toString() {
         return "UserBean{" +
                 "userId=" + userId +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", nickName='" + nickName + '\'' +
                 ", headImage='" + headImage + '\'' +
                 ", sex=" + sex +
                 ", introduction='" + introduction + '\'' +
+                ", token='" + token + '\'' +
                 '}';
     }
 }

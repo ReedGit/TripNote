@@ -20,8 +20,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".TripNoteApplication"
-        android:allowBackup="false"
+        android:name=".App"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -35,7 +35,9 @@
         </activity>
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.RegisterActivity" />
-        <activity android:name=".activities.PersonalActivity" />
+        <activity
+            android:name=".activities.PersonalActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activities.InformationActivity" />
         <activity android:name=".activities.ContentActivity" />
 
@@ -47,7 +49,9 @@
 
         <activity android:name=".activities.CreateContentActivity" />
         <activity android:name=".activities.TravelActivity" />
-        <activity android:name=".activities.ContentDetail"></activity>
+        <activity android:name=".activities.ContentDetail" />
+        <activity android:name=".activities.ForgetActivity" />
+        <activity android:name=".activities.ModifyPassword"></activity>
     </application>
 
 </manifest>

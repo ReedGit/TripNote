@@ -1,5 +1,6 @@
 package com.reed.tripnote.tools;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -25,11 +26,12 @@ public class MD5Tool {
 
     // 将传递进来的字节数组转换成十六进制的字符串形式并返回
     private static String toHex(byte[] buffer) {
-        StringBuilder sb = new StringBuilder(buffer.length * 2);
+        /*StringBuilder sb = new StringBuilder(buffer.length * 2);
         for (byte b : buffer) {
             sb.append(Character.forDigit((b & 0xf0) >> 4, 16));
             sb.append(Character.forDigit(b & 0x0f, 16));
-        }
-        return sb.toString();
+        }*/
+        BigInteger sb = new BigInteger(buffer);
+        return sb.toString(32);
     }
 }

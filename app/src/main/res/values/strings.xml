@@ -10,8 +10,10 @@
     <string name="new_password">新密码</string>
     <string name="email_hint">请输入邮箱</string>
     <string name="password_hint">请输入密码</string>
+    <string name="nickname_hint">请输入昵称</string>
     <string name="re_password_hint">请再次输入密码</string>
     <string name="new_password_hint">请输入新密码</string>
+    <string name="introduction_hint">介绍下自己呗</string>
     <string name="main_page">首页</string>
     <string name="trip_note">游记</string>
     <string name="collection">收藏</string>
@@ -46,6 +48,9 @@
     <string name="about_motto">明德格物、立己达人、追求真理、自强不息</string>
     <string name="please_login">请先登录账号</string>
     <string name="travel_name">游记名称</string>
-    <string name="confirm">创建</string>
+    <string name="confirm">确认</string>
+    <string name="forget_password_hint">请输入邮箱后，系统会将重置密码发至您的邮箱，请利用重置密码登陆后修改密码</string>
+    <string name="create">创建</string>
+    <string name="old_password">原密码</string>
 
 </resources>

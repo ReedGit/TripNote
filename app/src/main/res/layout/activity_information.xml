@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_information"
         android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
         android:layout_height="200dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -75,9 +77,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
                     android:layout_marginStart="12dp"
-                    android:drawableLeft="@mipmap/note"
+                    android:drawableLeft="@drawable/ic_class_24dp"
                     android:drawablePadding="16dp"
-                    android:drawableStart="@mipmap/note"
+                    android:drawableStart="@drawable/ic_class_24dp"
                     android:text="@string/trip_note"
                     android:textColor="#000000"
                     android:textSize="16sp" />
@@ -138,9 +140,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
                     android:layout_marginStart="12dp"
-                    android:drawableLeft="@mipmap/collection"
+                    android:drawableLeft="@drawable/ic_favorite_outline_24dp"
                     android:drawablePadding="16dp"
-                    android:drawableStart="@mipmap/collection"
+                    android:drawableStart="@drawable/ic_favorite_outline_24dp"
                     android:text="@string/collection"
                     android:textColor="#000000"
                     android:textSize="16sp" />

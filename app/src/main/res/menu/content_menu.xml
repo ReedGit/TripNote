@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/create_content"
-        android:icon="@mipmap/add"
+        android:icon="@drawable/ic_add_24dp"
         android:title="@string/create_content"
         app:showAsAction="always"/>
 

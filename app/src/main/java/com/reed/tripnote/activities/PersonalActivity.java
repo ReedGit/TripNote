@@ -143,7 +143,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                 if (!isEditable) {
                     isEditable = true;
                     item.setTitle(R.string.complete);
-                    item.setIcon(R.mipmap.publish);
+                    item.setIcon(R.drawable.ic_done_24dp);
                     introductionEt.setEnabled(true);
                     emailEt.setEnabled(true);
                     nicknameEt.setEnabled(true);
@@ -195,7 +195,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                                 }
                                 isEditable = false;
                                 item.setTitle(R.string.modify_personal);
-                                item.setIcon(R.mipmap.create);
+                                item.setIcon(R.drawable.ic_mode_edit_24dp);
                                 introductionEt.setEnabled(false);
                                 emailEt.setEnabled(false);
                                 nicknameEt.setEnabled(false);

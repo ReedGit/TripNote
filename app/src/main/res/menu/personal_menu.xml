@@ -5,7 +5,7 @@
     <item
         android:id="@+id/modify_information"
         android:title="@string/modify_personal"
-        android:icon="@mipmap/create"
+        android:icon="@drawable/ic_mode_edit_24dp"
         app:showAsAction="always"/>
 
 </menu>

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_publish"
-        android:icon="@mipmap/publish"
+        android:icon="@drawable/ic_done_24dp"
         android:title="@string/publish"
         app:showAsAction="always"/>
 

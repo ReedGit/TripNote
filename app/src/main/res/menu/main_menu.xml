@@ -5,7 +5,7 @@
     <item
         android:id="@+id/create_note"
         android:title="@string/create_note"
-        android:icon="@mipmap/create"
+        android:icon="@drawable/ic_mode_edit_24dp"
         app:showAsAction="always"/>
 
 </menu>

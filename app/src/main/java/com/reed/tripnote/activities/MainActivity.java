@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public long exitTime;
 
-    @Bind(R.id.toolbar_main)
+    @Bind(R.id.toolbar)
     public Toolbar mainToolbar;
 
     public LinearLayout drawerLL;
@@ -105,9 +105,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.create_note:
                 if (user == null){
+                    ToastTool.show(MainActivity.this, R.string.please_login);
                     intentToLogin();
                 } else {
-                    ToastTool.show(MainActivity.this, R.string.please_login);
                     Intent intent = new Intent(MainActivity.this, TravelActivity.class);
                     startActivity(intent);
                 }

@@ -143,7 +143,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                 if (!isEditable) {
                     isEditable = true;
                     item.setTitle(R.string.complete);
-                    item.setIcon(R.mipmap.create);
+                    item.setIcon(R.mipmap.publish);
                     introductionEt.setEnabled(true);
                     emailEt.setEnabled(true);
                     nicknameEt.setEnabled(true);

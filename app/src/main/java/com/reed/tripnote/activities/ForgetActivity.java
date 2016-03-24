@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -27,6 +28,9 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
 
     private static final String TAG = ForgetActivity.class.toString();
 
+    @Bind(R.id.toolbar)
+    public Toolbar toolbar;
+
     @Bind(R.id.et_forget_mail)
     public TextInputEditText emailET;
     private ProgressDialog mDlg;
@@ -36,6 +40,15 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget);
         ButterKnife.bind(this);
+        toolbar.setTitle("忘记密码");
+        toolbar.setNavigationIcon(R.mipmap.toolbar_back);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override

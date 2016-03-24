@@ -6,7 +6,8 @@ package com.reed.tripnote.tools;
  */
 public class ConstantTool {
 
-    public static final String baseUrl = "http://192.168.1.106:8080/trip/";
+    public static final String baseUrl = "http://192.168.1.104:8080/trip/";
+    public static final String imageUrl = "http://192.168.1.104:8080/trip";
 
     public static final String COORDINATE = "coordinate";
 

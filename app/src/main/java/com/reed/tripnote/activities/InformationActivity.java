@@ -63,7 +63,9 @@ public class InformationActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         if (!TextUtils.isEmpty(user.getHeadImage())) {
-            Glide.with(this).load(ConstantTool.baseUrl + user.getHeadImage()).into(headCIV);
+            Glide.with(this).load(ConstantTool.imageUrl + user.getHeadImage())
+                    .placeholder(R.mipmap.default_head)
+                    .into(headCIV);
         }
         informationCTL.setTitle(TextUtils.isEmpty(user.getNickName()) ? "" : user.getNickName());
         informationCTL.setCollapsedTitleTextColor(Color.WHITE);
@@ -73,6 +75,9 @@ public class InformationActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (user == null){
+            return false;
+        }
         getMenuInflater().inflate(R.menu.personal_menu, menu);
         return true;
     }

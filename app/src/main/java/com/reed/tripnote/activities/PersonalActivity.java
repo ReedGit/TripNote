@@ -41,6 +41,8 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -102,8 +104,10 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     protected void onResume() {
-        if (TextUtils.isEmpty(user.getHeadImage())) {
-            Glide.with(this).load(ConstantTool.baseUrl + user.getHeadImage()).into(headCIV);
+        if (!TextUtils.isEmpty(user.getHeadImage())) {
+            Glide.with(this).load(ConstantTool.imageUrl + user.getHeadImage())
+                    .placeholder(R.mipmap.default_head)
+                    .into(headCIV);
         }
         super.onResume();
     }
@@ -291,7 +295,44 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void uploadImage(String path) {
+        Map<String, RequestBody> map = new HashMap<>();
+        RequestBody file = RequestBody.create(MediaType.parse("image/*"), new File(path));
+        map.put("headImage\";filename=\"portrait_"+ user.getUserId() + ".jpg", file);
+        Call<JSONObject> call = RetrofitTool.getService().uploadImage(user.getUserId(), map, user.getToken());
+        mDlg = ProgressDialog.show(PersonalActivity.this, null, "头像上传中......", true);
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                mDlg.cancel();
+                if (response.code() != 200) {
+                    ToastTool.show(PersonalActivity.this, response.message());
+                    LogTool.e(TAG, "上传头像出错：" + response.message());
+                    return;
+                }
+                LogTool.i(TAG, response.body().toString());
+                JSONObject result = response.body();
+                try {
+                    if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
+                        ToastTool.show(PersonalActivity.this, result.getString(ConstantTool.MSG));
+                        return;
+                    }
+                    String headImage = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.DATA)), UserBean.class).getHeadImage();
+                    user.setHeadImage(headImage);
+                    UserManager.loginUser(PersonalActivity.this, user);
+                    ToastTool.show(PersonalActivity.this, "修改成功");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+                mDlg.cancel();
+                ToastTool.show(PersonalActivity.this, t.getMessage());
+                LogTool.e(TAG, t.getMessage());
+            }
+        });
     }
 
 }

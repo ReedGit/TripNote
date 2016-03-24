@@ -79,7 +79,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (user != null) {
             nameTV.setText(TextUtils.isEmpty(user.getNickName()) ? "" : user.getNickName());
             if (!TextUtils.isEmpty(user.getHeadImage())) {
-                Glide.with(this).load(ConstantTool.baseUrl + user.getHeadImage()).into(headCIV);
+                Glide.with(this)
+                        .load(ConstantTool.imageUrl + user.getHeadImage())
+                        .placeholder(R.mipmap.default_head)
+                        .into(headCIV);
             }
         } else {
             nameTV.setText("登录/注册");

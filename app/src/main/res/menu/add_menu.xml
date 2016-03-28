@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/create_content"
+        android:id="@+id/add"
         android:icon="@drawable/ic_add_24dp"
-        android:title="@string/create_content"
+        android:title="@string/add"
         app:showAsAction="always"/>
 
 </menu>

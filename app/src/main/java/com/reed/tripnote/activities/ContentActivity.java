@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -26,7 +25,12 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+import com.reed.tripnote.App;
 import com.reed.tripnote.R;
+import com.reed.tripnote.beans.TravelBean;
+import com.reed.tripnote.beans.UserBean;
 import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.tools.LogTool;
 
@@ -38,7 +42,7 @@ import butterknife.ButterKnife;
  * Created by 伟 on 2016/3/12.
  */
 public class ContentActivity extends AppCompatActivity implements LocationSource,
-        AMapLocationListener, AMap.OnMarkerClickListener {
+        AMapLocationListener, AMap.OnMarkerClickListener, View.OnClickListener {
 
     private static final String TAG = ContentActivity.class.toString();
 
@@ -48,20 +52,31 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     @Bind(R.id.map_content)
     public MapView contentMap;
 
+    @Bind(R.id.fab_content_liked)
+    public FloatingActionButton likeFAB;
+    @Bind(R.id.fab_content_comment)
+    public FloatingActionButton commentFAB;
+    @Bind(R.id.fab_content_collection)
+    public FloatingActionButton collectionFAB;
+    @Bind(R.id.fam_content)
+    public FloatingActionMenu contentFAM;
+
     private AMap aMap;
 
     private LocationSource.OnLocationChangedListener mListener;
     private AMapLocationClient mLocationClient;
-    private double latitude;
-    private double longitude;
-    private String travelName;
+    private String address;
+    private String coordinate;
+    private TravelBean travel;
+    private UserBean user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
         ButterKnife.bind(this);
-        travelName = getIntent().getStringExtra(ConstantTool.TRAVEL_NAME);
+        travel = (TravelBean) getIntent().getSerializableExtra(ConstantTool.TRAVEL);
+        user = ((App) getApplication()).getUser();
         contentMap.onCreate(savedInstanceState);
         init();
     }
@@ -93,16 +108,20 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.content_menu, menu);
+        if (travel != null && user != null && user.getUserId() == travel.getUserId()) {
+            getMenuInflater().inflate(R.menu.add_menu, menu);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.create_content:
+            case R.id.add:
                 Intent intent = new Intent(ContentActivity.this, CreateContentActivity.class);
-                intent.putExtra(ConstantTool.TRAVEL_NAME, travelName);
+                intent.putExtra(ConstantTool.TRAVEL_NAME, travel.getTitle());
+                intent.putExtra(ConstantTool.COORDINATE, coordinate);
+                intent.putExtra(ConstantTool.LOCATION, address);
                 startActivity(intent);
                 break;
         }
@@ -110,27 +129,33 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     }
 
     @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab_content_collection:
+                break;
+            case R.id.fab_content_comment:
+                contentFAM.close(true);
+                Intent intent = new Intent(ContentActivity.this, CommentActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.fab_content_liked:
+                break;
+        }
+    }
+
+    @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (mListener != null && aMapLocation != null) {
             if (aMapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(aMapLocation);// 显示系统小蓝点
-                mLocationClient.stopLocation();
                 //定位成功回调信息，设置相关消息
-                aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-                latitude = aMapLocation.getLatitude() + 1;//获取纬度
-                longitude = aMapLocation.getLongitude() + 1;//获取经度
-                aMapLocation.getAccuracy();//获取精度信息
-                aMapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果
-                aMapLocation.getCountry();//国家信息
-                aMapLocation.getProvince();//省信息
-                aMapLocation.getCity();//城市信息
-                aMapLocation.getDistrict();//城区信息
-                aMapLocation.getCityCode();//城市编码
-                aMapLocation.getAdCode();//地区编码
-                Toast.makeText(ContentActivity.this, latitude + "," + longitude, Toast.LENGTH_SHORT).show();
-                addMarkersToMap(new LatLng(latitude, longitude), "测试");
+                double latitude = aMapLocation.getLatitude();//获取纬度
+                double longitude = aMapLocation.getLongitude();//获取经度
+                coordinate = latitude + "," + longitude;
+                address = aMapLocation.getCountry() + " " + aMapLocation.getProvince() + " " + aMapLocation.getCity();
+                //addMarkersToMap(new LatLng(latitude, longitude), "测试");
             } else {
-                String errText = "定位失败," + aMapLocation.getErrorCode()+ ": " + aMapLocation.getErrorInfo();
+                String errText = "定位失败," + aMapLocation.getErrorCode() + ": " + aMapLocation.getErrorInfo();
                 LogTool.e(TAG, errText);
             }
         }
@@ -170,10 +195,11 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
         mLocationClient = null;
     }
 
+    //点击标记事件
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (aMap != null) {
-            jumpPoint(marker, new LatLng(latitude, longitude));
+            //jumpPoint(marker, new LatLng(latitude, longitude));
         }
         return false;
     }
@@ -183,7 +209,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
             aMap = contentMap.getMap();
             setUpMap();
         }
-        contentToolbar.setTitle(travelName);
+        contentToolbar.setTitle(travel.getTitle());
         contentToolbar.setNavigationIcon(R.mipmap.toolbar_back);
         setSupportActionBar(contentToolbar);
         contentToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -195,7 +221,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     }
 
     /**
-     * 设置一些amap的属性
+     * 设置一些aMap的属性
      */
     private void setUpMap() {
         aMap.setLocationSource(this);// 设置定位监听
@@ -223,6 +249,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
             @Override
             public void run() {
                 long elapsed = SystemClock.uptimeMillis() - start;
+
                 float t = interpolator.getInterpolation((float) elapsed
                         / duration);
                 double lng = t * latLng.longitude + (1 - t)

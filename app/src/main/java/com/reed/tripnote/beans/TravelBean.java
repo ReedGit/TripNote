@@ -1,8 +1,9 @@
 package com.reed.tripnote.beans;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TravelBean {
+public class TravelBean implements Serializable {
 
     private long travelId;
     private String title;

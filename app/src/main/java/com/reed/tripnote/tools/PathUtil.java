@@ -32,7 +32,7 @@ public class PathUtil {
     }
 
     //获取缓存大小
-    public static long getFileSize(File f) throws Exception// 取得文件夹大小
+    public static long getFileSize(File f)// 取得文件夹大小
     {
         long size = 0;
         File files[] = f.listFiles();

@@ -3,6 +3,11 @@ package com.reed.tripnote.tools;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * 数据格式转换工具类
  * Created by 伟 on 2016/2/14.
@@ -17,4 +22,21 @@ public class FormatTool {
     public static Gson gson = new GsonBuilder()
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
             .create();
+
+    public static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+
+    //将字符串转换成时间
+    public static Date transformToDate(String date) {
+        try {
+            return format.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //将时间转换成字符串
+    public static String transformToString(Date date) {
+        return format.format(date);
+    }
 }

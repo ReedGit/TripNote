@@ -10,7 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.reed.tripnote.App;
 import com.reed.tripnote.R;
+import com.reed.tripnote.beans.TravelBean;
+import com.reed.tripnote.beans.UserBean;
 import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.tools.ToastTool;
 
@@ -23,12 +26,14 @@ public class TravelActivity extends AppCompatActivity {
     public Toolbar travelToolbar;
     @Bind(R.id.et_travel_name)
     public EditText nameET;
+    private UserBean user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel);
         ButterKnife.bind(this);
+        user = ((App) getApplication()).getUser();
         initView();
     }
 
@@ -46,13 +51,15 @@ public class TravelActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(name)) {
                     nameET.setError("请输入游记名称");
                 } else {
+                    TravelBean travel = new TravelBean();
+                    travel.setTitle(name);
+                    travel.setUserId(user.getUserId());
                     Intent intent = new Intent(TravelActivity.this, ContentActivity.class);
-                    intent.putExtra(ConstantTool.TRAVEL_NAME, name);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(ConstantTool.TRAVEL, travel);
+                    intent.putExtras(bundle);
                     startActivity(intent);
                     finish();
-                    /**
-                     * 网络请求
-                     */
                 }
                 break;
         }

@@ -17,6 +17,7 @@
             android:layout_height="match_parent" />
 
         <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/fam_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|start"
@@ -28,20 +29,29 @@
             app:menu_fab_size="mini">
 
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_content_liked"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:src="@mipmap/like"
                 app:fab_label="点赞"
                 app:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_content_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:src="@drawable/ic_forum_24dp"
                 app:fab_label="评论"
                 app:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_content_collection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/ic_favorite_outline_24dp"
+                android:onClick="onClick"
                 app:fab_label="收藏"
                 app:fab_size="mini"/>
 

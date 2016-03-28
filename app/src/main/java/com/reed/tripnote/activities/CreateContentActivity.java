@@ -62,6 +62,7 @@ public class CreateContentActivity extends AppCompatActivity {
         } else {
             createToolbar.setTitle(travelName);
         }
+        locationTV.setText(location);
         createToolbar.setNavigationIcon(R.mipmap.toolbar_back);
         setSupportActionBar(createToolbar);
         createToolbar.setNavigationOnClickListener(new View.OnClickListener() {

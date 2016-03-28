@@ -184,6 +184,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mainToolbar.setTitle(R.string.about);
                 manager.beginTransaction().replace(R.id.main_frame, aboutFragment).commit();
                 break;
+            case R.id.drawer_setting:
+                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(intent);
+                break;
         }
         return false;
     }

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/drawer_group_user"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/drawer_main_page"
             android:checked="true"
@@ -28,4 +30,14 @@
             android:icon="@drawable/ic_info_outline_24dp"
             android:title="@string/about"/>
     </group>
+
+    <group
+        android:id="@+id/drawer_group_app"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_setting"
+            android:title="@string/setting"
+            android:checked="false"/>
+    </group>
+
 </menu>

@@ -1,5 +1,7 @@
 package com.reed.tripnote.activities;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
@@ -9,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -93,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        setupSearchView(menu);
         return true;
     }
 
@@ -104,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mainDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.create_note:
-                if (user == null){
+                if (user == null) {
                     ToastTool.show(MainActivity.this, R.string.please_login);
                     intentToLogin();
                 } else {
@@ -233,13 +237,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLL.setOnClickListener(this);
     }
 
-    private void initFragment(){
+    private void initFragment() {
         homeFragment = new HomeFragment();
         travelFragment = new TravelFragment();
         aboutFragment = new AboutFragment();
         collectionFragment = new CollectionFragment();
         manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.main_frame, homeFragment).commit();
+    }
+
+    private void setupSearchView(Menu menu) {
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        final MenuItem searchMenuItem = menu.findItem(R.id.search);
+        final SearchView searchView = (SearchView) searchMenuItem
+                .getActionView();
+        searchView.setIconifiedByDefault(true);
+        if (searchManager != null) {
+            searchView.setSearchableInfo(searchManager
+                    .getSearchableInfo(getComponentName()));
+            searchView
+                    .setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            if (!hasFocus) {
+                                searchMenuItem.collapseActionView();
+                                searchView.onActionViewCollapsed();
+                            }
+                        }
+                    });
+
+            searchView
+                    .setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            searchView.setVisibility(View.INVISIBLE);
+                            searchView.setVisibility(View.VISIBLE);
+                            return false;
+                        }
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            return false;
+                        }
+                    });
+        }
     }
 
 }

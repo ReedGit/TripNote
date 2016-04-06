@@ -1,102 +1,115 @@
 package com.reed.tripnote.views;
 
-import android.animation.Animator;
 import android.content.Context;
+import android.graphics.Rect;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v4.view.ViewGroupCompat;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewPropertyAnimator;
-import android.view.animation.Interpolator;
+
+import java.util.List;
+import java.util.jar.Attributes;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
+ * 头像伸缩
  * Created by 伟 on 2016/2/28.
  */
 public class HeadImageBehavior extends CoordinatorLayout.Behavior<CircleImageView> {
 
-    private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
+    private Rect mTmpRect;
 
-    private int sinceDirectionChange;
-
-    public HeadImageBehavior(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public HeadImageBehavior(Context context, AttributeSet attr) {
+        super(context, attr);
     }
 
     @Override
-    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, CircleImageView child, View directTargetChild, View target, int nestedScrollAxes) {
-        return (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
+    public boolean layoutDependsOn(CoordinatorLayout parent, CircleImageView child, View dependency) {
+        return dependency instanceof AppBarLayout;
     }
 
     @Override
-    public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, CircleImageView child, View target, int dx, int dy, int[] consumed) {
-        if (dy > 0 && sinceDirectionChange < 0 || dy < 0 && sinceDirectionChange > 0) {
-            child.animate().cancel();
-            sinceDirectionChange = 0;
+    public boolean onDependentViewChanged(CoordinatorLayout parent, CircleImageView child,
+                                          View dependency) {
+        updateFabVisibility(parent, (AppBarLayout) dependency, child);
+        return false;
+    }
+
+    private boolean updateFabVisibility(CoordinatorLayout parent,
+                                        AppBarLayout appBarLayout, CircleImageView child) {
+        final CoordinatorLayout.LayoutParams lp =
+                (CoordinatorLayout.LayoutParams) child.getLayoutParams();
+        if (lp.getAnchorId() != appBarLayout.getId()) {
+            return false;
         }
-        sinceDirectionChange += dy;
-        if (sinceDirectionChange > child.getHeight() && child.getVisibility() == View.VISIBLE) {
-            hide(child);
-        } else if (sinceDirectionChange < 0 && child.getVisibility() == View.GONE) {
-            show(child);
+
+        if (mTmpRect == null) {
+            mTmpRect = new Rect();
+        }
+
+        final Rect rect = mTmpRect;
+        rect.set(0, 0, appBarLayout.getWidth(), appBarLayout.getHeight());
+        parent.offsetDescendantRectToMyCoords(appBarLayout, mTmpRect);
+        mTmpRect.offset(appBarLayout.getScrollX(), appBarLayout.getScrollY());
+        if (rect.bottom <= appBarLayout.getTotalScrollRange()) {
+            child.setVisibility(View.GONE);
+        } else {
+            child.setVisibility(View.VISIBLE);
+        }
+        return true;
+    }
+
+
+    @Override
+    public boolean onLayoutChild(CoordinatorLayout parent, CircleImageView child,
+                                 int layoutDirection) {
+        final List<View> dependencies = parent.getDependencies(child);
+        for (int i = 0, count = dependencies.size(); i < count; i++) {
+            final View dependency = dependencies.get(i);
+            if (dependency instanceof AppBarLayout
+                    && updateFabVisibility(parent, (AppBarLayout) dependency, child)) {
+                break;
+            }
+        }
+        parent.onLayoutChild(child, layoutDirection);
+        offsetIfNeeded(parent, child);
+        return true;
+    }
+
+    /**
+     * Pre-Lollipop we use padding so that the shadow has enough space to be drawn. This method
+     * offsets our layout position so that we're positioned correctly if we're on one of
+     * our parent's edges.
+     */
+    private void offsetIfNeeded(CoordinatorLayout parent, CircleImageView civ) {
+        final Rect padding = new Rect();
+
+        if (padding.centerX() > 0 && padding.centerY() > 0) {
+            final CoordinatorLayout.LayoutParams lp =
+                    (CoordinatorLayout.LayoutParams) civ.getLayoutParams();
+
+            int offsetTB = 0, offsetLR = 0;
+
+            if (civ.getRight() >= parent.getWidth() - lp.rightMargin) {
+                // If we're on the left edge, shift it the right
+                offsetLR = padding.right;
+            } else if (civ.getLeft() <= lp.leftMargin) {
+                // If we're on the left edge, shift it the left
+                offsetLR = -padding.left;
+            }
+            if (civ.getBottom() >= parent.getBottom() - lp.bottomMargin) {
+                // If we're on the bottom edge, shift it down
+                offsetTB = padding.bottom;
+            } else if (civ.getTop() <= lp.topMargin) {
+                // If we're on the top edge, shift it up
+                offsetTB = -padding.top;
+            }
+
+            civ.offsetTopAndBottom(offsetTB);
+            civ.offsetLeftAndRight(offsetLR);
         }
     }
 
-
-    private void hide(final View view) {
-        ViewPropertyAnimator animator = view.animate().translationY(view.getHeight()).setInterpolator(INTERPOLATOR).setDuration(200);
-        animator.setListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                view.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-                show(view);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
-        animator.start();
-    }
-
-
-    private void show(final View view) {
-        ViewPropertyAnimator animator = view.animate().translationY(0).setInterpolator(INTERPOLATOR).setDuration(200);
-        animator.setListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                view.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-                hide(view);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
-        animator.start();
-
-    }
 }

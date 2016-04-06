@@ -14,7 +14,9 @@ import com.reed.tripnote.R;
 import com.reed.tripnote.ViewHolders.FootViewHolder;
 import com.reed.tripnote.adapters.TravelAdapter;
 import com.reed.tripnote.beans.TravelBean;
+import com.reed.tripnote.data.TravelData;
 import com.reed.tripnote.tools.LogTool;
+import com.reed.tripnote.views.DividerItemDecoration;
 
 import java.util.List;
 
@@ -43,6 +45,10 @@ public class HomeFragment extends Fragment {
             homeRecycler.setLayoutManager(mManager);
             homeRecycler.setAdapter(mAdapter);
             homeRecycler.setItemAnimator(new DefaultItemAnimator());
+            homeRecycler.addItemDecoration(new DividerItemDecoration(getActivity()));
+            travelBeans = TravelData.getInstance().getTravels();
+            mAdapter.setTravelBeans(travelBeans);
+            mAdapter.notifyDataSetChanged();
             initListener();
         }
         return mView;
@@ -52,7 +58,11 @@ public class HomeFragment extends Fragment {
         homeSRL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                travelBeans.clear();
+                travelBeans = TravelData.getInstance().getTravels();
+                mAdapter.setTravelBeans(travelBeans);
+                mAdapter.notifyDataSetChanged();
+                homeSRL.setRefreshing(false);
             }
         });
         homeRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {

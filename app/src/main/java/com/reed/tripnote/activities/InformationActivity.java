@@ -102,5 +102,8 @@ public class InformationActivity extends AppCompatActivity {
                 finish();
             }
         });
+        travelTV.setText("0");
+        likeTV.setText("0");
+        collectionTV.setText("0");
     }
 }

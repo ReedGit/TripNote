@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.reed.tripnote.R;
 import com.reed.tripnote.beans.TravelBean;
+import com.reed.tripnote.tools.FormatTool;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -19,9 +20,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class TravelViewHolder extends RecyclerView.ViewHolder {
 
     @Bind(R.id.tv_travel_title)
-    public TextView titleTv;
+    public TextView titleTV;
     @Bind(R.id.tv_travel_date)
-    public TextView dateTv;
+    public TextView dateTV;
     @Bind(R.id.civ_travel_head)
     public CircleImageView headCIV;
     @Bind(R.id.tv_travel_author)
@@ -35,6 +36,9 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindData(TravelBean travelBean) {
-
+        titleTV.setText(travelBean.getTitle());
+        dateTV.setText(FormatTool.transformToString(travelBean.getStartTime()));
+        authorTV.setText(travelBean.getNickname());
+        firstImageView.setImageResource(R.mipmap.background);
     }
 }

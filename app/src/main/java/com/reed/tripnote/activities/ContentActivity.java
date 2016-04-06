@@ -29,10 +29,14 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.reed.tripnote.App;
 import com.reed.tripnote.R;
+import com.reed.tripnote.beans.ContentBean;
 import com.reed.tripnote.beans.TravelBean;
 import com.reed.tripnote.beans.UserBean;
+import com.reed.tripnote.data.ContentData;
 import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.tools.LogTool;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -69,6 +73,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     private String coordinate;
     private TravelBean travel;
     private UserBean user;
+    private List<ContentBean> contents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,6 +223,13 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
                 finish();
             }
         });
+        contents = ContentData.getInstance().getContents();
+        for (ContentBean content : contents) {
+            double longitude = Double.parseDouble(content.getCoordinate().split(",")[0]);
+            double latitude = Double.parseDouble(content.getCoordinate().split(",")[1]);
+            LogTool.i(TAG, latitude + "," + longitude);
+            addMarkersToMap(new LatLng(latitude, longitude), content.getArticle());
+        }
     }
 
     /**

@@ -4,12 +4,11 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewGroupCompat;
+import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.View;
 
 import java.util.List;
-import java.util.jar.Attributes;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

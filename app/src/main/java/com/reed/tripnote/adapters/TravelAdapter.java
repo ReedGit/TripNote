@@ -2,6 +2,7 @@ package com.reed.tripnote.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.reed.tripnote.R;
@@ -10,6 +11,8 @@ import com.reed.tripnote.ViewHolders.TravelViewHolder;
 import com.reed.tripnote.beans.TravelBean;
 
 import java.util.List;
+
+import butterknife.OnItemClick;
 
 /**
  * 游记Adapter
@@ -40,6 +43,16 @@ public class TravelAdapter extends RecyclerView.Adapter {
         this.travelBeans = travelBeans;
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -53,7 +66,7 @@ public class TravelAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (travelBeans == null || isAll) {
             ((FootViewHolder) holder).bindData(NO_DATA);
             return;
@@ -67,6 +80,14 @@ public class TravelAdapter extends RecyclerView.Adapter {
             return;
         }
         ((TravelViewHolder) holder).bindData(travelBeans.get(position));
+        if (onItemClickListener != null) {
+            ((TravelViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onItemClick(((TravelViewHolder) holder).itemView, position);
+                }
+            });
+        }
     }
 
     @Override

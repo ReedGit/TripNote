@@ -1,5 +1,6 @@
 package com.reed.tripnote.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,9 +13,11 @@ import android.view.ViewGroup;
 
 import com.reed.tripnote.R;
 import com.reed.tripnote.ViewHolders.FootViewHolder;
+import com.reed.tripnote.activities.ContentActivity;
 import com.reed.tripnote.adapters.TravelAdapter;
 import com.reed.tripnote.beans.TravelBean;
 import com.reed.tripnote.data.TravelData;
+import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.views.DividerItemDecoration;
 
 import java.util.List;
@@ -62,6 +65,16 @@ public class TravelFragment extends Fragment {
                 mAdapter.setTravelBeans(travelBeans);
                 mAdapter.notifyDataSetChanged();
                 travelRefresh.setRefreshing(false);
+            }
+        });
+        mAdapter.setOnItemClickListener(new TravelAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(getActivity(), ContentActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(ConstantTool.TRAVEL, travelBeans.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
         travelRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {

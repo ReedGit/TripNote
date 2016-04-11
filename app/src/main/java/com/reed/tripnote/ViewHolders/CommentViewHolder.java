@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
+ * comment's viewHolder
  * Created by 伟 on 2016/3/29.
  */
 public class CommentViewHolder extends RecyclerView.ViewHolder {
@@ -37,7 +38,7 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 
     public void bindData(Context context, CommentBean comment) {
         nameTV.setText(comment.getNickname());
-        dateTV.setText(FormatTool.transformToString(comment.getTime()));
+        dateTV.setText(FormatTool.simpleTransformToString(comment.getTime()));
         remarkTV.setText(comment.getRemark());
         if (!TextUtils.isEmpty(comment.getUserImage())) {
             Glide.with(context).load(ConstantTool.imageUrl + comment.getUserImage()).placeholder(R.mipmap.default_head).into(commentCIV);

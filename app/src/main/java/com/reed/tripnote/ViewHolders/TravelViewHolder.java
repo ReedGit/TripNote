@@ -1,12 +1,14 @@
 package com.reed.tripnote.ViewHolders;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.reed.tripnote.R;
 import com.reed.tripnote.beans.TravelBean;
+import com.reed.tripnote.tools.CalculateTool;
 import com.reed.tripnote.tools.FormatTool;
 
 import butterknife.Bind;
@@ -29,6 +31,8 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
     public TextView authorTV;
     @Bind(R.id.iv_travel_first)
     public ImageView firstImageView;
+    @Bind(R.id.tv_travel_introduction)
+    public TextView introductionTV;
 
     public TravelViewHolder(View itemView) {
         super(itemView);
@@ -37,8 +41,16 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
 
     public void bindData(TravelBean travelBean) {
         titleTV.setText(travelBean.getTitle());
-        dateTV.setText(FormatTool.transformToString(travelBean.getStartTime()));
+        String date = FormatTool.transformToDateString(travelBean.getStartTime());
+        if (travelBean.getEndTime() != null) {
+            date += " / " + CalculateTool.calculateDay(travelBean.getStartTime(), travelBean.getEndTime()) + "天";
+        }
+        dateTV.setText(date);
         authorTV.setText(travelBean.getNickname());
         firstImageView.setImageResource(R.mipmap.background);
+        if (!TextUtils.isEmpty(travelBean.getIntroduction())) {
+            String introduction = "\u3000\u3000" + travelBean.getIntroduction();
+            introductionTV.setText(introduction);
+        }
     }
 }

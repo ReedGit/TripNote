@@ -16,6 +16,7 @@ public class ConstantTool {
 
     public static final String USER = "user";
     public static final String TRAVEL = "travel";
+    public static final String CONTENT = "content";
 
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";

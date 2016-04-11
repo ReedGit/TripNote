@@ -48,7 +48,7 @@ public class CommentAdapter extends RecyclerView.Adapter {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == TYPE_NORMAL) {
-            return new CommentViewHolder(inflater.inflate(R.layout.item_travel, parent, false));
+            return new CommentViewHolder(inflater.inflate(R.layout.item_comment, parent, false));
         } else if (viewType == TYPE_FOOT) {
             return new FootViewHolder(inflater.inflate(R.layout.item_more, parent, false));
         } else {
@@ -58,11 +58,11 @@ public class CommentAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (comments == null || isAll) {
+        if (comments == null || (isAll && position == comments.size())) {
             ((FootViewHolder) holder).bindData(NO_DATA);
             return;
         }
-        if (isLoading) {
+        if (isLoading && position == comments.size()) {
             ((FootViewHolder) holder).bindData(LOADING_DATA);
             return;
         }

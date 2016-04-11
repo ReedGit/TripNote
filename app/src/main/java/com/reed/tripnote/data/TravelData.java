@@ -37,7 +37,7 @@ public class TravelData {
             travelBean.setTitle("南京一日游");
             travelBean.setStartTime(FormatTool.transformToDate("2016-04-06 10:00:00"));
             travelBean.setEndTime(FormatTool.transformToDate("2016-04-06 20:00:00"));
-            travelBean.setIntroduction("感受金陵之美");
+            travelBean.setIntroduction("感受金陵之美\n测试是味儿啊大大阿达撒健康大空间都会卡机的哈空间等哈看大家好打打瞌睡的骄傲吧达到可骄傲的萨克大啊大大啊萨达阿达撒");
             travelBean.setNickname("Reed");
             travelBean.setUserImage("/upload/4/da92f128-42ed-4424-8336-d57c830723f1.jpg");
             travels.add(travelBean);

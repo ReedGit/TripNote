@@ -26,7 +26,7 @@
 
 
         <EditText
-            android:id="@+id/et_travel_name"
+            android:id="@+id/et_travel_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="48dp"
@@ -49,5 +49,18 @@
             android:textSize="16sp" />
 
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_travel_introduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:gravity="top"
+        android:padding="10dp"
+        android:hint="@string/travel_introduction"
+        android:minLines="1"
+        android:scrollbars="vertical"
+        android:textColor="#000000"
+        android:textSize="16sp" />
 
 </LinearLayout>

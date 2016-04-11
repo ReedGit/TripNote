@@ -1,12 +1,17 @@
 package com.reed.tripnote.activities;
 
+import android.content.DialogInterface;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +21,9 @@ import com.reed.tripnote.R;
 import com.reed.tripnote.adapters.CommentAdapter;
 import com.reed.tripnote.beans.CommentBean;
 import com.reed.tripnote.beans.UserBean;
+import com.reed.tripnote.data.CommentData;
+import com.reed.tripnote.tools.ToastTool;
+import com.reed.tripnote.views.DividerItemDecoration;
 
 import java.util.List;
 
@@ -28,7 +36,7 @@ public class CommentActivity extends AppCompatActivity {
     public Toolbar commentToolbar;
     @Bind(R.id.rcv_comment)
     public RecyclerView commentRCV;
-    @Bind(R.id.srl_comment)
+    @Bind(R.id.srf_comment)
     public SwipeRefreshLayout commentSRL;
 
     private UserBean user;
@@ -36,6 +44,7 @@ public class CommentActivity extends AppCompatActivity {
     private List<CommentBean> comments;
     private int visibleLastIndex = 0;
     private LinearLayoutManager mManager;
+    private TextInputEditText commentET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +68,24 @@ public class CommentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add:
+                AlertDialog.Builder builder = new AlertDialog.Builder(CommentActivity.this);
+                View view = LayoutInflater.from(CommentActivity.this).inflate(R.layout.dlg_comment, null, false);
+                commentET = (TextInputEditText) view.findViewById(R.id.et_comment_add);
+                builder.setCancelable(true);
+                builder.setView(view);
+                builder.setPositiveButton(R.string.publish, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String remark = commentET.getText().toString();
+                        if (TextUtils.isEmpty(remark)) {
+                            ToastTool.show(CommentActivity.this, "评论不能为空");
+                        } else {
+                            //添加评论
+                        }
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel,null);
+                builder.create().show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -73,6 +100,9 @@ public class CommentActivity extends AppCompatActivity {
         commentRCV.setLayoutManager(mManager);
         commentRCV.setAdapter(mAdapter);
         commentRCV.setItemAnimator(new DefaultItemAnimator());
+        commentRCV.addItemDecoration(new DividerItemDecoration(this, (float) 1));
+        mAdapter.setComments(CommentData.getInstance().getComments());
+        mAdapter.notifyDataSetChanged();
     }
 
     private void initListener(){
@@ -85,7 +115,7 @@ public class CommentActivity extends AppCompatActivity {
         commentSRL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                commentSRL.setRefreshing(false);
             }
         });
         commentRCV.addOnScrollListener(new RecyclerView.OnScrollListener() {

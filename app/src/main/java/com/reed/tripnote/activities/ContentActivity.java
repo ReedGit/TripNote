@@ -1,17 +1,16 @@
 package com.reed.tripnote.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Point;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.Interpolator;
+import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -20,11 +19,11 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
-import com.amap.api.maps.Projection;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.model.PolylineOptions;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.reed.tripnote.App;
@@ -36,6 +35,7 @@ import com.reed.tripnote.data.ContentData;
 import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.tools.LogTool;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -48,7 +48,7 @@ import butterknife.ButterKnife;
 public class ContentActivity extends AppCompatActivity implements LocationSource,
         AMapLocationListener, AMap.OnMarkerClickListener, View.OnClickListener {
 
-    private static final String TAG = ContentActivity.class.toString();
+    private static final String TAG = ContentActivity.class.getSimpleName();
 
     @Bind(R.id.toolbar)
     public Toolbar contentToolbar;
@@ -74,6 +74,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     private TravelBean travel;
     private UserBean user;
     private List<ContentBean> contents;
+    private List<LatLng> lats = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,8 +114,13 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (travel != null && user != null && user.getUserId() == travel.getUserId()) {
-            getMenuInflater().inflate(R.menu.add_menu, menu);
+        if (travel != null) {
+            getMenuInflater().inflate(R.menu.travel_menu, menu);
+            if (user != null && user.getUserId() == travel.getUserId()) {
+                menu.getItem(1).setVisible(true);
+            } else {
+                menu.getItem(1).setVisible(false);
+            }
         }
         return true;
     }
@@ -128,6 +134,17 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
                 intent.putExtra(ConstantTool.COORDINATE, coordinate);
                 intent.putExtra(ConstantTool.LOCATION, address);
                 startActivity(intent);
+                break;
+            case R.id.information:
+                Dialog dialog = new Dialog(ContentActivity.this);
+                dialog.setTitle("游记详情");
+                dialog.setCanceledOnTouchOutside(true);
+                View view = LayoutInflater.from(ContentActivity.this).inflate(R.layout.dlg_travel, null, false);
+                TextView introductionTV = (TextView) view.findViewById(R.id.tv_travel_introduction);
+                String introduction = "\u3000\u3000" + travel.getIntroduction();
+                introductionTV.setText(introduction);
+                dialog.setContentView(view);
+                dialog.show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -204,7 +221,17 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (aMap != null) {
-            //jumpPoint(marker, new LatLng(latitude, longitude));
+            LogTool.i(TAG, "marker id =====" + marker.getId());
+            int position = Integer.parseInt(marker.getId().substring(6)) - 1;
+            if (position < contents.size()) {
+                Intent intent = new Intent(ContentActivity.this, ContentDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(ConstantTool.CONTENT, contents.get(position));
+                intent.putExtra(ConstantTool.TRAVEL_NAME, travel.getTitle());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+
         }
         return false;
     }
@@ -227,9 +254,17 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
         for (ContentBean content : contents) {
             double longitude = Double.parseDouble(content.getCoordinate().split(",")[0]);
             double latitude = Double.parseDouble(content.getCoordinate().split(",")[1]);
-            LogTool.i(TAG, latitude + "," + longitude);
-            addMarkersToMap(new LatLng(latitude, longitude), content.getArticle());
+            LatLng lat = new LatLng(latitude, longitude);
+            addMarkersToMap(lat, "第" + content.getDay() + "天");
+            lats.add(lat);
         }
+        aMap.addPolyline((new PolylineOptions())
+                .addAll(lats)
+                .width(5)
+                .setDottedLine(false)
+                .geodesic(true)
+                .color(Color.BLACK)
+        );
     }
 
     /**
@@ -244,37 +279,6 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
         aMap.setOnMarkerClickListener(this);
     }
 
-    /**
-     * marker点击时跳动一下
-     */
-    public void jumpPoint(final Marker marker, final LatLng latLng) {
-        final Handler handler = new Handler();
-        final long start = SystemClock.uptimeMillis();
-        Projection projection = aMap.getProjection();
-        Point startPoint = projection.toScreenLocation(latLng);
-        startPoint.offset(0, -100);
-        final LatLng startLatLng = projection.fromScreenLocation(startPoint);
-        final long duration = 1500;
-
-        final Interpolator interpolator = new BounceInterpolator();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long elapsed = SystemClock.uptimeMillis() - start;
-
-                float t = interpolator.getInterpolation((float) elapsed
-                        / duration);
-                double lng = t * latLng.longitude + (1 - t)
-                        * startLatLng.longitude;
-                double lat = t * latLng.latitude + (1 - t)
-                        * startLatLng.latitude;
-                marker.setPosition(new LatLng(lat, lng));
-                if (t < 1.0) {
-                    handler.postDelayed(this, 16);
-                }
-            }
-        });
-    }
 
     /**
      * 在地图上添加marker

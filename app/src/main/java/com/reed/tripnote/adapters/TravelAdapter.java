@@ -53,12 +53,22 @@ public class TravelAdapter extends RecyclerView.Adapter {
         this.onItemClickListener = onItemClickListener;
     }
 
+    public interface OnItemLongClickListener {
+        void onItemLongClick(View view, int position);
+    }
+
+    private OnItemLongClickListener onItemLongClickListener;
+
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+        this.onItemLongClickListener = onItemLongClickListener;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == TYPE_NORMAL) {
             return new TravelViewHolder(inflater.inflate(R.layout.item_travel, parent, false));
-        } else if (viewType == TYPE_FOOT){
+        } else if (viewType == TYPE_FOOT) {
             return new FootViewHolder(inflater.inflate(R.layout.item_more, parent, false));
         } else {
             return null;
@@ -66,12 +76,12 @@ public class TravelAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        if (travelBeans == null || isAll) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        if (travelBeans == null || (isAll && position == travelBeans.size())) {
             ((FootViewHolder) holder).bindData(NO_DATA);
             return;
         }
-        if (isLoading) {
+        if (isLoading && position == travelBeans.size()) {
             ((FootViewHolder) holder).bindData(LOADING_DATA);
             return;
         }
@@ -84,7 +94,16 @@ public class TravelAdapter extends RecyclerView.Adapter {
             ((TravelViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onItemClick(((TravelViewHolder) holder).itemView, position);
+                    onItemClickListener.onItemClick(((TravelViewHolder) holder).itemView, holder.getAdapterPosition());
+                }
+            });
+        }
+        if (onItemLongClickListener != null) {
+            ((TravelViewHolder) holder).itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onItemLongClickListener.onItemLongClick(((TravelViewHolder) holder).itemView, holder.getAdapterPosition());
+                    return false;
                 }
             });
         }

@@ -1,8 +1,9 @@
 package com.reed.tripnote.beans;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ContentBean {
+public class ContentBean implements Serializable {
 
     private long contentId;
     private String article;

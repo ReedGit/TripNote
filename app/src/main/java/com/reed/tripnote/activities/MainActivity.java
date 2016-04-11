@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     ToastTool.show(MainActivity.this, R.string.please_login);
                     intentToLogin();
                 } else {
-                    Intent intent = new Intent(MainActivity.this, TravelActivity.class);
+                    Intent intent = new Intent(MainActivity.this, CreateTravelActivity.class);
                     startActivity(intent);
                 }
                 break;

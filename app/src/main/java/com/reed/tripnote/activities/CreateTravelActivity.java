@@ -15,23 +15,22 @@ import com.reed.tripnote.R;
 import com.reed.tripnote.beans.TravelBean;
 import com.reed.tripnote.beans.UserBean;
 import com.reed.tripnote.tools.ConstantTool;
-import com.reed.tripnote.tools.ToastTool;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class TravelActivity extends AppCompatActivity {
+public class CreateTravelActivity extends AppCompatActivity {
 
     @Bind(R.id.toolbar)
     public Toolbar travelToolbar;
-    @Bind(R.id.et_travel_name)
-    public EditText nameET;
+    @Bind(R.id.et_travel_title)
+    public EditText titleET;
     private UserBean user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_travel);
+        setContentView(R.layout.activity_create_travel);
         ButterKnife.bind(this);
         user = ((App) getApplication()).getUser();
         initView();
@@ -47,14 +46,14 @@ public class TravelActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_publish:
-                String name = nameET.getText().toString().trim();
-                if (TextUtils.isEmpty(name)) {
-                    nameET.setError("请输入游记名称");
+                String title = titleET.getText().toString().trim();
+                if (TextUtils.isEmpty(title)) {
+                    titleET.setError("请输入游记名称");
                 } else {
                     TravelBean travel = new TravelBean();
-                    travel.setTitle(name);
+                    travel.setTitle(title);
                     travel.setUserId(user.getUserId());
-                    Intent intent = new Intent(TravelActivity.this, ContentActivity.class);
+                    Intent intent = new Intent(CreateTravelActivity.this, ContentActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(ConstantTool.TRAVEL, travel);
                     intent.putExtras(bundle);

@@ -60,8 +60,9 @@
             android:value="b46b35fa01da19045811bcbd7b03836e" />
 
         <activity android:name=".activities.CreateContentActivity" />
-        <activity android:name=".activities.TravelActivity" />
-        <activity android:name=".activities.ContentDetail" />
+        <activity android:name=".activities.CreateTravelActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activities.ContentDetailActivity" />
         <activity android:name=".activities.ForgetActivity" />
         <activity android:name=".activities.ModifyPassword" />
         <activity android:name=".activities.SettingActivity" />

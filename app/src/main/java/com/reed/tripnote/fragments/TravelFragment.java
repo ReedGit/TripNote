@@ -1,9 +1,11 @@
 package com.reed.tripnote.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -75,6 +77,22 @@ public class TravelFragment extends Fragment {
                 bundle.putSerializable(ConstantTool.TRAVEL, travelBeans.get(position));
                 intent.putExtras(bundle);
                 startActivity(intent);
+            }
+        });
+        mAdapter.setOnItemLongClickListener(new TravelAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(View view, int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("确认删除“" + travelBeans.get(position).getTitle() + "”？")
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, null);
+                builder.create().show();
             }
         });
         travelRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {

@@ -12,6 +12,11 @@ import android.view.View;
 
 import com.reed.tripnote.R;
 import com.reed.tripnote.adapters.TravelAdapter;
+import com.reed.tripnote.beans.TravelBean;
+import com.reed.tripnote.data.TravelData;
+import com.reed.tripnote.views.DividerItemDecoration;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,6 +32,7 @@ public class SearchResultActivity extends AppCompatActivity {
     private LinearLayoutManager mManager;
     private int visibleLastIndex = 0;
     private String query;
+    private List<TravelBean> travels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,7 @@ public class SearchResultActivity extends AppCompatActivity {
         initListener();
         if (Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             query = getIntent().getStringExtra(SearchManager.QUERY);
-            setTitle(getString(R.string.search) + "：" +query);
+            setTitle(getString(R.string.search) + "：" + query);
         }
     }
 
@@ -49,10 +55,13 @@ public class SearchResultActivity extends AppCompatActivity {
         searchRCV.setLayoutManager(mManager);
         searchRCV.setAdapter(mAdapter);
         searchRCV.setItemAnimator(new DefaultItemAnimator());
-
+        searchRCV.addItemDecoration(new DividerItemDecoration(this));
+        travels = TravelData.getInstance().getTravels();
+        mAdapter.setTravelBeans(travels);
+        mAdapter.notifyDataSetChanged();
     }
 
-    private void initListener(){
+    private void initListener() {
         searchToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

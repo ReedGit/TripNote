@@ -25,6 +25,10 @@ public class FormatTool {
 
     public static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
 
+    public static SimpleDateFormat shortFormat = new SimpleDateFormat("MM.dd HH:mm", Locale.CHINA);
+
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.CHINA);
+
     //将字符串转换成时间
     public static Date transformToDate(String date) {
         try {
@@ -38,5 +42,13 @@ public class FormatTool {
     //将时间转换成字符串
     public static String transformToString(Date date) {
         return format.format(date);
+    }
+
+    public static String simpleTransformToString(Date date) {
+        return shortFormat.format(date);
+    }
+
+    public static String transformToDateString(Date date) {
+        return dateFormat.format(date);
     }
 }

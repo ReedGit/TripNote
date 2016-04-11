@@ -7,14 +7,17 @@
     <include layout="@layout/layout_toolbar" />
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/srl_comment"
+        android:id="@+id/srf_comment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rcv_comment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="match_parent"
+            android:background="#EBEBEB"
+            android:paddingTop="16dp"
+            android:clipToPadding="false"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

@@ -1,14 +1,18 @@
 package com.reed.tripnote.ViewHolders;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.reed.tripnote.R;
+import com.reed.tripnote.activities.InformationActivity;
 import com.reed.tripnote.beans.TravelBean;
 import com.reed.tripnote.tools.CalculateTool;
+import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.tools.FormatTool;
 
 import butterknife.Bind;
@@ -33,13 +37,15 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
     public ImageView firstImageView;
     @Bind(R.id.tv_travel_introduction)
     public TextView introductionTV;
+    @Bind(R.id.ll_travel_author)
+    public LinearLayout authorLL;
 
     public TravelViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
-    public void bindData(TravelBean travelBean) {
+    public void bindData(final TravelBean travelBean) {
         titleTV.setText(travelBean.getTitle());
         String date = FormatTool.transformToDateString(travelBean.getStartTime());
         if (travelBean.getEndTime() != null) {
@@ -52,5 +58,13 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
             String introduction = "\u3000\u3000" + travelBean.getIntroduction();
             introductionTV.setText(introduction);
         }
+        authorLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), InformationActivity.class);
+                intent.putExtra(ConstantTool.USER_ID, travelBean.getUserId());
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 }

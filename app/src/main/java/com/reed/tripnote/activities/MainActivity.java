@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.ll_drawer:
                 if (user != null) {
                     Intent intent = new Intent(MainActivity.this, InformationActivity.class);
+                    intent.putExtra(ConstantTool.USER_ID, user.getUserId());
                     startActivity(intent);
                 } else {
                     intentToLogin();
@@ -211,7 +212,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initView() {
-        mainToolbar.setTitleTextColor(Color.BLACK);
         mainToolbar.setTitle(R.string.main_page);
         setSupportActionBar(mainToolbar);
         View drawerHeader = drawerNGV.inflateHeaderView(R.layout.drawer_header);

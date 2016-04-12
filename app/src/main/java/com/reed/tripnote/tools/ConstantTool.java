@@ -37,4 +37,9 @@ public class ConstantTool {
     public static final int RESULT_OK = 0;
 
     public static final String TRAVEL_NAME = "travel_name";
+
+    public static final String FROM = "from";
+
+    public static final String LIKE = "like";
+    public static final String COLLECTION = "collection";
 }

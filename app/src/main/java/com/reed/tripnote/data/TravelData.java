@@ -32,7 +32,7 @@ public class TravelData {
         travels = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             TravelBean travelBean = new TravelBean();
-            travelBean.setUserId(4);
+            travelBean.setUserId(5);
             travelBean.setTravelId(1);
             travelBean.setTitle("南京一日游");
             travelBean.setStartTime(FormatTool.transformToDate("2016-04-06 10:00:00"));

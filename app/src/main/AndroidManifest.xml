@@ -37,7 +37,7 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".activities.SearchResultActivity"/>
+                android:value=".activities.SearchResultActivity" />
         </activity>
         <activity
             android:name=".activities.LoginActivity"
@@ -60,22 +60,26 @@
             android:value="b46b35fa01da19045811bcbd7b03836e" />
 
         <activity android:name=".activities.CreateContentActivity" />
-        <activity android:name=".activities.CreateTravelActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".activities.CreateTravelActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.ContentDetailActivity" />
         <activity android:name=".activities.ForgetActivity" />
         <activity android:name=".activities.ModifyPassword" />
         <activity android:name=".activities.SettingActivity" />
         <activity android:name=".activities.CommentActivity" />
-        <activity android:name=".activities.SearchResultActivity"
+        <activity
+            android:name=".activities.SearchResultActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+        <activity android:name=".activities.PersonTravelActivity"></activity>
     </application>
 
 </manifest>

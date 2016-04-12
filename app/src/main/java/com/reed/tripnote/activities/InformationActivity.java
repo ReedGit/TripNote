@@ -26,7 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 个人资料详情
  * Created by 伟 on 2016/2/27.
  */
-public class InformationActivity extends AppCompatActivity {
+public class InformationActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Bind(R.id.ctl_information)
     public CollapsingToolbarLayout informationCTL;
@@ -50,36 +50,48 @@ public class InformationActivity extends AppCompatActivity {
     public TextView collectionTV;
 
     private UserBean user;
+    private long userId;
+    private UserBean author;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information);
         user = ((App) getApplication()).getUser();
+        userId = getIntent().getLongExtra(ConstantTool.USER_ID, 0);
         ButterKnife.bind(this);
         initView();
+        travelTV.setText("0");
+        likeTV.setText("0");
+        collectionTV.setText("0");
+        if (user != null && user.getUserId() == userId) {
+            author = user;
+        } else {
+            author = new UserBean();
+            author.setUserId(userId);
+        }
     }
 
     @Override
     protected void onResume() {
-        if (!TextUtils.isEmpty(user.getHeadImage())) {
-            Glide.with(this).load(ConstantTool.imageUrl + user.getHeadImage())
+        if (!TextUtils.isEmpty(author.getHeadImage())) {
+            Glide.with(this).load(ConstantTool.imageUrl + author.getHeadImage())
                     .placeholder(R.mipmap.default_head)
                     .into(headCIV);
         }
-        informationCTL.setTitle(TextUtils.isEmpty(user.getNickName()) ? "" : user.getNickName());
+        informationCTL.setTitle(TextUtils.isEmpty(author.getNickName()) ? "" : author.getNickName());
         informationCTL.setCollapsedTitleTextColor(Color.WHITE);
-        introductionTV.setText(TextUtils.isEmpty(user.getIntroduction()) ? "你还没有给自己写点介绍呢" : user.getIntroduction());
+        introductionTV.setText(TextUtils.isEmpty(author.getIntroduction()) ? "你还没有给自己写点介绍呢" : author.getIntroduction());
         super.onResume();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (user == null){
-            return false;
+        if (user != null && user.getUserId() == userId){
+            getMenuInflater().inflate(R.menu.personal_menu, menu);
+            return true;
         }
-        getMenuInflater().inflate(R.menu.personal_menu, menu);
-        return true;
+        return false;
     }
 
     @Override
@@ -93,6 +105,29 @@ public class InformationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(InformationActivity.this, PersonTravelActivity.class);
+        intent.putExtra(ConstantTool.USER_ID, author.getUserId());
+        intent.putExtra(ConstantTool.NICKNAME, author.getNickName());
+        switch (v.getId()) {
+            case R.id.ll_information_travel:
+                intent.putExtra(ConstantTool.FROM, ConstantTool.TRAVEL);
+                break;
+            case R.id.ll_information_collection:
+                intent.putExtra(ConstantTool.FROM, ConstantTool.COLLECTION);
+                break;
+            case R.id.ll_information_like:
+                intent.putExtra(ConstantTool.FROM, ConstantTool.LIKE);
+                break;
+            default:
+                intent = null;
+        }
+        if (intent != null) {
+            startActivity(intent);
+        }
+    }
+
     private void initView() {
         informationToolbar.setNavigationIcon(R.mipmap.toolbar_back);
         setSupportActionBar(informationToolbar);
@@ -102,8 +137,6 @@ public class InformationActivity extends AppCompatActivity {
                 finish();
             }
         });
-        travelTV.setText("0");
-        likeTV.setText("0");
-        collectionTV.setText("0");
     }
+
 }

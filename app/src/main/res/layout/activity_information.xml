@@ -66,11 +66,14 @@
                 android:textSize="16sp" />
 
             <LinearLayout
+                android:id="@+id/ll_information_travel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:onClick="onClick"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -95,11 +98,14 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_information_like"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:onClick="onClick"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -124,12 +130,15 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_information_collection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
+                android:foreground="?attr/selectableItemBackground"
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
+                android:onClick="onClick"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 

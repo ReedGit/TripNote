@@ -2,6 +2,7 @@ package com.reed.tripnote.beans;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ContentBean implements Serializable {
 
@@ -12,6 +13,7 @@ public class ContentBean implements Serializable {
     private long travelId;
     private String coordinate;
     private int day;
+    private List<String> imageurl;
 
     public long getContentId() {
         return contentId;
@@ -69,6 +71,14 @@ public class ContentBean implements Serializable {
         this.day = day;
     }
 
+    public List<String> getImageurl() {
+        return imageurl;
+    }
+
+    public void setImageurl(List<String> imageurl) {
+        this.imageurl = imageurl;
+    }
+
     @Override
     public String toString() {
         return "ContentBean{" +
@@ -79,6 +89,7 @@ public class ContentBean implements Serializable {
                 ", travelId=" + travelId +
                 ", coordinate='" + coordinate + '\'' +
                 ", day=" + day +
+                ", imageurl=" + imageurl +
                 '}';
     }
 }

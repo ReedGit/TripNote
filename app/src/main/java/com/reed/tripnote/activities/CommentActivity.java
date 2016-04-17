@@ -1,5 +1,6 @@
 package com.reed.tripnote.activities;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,21 +17,36 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.reed.tripnote.App;
 import com.reed.tripnote.R;
 import com.reed.tripnote.adapters.CommentAdapter;
 import com.reed.tripnote.beans.CommentBean;
 import com.reed.tripnote.beans.UserBean;
-import com.reed.tripnote.data.CommentData;
+import com.reed.tripnote.tools.ConstantTool;
+import com.reed.tripnote.tools.FormatTool;
+import com.reed.tripnote.tools.LogTool;
+import com.reed.tripnote.tools.RetrofitTool;
 import com.reed.tripnote.tools.ToastTool;
 import com.reed.tripnote.views.DividerItemDecoration;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CommentActivity extends AppCompatActivity {
+
+    private static final String TAG = CommentActivity.class.getSimpleName();
 
     @Bind(R.id.toolbar)
     public Toolbar commentToolbar;
@@ -40,11 +56,17 @@ public class CommentActivity extends AppCompatActivity {
     public SwipeRefreshLayout commentSRL;
 
     private UserBean user;
+    private long travelId;
     private CommentAdapter mAdapter;
-    private List<CommentBean> comments;
+    private List<CommentBean> comments = new ArrayList<>();
     private int visibleLastIndex = 0;
     private LinearLayoutManager mManager;
     private TextInputEditText commentET;
+
+    private ProgressDialog mDlg;
+
+    private int size = 0;
+    private int page = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +74,7 @@ public class CommentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_comment);
         ButterKnife.bind(this);
         user = ((App) getApplication()).getUser();
+        travelId = getIntent().getLongExtra(ConstantTool.TRAVEL_ID, 0);
         initView();
         initListener();
     }
@@ -80,7 +103,7 @@ public class CommentActivity extends AppCompatActivity {
                         if (TextUtils.isEmpty(remark)) {
                             ToastTool.show(CommentActivity.this, "评论不能为空");
                         } else {
-                            //添加评论
+                            addComment(remark);
                         }
                     }
                 });
@@ -101,8 +124,8 @@ public class CommentActivity extends AppCompatActivity {
         commentRCV.setAdapter(mAdapter);
         commentRCV.setItemAnimator(new DefaultItemAnimator());
         commentRCV.addItemDecoration(new DividerItemDecoration(this, (float) 1));
-        mAdapter.setComments(CommentData.getInstance().getComments());
-        mAdapter.notifyDataSetChanged();
+        commentSRL.setRefreshing(true);
+        getData(1);
     }
 
     private void initListener(){
@@ -115,7 +138,11 @@ public class CommentActivity extends AppCompatActivity {
         commentSRL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                commentSRL.setRefreshing(false);
+                comments.clear();
+                mAdapter.setIsLoading(false);
+                mAdapter.setIsAll(false);
+                page = 1;
+                getData(1);
             }
         });
         commentRCV.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -125,6 +152,15 @@ public class CommentActivity extends AppCompatActivity {
                 super.onScrollStateChanged(recyclerView, newState);
                 int itemLastIndex = mAdapter.getItemCount() - 1;
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && visibleLastIndex == itemLastIndex) {
+                    if (comments.size() < size){
+                        page++;
+                        mAdapter.setIsLoading(true);
+                        mAdapter.notifyDataSetChanged();
+                        getData(page);
+                    } else {
+                        mAdapter.setIsAll(true);
+                        mAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 
@@ -132,6 +168,91 @@ public class CommentActivity extends AppCompatActivity {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 visibleLastIndex = mManager.findLastCompletelyVisibleItemPosition();
+            }
+        });
+    }
+
+    private void addComment(String remark){
+        Map<String, Object> map = new HashMap<>();
+        map.put(ConstantTool.USER_ID, user.getUserId());
+        map.put(ConstantTool.TRAVEL_ID, travelId);
+        map.put(ConstantTool.REMARK, remark);
+        Call<JSONObject> call = RetrofitTool.getService().addComment(map);
+        mDlg = ProgressDialog.show(CommentActivity.this, null, "请稍后......", true);
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                if (mDlg.isShowing()){
+                    mDlg.cancel();
+                }
+                if (response.code() != 200) {
+                    ToastTool.show(CommentActivity.this, response.message());
+                    LogTool.e(TAG, response.message());
+                    return;
+                }
+                JSONObject result = response.body();
+                try {
+                    if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
+                        ToastTool.show(CommentActivity.this, result.getString(ConstantTool.MSG));
+                        return;
+                    }
+                    ToastTool.show(CommentActivity.this, "评论成功");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+                if (mDlg.isShowing()) {
+                    mDlg.cancel();
+                }
+                ToastTool.show(CommentActivity.this, "服务器出现问题: " + t.getMessage());
+            }
+        });
+    }
+
+    private void getData(int page){
+        Call<JSONObject> call = RetrofitTool.getService().getComments(travelId, page);
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                if (commentSRL.isRefreshing()) {
+                    commentSRL.setRefreshing(false);
+                }
+                mAdapter.setIsLoading(false);
+                mAdapter.notifyDataSetChanged();
+                if (response.code() != 200) {
+                    ToastTool.show(CommentActivity.this, response.message());
+                    LogTool.e(TAG, "请求出错：" + response.message());
+                    return;
+                }
+                LogTool.i(TAG, response.body().toString());
+                JSONObject result = response.body();
+                try {
+                    if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
+                        ToastTool.show(CommentActivity.this, result.getString(ConstantTool.MSG));
+                        return;
+                    }
+                    size = result.getInt(ConstantTool.SIZE);
+                    List<CommentBean> commentBeans = FormatTool.gson.fromJson(String.valueOf(result.getJSONArray(ConstantTool.DATA)), new TypeToken<List<CommentBean>>(){}.getType());
+                    comments.addAll(commentBeans);
+                    mAdapter.setComments(comments);
+                    mAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+                if (commentSRL.isRefreshing()) {
+                    commentSRL.setRefreshing(false);
+                }
+                mAdapter.setIsLoading(false);
+                mAdapter.notifyDataSetChanged();
+                ToastTool.show(CommentActivity.this, "服务器出现问题: " + t.getMessage());
             }
         });
     }

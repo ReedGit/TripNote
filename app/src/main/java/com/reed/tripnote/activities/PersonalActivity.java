@@ -181,6 +181,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                     call.enqueue(new Callback<JSONObject>() {
                         @Override
                         public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                            mDlg.cancel();
                             if (response.code() != 200) {
                                 ToastTool.show(PersonalActivity.this, response.message());
                                 LogTool.e(TAG, "请求出错：" + response.message());

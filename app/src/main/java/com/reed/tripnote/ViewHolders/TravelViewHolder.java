@@ -1,5 +1,6 @@
 package com.reed.tripnote.ViewHolders;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.reed.tripnote.R;
 import com.reed.tripnote.activities.InformationActivity;
 import com.reed.tripnote.beans.TravelBean;
@@ -45,7 +47,7 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bindData(final TravelBean travelBean) {
+    public void bindData(Context context, final TravelBean travelBean) {
         titleTV.setText(travelBean.getTitle());
         String date = FormatTool.transformToDateString(travelBean.getStartTime());
         if (travelBean.getEndTime() != null) {
@@ -57,6 +59,9 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
         if (!TextUtils.isEmpty(travelBean.getIntroduction())) {
             String introduction = "\u3000\u3000" + travelBean.getIntroduction();
             introductionTV.setText(introduction);
+        }
+        if (!TextUtils.isEmpty(travelBean.getUserImage())){
+            Glide.with(context).load(ConstantTool.imageUrl + travelBean.getUserImage()).placeholder(R.mipmap.default_head).into(headCIV);
         }
         authorLL.setOnClickListener(new View.OnClickListener() {
             @Override

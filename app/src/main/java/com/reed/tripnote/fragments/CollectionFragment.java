@@ -11,16 +11,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.reflect.TypeToken;
+import com.reed.tripnote.App;
 import com.reed.tripnote.R;
-import com.reed.tripnote.ViewHolders.FootViewHolder;
 import com.reed.tripnote.activities.ContentActivity;
 import com.reed.tripnote.adapters.TravelAdapter;
 import com.reed.tripnote.beans.TravelBean;
-import com.reed.tripnote.data.TravelData;
+import com.reed.tripnote.beans.UserBean;
 import com.reed.tripnote.tools.ConstantTool;
+import com.reed.tripnote.tools.FormatTool;
+import com.reed.tripnote.tools.LogTool;
+import com.reed.tripnote.tools.RetrofitTool;
+import com.reed.tripnote.tools.ToastTool;
 import com.reed.tripnote.views.DividerItemDecoration;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 我收藏的游记
@@ -28,30 +43,41 @@ import java.util.List;
  */
 public class CollectionFragment extends Fragment {
 
+    private static final String TAG = CollectionFragment.class.getSimpleName();
+
     private View mView;
-    private SwipeRefreshLayout collectionRefresh;
-    private RecyclerView collectRecycler;
+
+    @Bind(R.id.refresh)
+    public SwipeRefreshLayout collectionRefresh;
+
+    @Bind(R.id.recycler_view)
+    public RecyclerView collectRecycler;
+
     private TravelAdapter mAdapter;
-    private List<TravelBean> travelBeans;
+    private List<TravelBean> travelBeans = new ArrayList<>();
     private int visibleLastIndex = 0;
     private LinearLayoutManager mManager;
+
+    private int size = 0;
+    private int page = 1;
+
+    private UserBean user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mView == null) {
+            user = ((App) getActivity().getApplication()).getUser();
             mView = inflater.inflate(R.layout.layout_recycler, container, false);
-            collectionRefresh = (SwipeRefreshLayout) mView.findViewById(R.id.refresh);
-            collectRecycler = (RecyclerView) mView.findViewById(R.id.recycler_view);
+            ButterKnife.bind(this, mView);
             mAdapter = new TravelAdapter();
             mManager = new LinearLayoutManager(getActivity());
             collectRecycler.setLayoutManager(mManager);
             collectRecycler.setAdapter(mAdapter);
             collectRecycler.setItemAnimator(new DefaultItemAnimator());
             collectRecycler.addItemDecoration(new DividerItemDecoration(getContext()));
-            travelBeans = TravelData.getInstance().getTravels();
-            mAdapter.setTravelBeans(travelBeans);
-            mAdapter.notifyDataSetChanged();
             initListener();
+            collectionRefresh.setRefreshing(true);
+            getData(1);
         }
         return mView;
     }
@@ -61,10 +87,10 @@ public class CollectionFragment extends Fragment {
             @Override
             public void onRefresh() {
                 travelBeans.clear();
-                travelBeans = TravelData.getInstance().getTravels();
-                mAdapter.setTravelBeans(travelBeans);
-                mAdapter.notifyDataSetChanged();
-                collectionRefresh.setRefreshing(false);
+                mAdapter.setIsLoading(false);
+                mAdapter.setIsAll(false);
+                page = 1;
+                getData(1);
             }
         });
         mAdapter.setOnItemClickListener(new TravelAdapter.OnItemClickListener() {
@@ -84,6 +110,15 @@ public class CollectionFragment extends Fragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 int itemLastIndex = mAdapter.getItemCount() - 1;
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && visibleLastIndex == itemLastIndex) {
+                    if (travelBeans.size() < size){
+                        page++;
+                        mAdapter.setIsLoading(true);
+                        mAdapter.notifyDataSetChanged();
+                        getData(page);
+                    } else {
+                        mAdapter.setIsAll(true);
+                        mAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 
@@ -91,6 +126,50 @@ public class CollectionFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 visibleLastIndex = mManager.findLastCompletelyVisibleItemPosition();
+            }
+        });
+    }
+
+    private void getData(int page) {
+        Call<JSONObject> call = RetrofitTool.getService().userCollection(user.getUserId(), page);
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                if (collectionRefresh.isRefreshing()) {
+                    collectionRefresh.setRefreshing(false);
+                }
+                mAdapter.setIsLoading(false);
+                mAdapter.notifyDataSetChanged();
+                if (response.code() != 200) {
+                    ToastTool.show(getActivity(), response.message());
+                    LogTool.e(TAG, "请求出错：" + response.message());
+                    return;
+                }
+                LogTool.i(TAG, response.body().toString());
+                JSONObject result = response.body();
+                try {
+                    if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
+                        ToastTool.show(getActivity(), result.getString(ConstantTool.MSG));
+                        return;
+                    }
+                    size = result.getInt(ConstantTool.SIZE);
+                    List<TravelBean> travels = FormatTool.gson.fromJson(String.valueOf(result.getJSONArray(ConstantTool.DATA)), new TypeToken<List<TravelBean>>(){}.getType());
+                    travelBeans.addAll(travels);
+                    mAdapter.setTravelBeans(travelBeans);
+                    mAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+                if (collectionRefresh.isRefreshing()) {
+                    collectionRefresh.setRefreshing(false);
+                }
+                mAdapter.setIsLoading(false);
+                mAdapter.notifyDataSetChanged();
+                ToastTool.show(getActivity().getApplicationContext(), "服务器出现问题: " + t.getMessage());
             }
         });
     }

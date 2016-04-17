@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,7 +74,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     private String coordinate;
     private TravelBean travel;
     private UserBean user;
-    private List<ContentBean> contents;
+    private List<ContentBean> contents = new ArrayList<>();
     private List<LatLng> lats = new ArrayList<>();
 
     @Override
@@ -137,11 +138,16 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
                 break;
             case R.id.information:
                 Dialog dialog = new Dialog(ContentActivity.this);
-                dialog.setTitle("游记详情");
+                dialog.setTitle("游记简介");
                 dialog.setCanceledOnTouchOutside(true);
                 View view = LayoutInflater.from(ContentActivity.this).inflate(R.layout.dlg_travel, null, false);
                 TextView introductionTV = (TextView) view.findViewById(R.id.tv_travel_introduction);
-                String introduction = "\u3000\u3000" + travel.getIntroduction();
+                String introduction;
+                if (TextUtils.isEmpty(travel.getIntroduction())){
+                    introduction = "对不起，该游记没有提供简介";
+                } else {
+                    introduction = "\u3000\u3000" + travel.getIntroduction();
+                }
                 introductionTV.setText(introduction);
                 dialog.setContentView(view);
                 dialog.show();
@@ -158,6 +164,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
             case R.id.fab_content_comment:
                 contentFAM.close(true);
                 Intent intent = new Intent(ContentActivity.this, CommentActivity.class);
+                intent.putExtra(ConstantTool.TRAVEL_ID, travel.getTravelId());
                 startActivity(intent);
                 break;
             case R.id.fab_content_liked:
@@ -175,7 +182,6 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
                 double longitude = aMapLocation.getLongitude();//获取经度
                 coordinate = latitude + "," + longitude;
                 address = aMapLocation.getCountry() + " " + aMapLocation.getProvince() + " " + aMapLocation.getCity();
-                //addMarkersToMap(new LatLng(latitude, longitude), "测试");
             } else {
                 String errText = "定位失败," + aMapLocation.getErrorCode() + ": " + aMapLocation.getErrorInfo();
                 LogTool.e(TAG, errText);
@@ -221,16 +227,13 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (aMap != null) {
-            LogTool.i(TAG, "marker id =====" + marker.getId());
-            int position = Integer.parseInt(marker.getId().substring(6)) - 1;
-            if (position < contents.size()) {
-                Intent intent = new Intent(ContentActivity.this, ContentDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(ConstantTool.CONTENT, contents.get(position));
-                intent.putExtra(ConstantTool.TRAVEL_NAME, travel.getTitle());
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
+            LogTool.i(TAG, "marker id =====" + marker.getObject());
+            Intent intent = new Intent(ContentActivity.this, ContentDetailActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ConstantTool.CONTENT, (ContentBean) marker.getObject());
+            intent.putExtra(ConstantTool.TRAVEL_NAME, travel.getTitle());
+            intent.putExtras(bundle);
+            startActivity(intent);
 
         }
         return false;
@@ -255,7 +258,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
             double longitude = Double.parseDouble(content.getCoordinate().split(",")[0]);
             double latitude = Double.parseDouble(content.getCoordinate().split(",")[1]);
             LatLng lat = new LatLng(latitude, longitude);
-            addMarkersToMap(lat, "第" + content.getDay() + "天");
+            addMarkersToMap(lat, content);
             lats.add(lat);
         }
         aMap.addPolyline((new PolylineOptions())
@@ -283,16 +286,21 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     /**
      * 在地图上添加marker
      */
-    private void addMarkersToMap(LatLng latLng, String text) {
+    private void addMarkersToMap(LatLng latLng, ContentBean contentBean) {
         MarkerOptions options = new MarkerOptions();
         options.position(latLng);
-        options.title(text);
+        options.title("第" + contentBean.getDay() + "天");
         options.draggable(true);
         options.icon(BitmapDescriptorFactory.defaultMarker());
         // 将Marker设置为贴地显示，可以双指下拉看效果
         options.setFlat(true);
         Marker marker = aMap.addMarker(options);
+        marker.setObject(contentBean);
         marker.showInfoWindow();
+    }
+
+    private void getData() {
+
     }
 
 }

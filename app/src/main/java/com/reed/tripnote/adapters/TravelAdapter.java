@@ -1,5 +1,6 @@
 package com.reed.tripnote.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ public class TravelAdapter extends RecyclerView.Adapter {
     private boolean isAll = false;
 
     private boolean isLoading = false;
+    private Context context;
 
     public void setIsAll(boolean isAll) {
         this.isAll = isAll;
@@ -65,6 +67,7 @@ public class TravelAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        this.context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == TYPE_NORMAL) {
             return new TravelViewHolder(inflater.inflate(R.layout.item_travel, parent, false));
@@ -89,7 +92,7 @@ public class TravelAdapter extends RecyclerView.Adapter {
             ((FootViewHolder) holder).bindData(FINISH_DATA);
             return;
         }
-        ((TravelViewHolder) holder).bindData(travelBeans.get(position));
+        ((TravelViewHolder) holder).bindData(context, travelBeans.get(position));
         if (onItemClickListener != null) {
             ((TravelViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

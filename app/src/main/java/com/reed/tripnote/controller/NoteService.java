@@ -21,31 +21,71 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
- * retrofit service接口
+ * retrofit service interface
  * Created by 伟 on 2016/3/17.
  */
 public interface NoteService {
 
+    //the api for user's login
     @FormUrlEncoded
     @POST("user/login")
     Call<JSONObject> login(@Field("email") String email, @Field("password") String password);
 
+    //the api for user's register
     @FormUrlEncoded
     @POST("user/register")
     Call<JSONObject> register(@Field("email") String email, @Field("password") String password);
 
+    //the api for user to modify personal's information
     @FormUrlEncoded
     @POST("user/{id}")
     Call<JSONObject> setProfile(@Path("id") long id, @FieldMap Map<String, Object> map);
 
-    @GET("user/exist")
-    Call<JSONObject> exist(@Query("email") String email);
-
+    //the api for forgetting password
     @FormUrlEncoded
     @POST("user/reset")
     Call<JSONObject> reset(@Field("email") String email);
 
+    //the api for getting user's information
+    @GET("user/{id}")
+    Call<JSONObject> getUser(@Path("id") long id);
+
+    //the api for modifying user's portrait
     @Multipart
     @POST("user/{id}/change_avatar")
     Call<JSONObject> uploadImage(@Path("id") long id, @PartMap Map<String, RequestBody> map, @Part("token") String token);
+
+    //the api for getting the travels in the main page
+    @GET("travel/explore")
+    Call<JSONObject> getTravels(@Query("page") int page);
+
+    //the api for searching the travel by the key
+    @GET("travel/search")
+    Call<JSONObject> searchTravel(@Query("q") String q, @Query("page") int page);
+
+    @GET("collection/travels")
+    Call<JSONObject> userCollection(@Query("userId") long userId, @Query("page") int page);
+
+    //the api for creating a travel
+    @FormUrlEncoded
+    @POST("travel/create")
+    Call<JSONObject> createTravel(@FieldMap Map<String, Object> map);
+
+    //the api for users who collected the travel
+    @GET("collection/users")
+    Call<JSONObject> usersForCollection(@Query("travelId") long travelId);
+
+    //the api for users who liked the travel
+    @GET("like/users")
+    Call<JSONObject> usersForLike(@Query("travelId") long travelId);
+
+    //the api for adding comment
+    @FormUrlEncoded
+    @POST("comment/add")
+    Call<JSONObject> addComment(@FieldMap Map<String, Object> map);
+
+    //the api for getting comment
+    @GET("comment/list")
+    Call<JSONObject> getComments(@Query("travelId") long travelId, @Query("page") int page);
+
 }

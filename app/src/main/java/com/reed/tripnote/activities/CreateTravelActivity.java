@@ -1,5 +1,6 @@
 package com.reed.tripnote.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,17 +16,35 @@ import com.reed.tripnote.R;
 import com.reed.tripnote.beans.TravelBean;
 import com.reed.tripnote.beans.UserBean;
 import com.reed.tripnote.tools.ConstantTool;
+import com.reed.tripnote.tools.FormatTool;
+import com.reed.tripnote.tools.LogTool;
+import com.reed.tripnote.tools.RetrofitTool;
+import com.reed.tripnote.tools.ToastTool;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CreateTravelActivity extends AppCompatActivity {
+
+    private static final String TAG = CreateTravelActivity.class.getSimpleName();
 
     @Bind(R.id.toolbar)
     public Toolbar travelToolbar;
     @Bind(R.id.et_travel_title)
     public EditText titleET;
+    @Bind(R.id.et_travel_introduction)
+    public EditText introductionET;
     private UserBean user;
+    private ProgressDialog mDlg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,18 +66,50 @@ public class CreateTravelActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_publish:
                 String title = titleET.getText().toString().trim();
+                String introduction = introductionET.getText().toString().trim();
                 if (TextUtils.isEmpty(title)) {
                     titleET.setError("请输入游记名称");
                 } else {
-                    TravelBean travel = new TravelBean();
-                    travel.setTitle(title);
-                    travel.setUserId(user.getUserId());
-                    Intent intent = new Intent(CreateTravelActivity.this, ContentActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(ConstantTool.TRAVEL, travel);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                    finish();
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("title", title);
+                    map.put("introduction", introduction);
+                    map.put("userId", user.getUserId());
+                    Call<JSONObject> call = RetrofitTool.getService().createTravel(map);
+                    mDlg = ProgressDialog.show(CreateTravelActivity.this, null, "请稍后......", true);
+                    call.enqueue(new Callback<JSONObject>() {
+                        @Override
+                        public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                            mDlg.cancel();
+                            if (response.code() != 200) {
+                                ToastTool.show(CreateTravelActivity.this, response.message());
+                                LogTool.e(TAG, "请求出错：" + response.message());
+                                return;
+                            }
+                            LogTool.i(TAG, response.body().toString());
+                            JSONObject result = response.body();
+                            try {
+                                if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK){
+                                    ToastTool.show(CreateTravelActivity.this, result.getString(ConstantTool.MSG));
+                                    return;
+                                }
+                                TravelBean travel = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.DATA)), TravelBean.class);
+                                Intent intent = new Intent(CreateTravelActivity.this, ContentActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable(ConstantTool.TRAVEL, travel);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                                finish();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<JSONObject> call, Throwable t) {
+                            mDlg.cancel();
+                            ToastTool.show(CreateTravelActivity.this, "服务器出现问题: " + t.getMessage());
+                        }
+                    });
                 }
                 break;
         }

@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public Toolbar loginToolbar;
 
     private ProgressDialog mDlg;
+    private Call<JSONObject> call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         initView();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (call != null && call.isExecuted()) {
+            call.cancel();
+        }
     }
 
     private void initView() {
@@ -104,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     emailET.setError("邮箱格式不正确");
                     return;
                 }
-                Call<JSONObject> call = RetrofitTool.getService().login(email, MD5Tool.compute(password));
+                call = RetrofitTool.getService().login(email, MD5Tool.compute(password));
                 mDlg = ProgressDialog.show(LoginActivity.this, null, "正在登陆，请稍后......", true);
                 call.enqueue(new Callback<JSONObject>() {
                     @Override

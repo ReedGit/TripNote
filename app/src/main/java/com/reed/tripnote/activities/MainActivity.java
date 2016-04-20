@@ -165,24 +165,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     manager.beginTransaction().replace(R.id.main_frame, collectionFragment).commit();
                 }
                 break;
-            /*case R.id.drawer_liked:
-                if (user == null) {
-                    Toast.makeText(MainActivity.this, "请先登录账号", Toast.LENGTH_SHORT).show();
-                    intentToLogin();
-                } else {
-                    item.setChecked(true);
-                    mainToolbar.setTitle(R.string.liked);
-                }
-                break;
-            case R.id.drawer_commented:
-                if (user == null) {
-                    Toast.makeText(MainActivity.this, "请先登录账号", Toast.LENGTH_SHORT).show();
-                    intentToLogin();
-                } else {
-                    item.setChecked(true);
-                    mainToolbar.setTitle(R.string.commented);
-                }
-                break;*/
             case R.id.drawer_about:
                 item.setChecked(true);
                 mainToolbar.setTitle(R.string.about);

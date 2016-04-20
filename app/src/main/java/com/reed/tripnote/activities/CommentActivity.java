@@ -67,6 +67,8 @@ public class CommentActivity extends AppCompatActivity {
 
     private int size = 0;
     private int page = 1;
+    private Call<JSONObject> listCall;
+    private Call<JSONObject> addCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,17 @@ public class CommentActivity extends AppCompatActivity {
         travelId = getIntent().getLongExtra(ConstantTool.TRAVEL_ID, 0);
         initView();
         initListener();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (listCall != null && listCall.isExecuted()) {
+            listCall.cancel();
+        }
+        if (addCall != null && addCall.isExecuted()) {
+            addCall.cancel();
+        }
     }
 
     @Override
@@ -177,9 +190,9 @@ public class CommentActivity extends AppCompatActivity {
         map.put(ConstantTool.USER_ID, user.getUserId());
         map.put(ConstantTool.TRAVEL_ID, travelId);
         map.put(ConstantTool.REMARK, remark);
-        Call<JSONObject> call = RetrofitTool.getService().addComment(map);
+        addCall = RetrofitTool.getService().addComment(map);
         mDlg = ProgressDialog.show(CommentActivity.this, null, "请稍后......", true);
-        call.enqueue(new Callback<JSONObject>() {
+        addCall.enqueue(new Callback<JSONObject>() {
             @Override
             public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                 if (mDlg.isShowing()){
@@ -207,14 +220,16 @@ public class CommentActivity extends AppCompatActivity {
                 if (mDlg.isShowing()) {
                     mDlg.cancel();
                 }
-                ToastTool.show(CommentActivity.this, "服务器出现问题: " + t.getMessage());
+                if (!call.isCanceled()) {
+                    ToastTool.show(CommentActivity.this, "服务器出现问题: " + t.getMessage());
+                }
             }
         });
     }
 
     private void getData(int page){
-        Call<JSONObject> call = RetrofitTool.getService().getComments(travelId, page);
-        call.enqueue(new Callback<JSONObject>() {
+        listCall = RetrofitTool.getService().getComments(travelId, page);
+        listCall.enqueue(new Callback<JSONObject>() {
             @Override
             public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                 if (commentSRL.isRefreshing()) {
@@ -252,7 +267,9 @@ public class CommentActivity extends AppCompatActivity {
                 }
                 mAdapter.setIsLoading(false);
                 mAdapter.notifyDataSetChanged();
-                ToastTool.show(CommentActivity.this, "服务器出现问题: " + t.getMessage());
+                if (!call.isCanceled()) {
+                    ToastTool.show(CommentActivity.this, "服务器出现问题: " + t.getMessage());
+                }
             }
         });
     }

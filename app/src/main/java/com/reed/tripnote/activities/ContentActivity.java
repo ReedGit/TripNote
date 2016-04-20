@@ -36,11 +36,14 @@ import com.reed.tripnote.data.ContentData;
 import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.tools.LogTool;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
 
 /**
  * 游记内容详情
@@ -76,6 +79,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     private UserBean user;
     private List<ContentBean> contents = new ArrayList<>();
     private List<LatLng> lats = new ArrayList<>();
+    private Call<JSONObject> call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +103,14 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
         super.onPause();
         contentMap.onPause();
         deactivate();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (call != null && call.isExecuted()) {
+            call.cancel();
+        }
     }
 
     @Override

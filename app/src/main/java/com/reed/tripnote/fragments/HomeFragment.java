@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,7 @@ public class HomeFragment extends Fragment {
     private LinearLayoutManager mManager;
     private int size = 0;
     private int page = 1;
+    private Call<JSONObject> call;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,6 +73,14 @@ public class HomeFragment extends Fragment {
             initListener();
         }
         return mView;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (call != null && call.isExecuted()) {
+            call.cancel();
+        }
     }
 
     private void initListener() {
@@ -122,7 +132,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void getData(int page) {
-        Call<JSONObject> call = RetrofitTool.getService().getTravels(page);
+        call = RetrofitTool.getService().getTravels(page);
+        if (call.isExecuted()) {
+            call.cancel();
+        }
         call.enqueue(new Callback<JSONObject>() {
             @Override
             public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
@@ -160,7 +173,10 @@ public class HomeFragment extends Fragment {
                 }
                 mAdapter.setIsLoading(false);
                 mAdapter.notifyDataSetChanged();
-                ToastTool.show(getActivity().getApplicationContext(), "服务器出现问题: " + t.getMessage());
+                LogTool.i(TAG, "服务器出现问题: " + t.getMessage());
+                if (!call.isCanceled()) {
+                    ToastTool.show(getActivity(), "服务器出现问题: " + t.getMessage());
+                }
             }
         });
     }

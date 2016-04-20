@@ -6,19 +6,16 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.reed.tripnote.App;
 import com.reed.tripnote.R;
 import com.reed.tripnote.beans.UserBean;
 import com.reed.tripnote.controller.UserManager;
-import com.reed.tripnote.tools.PathUtil;
 import com.reed.tripnote.tools.ToastTool;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -26,8 +23,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     public Toolbar settingToolbar;
     @Bind(R.id.btn_exit)
     public Button exitBtn;
-    /*@Bind(R.id.tv_setting_cache)
-    public TextView cacheTV;*/
     private UserBean user;
 
     @Override
@@ -66,7 +61,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         settingToolbar.setTitle(R.string.setting);
         settingToolbar.setNavigationIcon(R.mipmap.toolbar_back);
         setSupportActionBar(settingToolbar);
-        //cacheTV.setText(PathUtil.formatFileSize(PathUtil.getFileSize(PathUtil.getAvailableCacheDir(this))));
         if (user == null) {
             exitBtn.setVisibility(View.GONE);
         } else {

@@ -17,10 +17,13 @@ import com.reed.tripnote.data.TravelData;
 import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.views.DividerItemDecoration;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
 
 public class PersonTravelActivity extends AppCompatActivity {
 
@@ -38,6 +41,7 @@ public class PersonTravelActivity extends AppCompatActivity {
     private long userId;
     private String from;
     private String nickName;
+    private Call<JSONObject> call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

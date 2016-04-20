@@ -45,6 +45,7 @@ public class CreateTravelActivity extends AppCompatActivity {
     public EditText introductionET;
     private UserBean user;
     private ProgressDialog mDlg;
+    private Call<JSONObject> call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,17 @@ public class CreateTravelActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         user = ((App) getApplication()).getUser();
         initView();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (call != null && call.isExecuted()) {
+            call.cancel();
+        }
+        if (mDlg != null && mDlg.isShowing()) {
+            mDlg.cancel();
+        }
     }
 
     @Override
@@ -74,7 +86,7 @@ public class CreateTravelActivity extends AppCompatActivity {
                     map.put("title", title);
                     map.put("introduction", introduction);
                     map.put("userId", user.getUserId());
-                    Call<JSONObject> call = RetrofitTool.getService().createTravel(map);
+                    call = RetrofitTool.getService().createTravel(map);
                     mDlg = ProgressDialog.show(CreateTravelActivity.this, null, "请稍后......", true);
                     call.enqueue(new Callback<JSONObject>() {
                         @Override
@@ -106,8 +118,12 @@ public class CreateTravelActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<JSONObject> call, Throwable t) {
-                            mDlg.cancel();
-                            ToastTool.show(CreateTravelActivity.this, "服务器出现问题: " + t.getMessage());
+                            if (mDlg.isShowing()) {
+                                mDlg.cancel();
+                            }
+                            if (!call.isCanceled()) {
+                                ToastTool.show(CreateTravelActivity.this, "服务器出现问题: " + t.getMessage());
+                            }
                         }
                     });
                 }

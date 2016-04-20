@@ -34,6 +34,7 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
     @Bind(R.id.et_forget_mail)
     public TextInputEditText emailET;
     private ProgressDialog mDlg;
+    private Call<JSONObject> call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,14 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        if (call != null && call.isExecuted()) {
+            call.cancel();
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_forget:
@@ -64,7 +73,7 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
                     ToastTool.show(ForgetActivity.this, "邮箱格式不正确");
                     return;
                 }
-                Call<JSONObject> call = RetrofitTool.getService().reset(email);
+                call = RetrofitTool.getService().reset(email);
                 mDlg = ProgressDialog.show(ForgetActivity.this, null, "请稍后.......", true);
                 call.enqueue(new Callback<JSONObject>() {
                     @Override
@@ -87,7 +96,9 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onFailure(Call<JSONObject> call, Throwable t) {
                         mDlg.cancel();
-                        ToastTool.show(ForgetActivity.this, "服务器出现问题: " + t.getMessage());
+                        if (!call.isCanceled()) {
+                            ToastTool.show(ForgetActivity.this, "服务器出现问题: " + t.getMessage());
+                        }
                     }
                 });
                 break;

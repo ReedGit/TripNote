@@ -50,6 +50,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
     private int size = 0;
     private int page = 1;
+    private Call<JSONObject> call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

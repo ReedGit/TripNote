@@ -55,6 +55,7 @@ public class ModifyPassword extends AppCompatActivity {
     private UserBean user;
 
     private ProgressDialog mDlg;
+    private Call<JSONObject> call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,14 @@ public class ModifyPassword extends AppCompatActivity {
         ButterKnife.bind(this);
         user = ((App) getApplication()).getUser();
         initView();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (call != null && call.isExecuted()) {
+            call.cancel();
+        }
     }
 
     @Override
@@ -102,7 +111,7 @@ public class ModifyPassword extends AppCompatActivity {
                 map.put(ConstantTool.NEW_PASSWORD, MD5Tool.compute(newPassword));
                 map.put(ConstantTool.PASSWORD, MD5Tool.compute(oldPassword));
                 map.put(ConstantTool.TOKEN, user.getToken());
-                Call<JSONObject> call = RetrofitTool.getService().setProfile(user.getUserId(), map);
+                call = RetrofitTool.getService().setProfile(user.getUserId(), map);
                 mDlg = ProgressDialog.show(ModifyPassword.this, null, "修改中......", true);
                 call.enqueue(new Callback<JSONObject>() {
                     @Override
@@ -133,7 +142,9 @@ public class ModifyPassword extends AppCompatActivity {
                     public void onFailure(Call<JSONObject> call, Throwable t) {
                         mDlg.cancel();
                         LogTool.e(TAG, t.getMessage());
-                        ToastTool.show(ModifyPassword.this, t.getMessage());
+                        if (!call.isCanceled()) {
+                            ToastTool.show(ModifyPassword.this, t.getMessage());
+                        }
                     }
                 });
                 break;

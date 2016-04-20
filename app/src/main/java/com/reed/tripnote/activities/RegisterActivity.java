@@ -51,6 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
     public TextInputEditText rePasswordEt;
 
     private ProgressDialog mDlg;
+    private Call<JSONObject> call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,14 @@ public class RegisterActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initView();
         initListener();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (call != null && call.isExecuted()) {
+            call.cancel();
+        }
     }
 
     private void initView() {
@@ -101,7 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
                     rePasswordEt.setError("两次输入密码不一致");
                     return;
                 }
-                Call<JSONObject> call = RetrofitTool.getService().register(email, MD5Tool.compute(password));
+                call = RetrofitTool.getService().register(email, MD5Tool.compute(password));
                 mDlg = ProgressDialog.show(RegisterActivity.this, null, "加载中", true);
                 call.enqueue(new Callback<JSONObject>() {
                     @Override
@@ -130,7 +139,9 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onFailure(Call<JSONObject> call, Throwable t) {
                         mDlg.cancel();
                         LogTool.e(TAG, t.getMessage());
-                        ToastTool.show(RegisterActivity.this, "服务器出现问题: " + t.getMessage());
+                        if (!call.isCanceled()) {
+                            ToastTool.show(RegisterActivity.this, "服务器出现问题: " + t.getMessage());
+                        }
                     }
                 });
             }

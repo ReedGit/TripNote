@@ -66,6 +66,7 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
     private long userId;
     private UserBean author;
     private ProgressDialog mDlg;
+    private Call<JSONObject> call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,14 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
             introductionTV.setText(TextUtils.isEmpty(author.getIntroduction()) ? "你还没有给自己写点介绍呢" : author.getIntroduction());
         }
         super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (call != null && call.isExecuted()) {
+            call.cancel();
+        }
     }
 
     @Override
@@ -155,7 +164,7 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void getUserInfo(long id) {
-        Call<JSONObject> call = RetrofitTool.getService().getUser(id);
+        call = RetrofitTool.getService().getUser(id);
         mDlg = ProgressDialog.show(InformationActivity.this, null, "请稍后......", true);
         call.enqueue(new Callback<JSONObject>() {
             @Override
@@ -180,7 +189,9 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
             public void onFailure(Call<JSONObject> call, Throwable t) {
                 mDlg.cancel();
                 LogTool.e(TAG, "服务器出现问题: " + t.getMessage());
-                ToastTool.show(InformationActivity.this, "服务器出现问题: " + t.getMessage());
+                if (!call.isCanceled()) {
+                    ToastTool.show(InformationActivity.this, "服务器出现问题: " + t.getMessage());
+                }
             }
         });
     }

@@ -1,66 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="#F9FBE7"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <include layout="@layout/layout_toolbar" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="36dp"
-            android:text="@string/create_note"
-            android:textColor="#FFFFFF"
-            android:textSize="36sp" />
-
-
-        <EditText
-            android:id="@+id/et_travel_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="48dp"
-            android:layout_marginLeft="26dp"
-            android:layout_marginRight="26dp"
-            android:layout_marginTop="36dp"
-            android:paddingLeft="26dp"
-            android:paddingRight="26dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:background="@drawable/travel_name_background"
-            android:drawableLeft="@drawable/ic_class_24dp"
-            android:drawablePadding="20dp"
-            android:drawableStart="@drawable/ic_class_24dp"
-            android:hint="@string/travel_name"
-            android:singleLine="true"
-            android:maxLength="20"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:textSize="16sp" />
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/et_travel_introduction"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:gravity="top"
-        android:padding="10dp"
-        android:hint="@string/travel_introduction"
-        android:minLines="1"
-        android:scrollbars="vertical"
-        android:textColor="#000000"
-        android:textSize="16sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="36dp"
+                    android:text="@string/create_note"
+                    android:textColor="#FFFFFF"
+                    android:textSize="36sp" />
+
+
+                <EditText
+                    android:id="@+id/et_travel_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="48dp"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginRight="26dp"
+                    android:layout_marginTop="36dp"
+                    android:background="@drawable/travel_name_background"
+                    android:drawableLeft="@drawable/ic_class_24dp"
+                    android:drawablePadding="20dp"
+                    android:drawableStart="@drawable/ic_class_24dp"
+                    android:hint="@string/travel_name"
+                    android:maxLength="20"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="26dp"
+                    android:paddingRight="26dp"
+                    android:paddingTop="8dp"
+                    android:singleLine="true"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_travel_introduction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="@string/travel_introduction"
+                android:minLines="1"
+                android:padding="10dp"
+                android:scrollbars="vertical"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </LinearLayout>

@@ -62,7 +62,7 @@
         <activity android:name=".activities.CreateContentActivity" />
         <activity
             android:name=".activities.CreateTravelActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activities.ContentDetailActivity" />
         <activity android:name=".activities.ForgetActivity" />
         <activity android:name=".activities.ModifyPassword" />
@@ -79,7 +79,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".activities.PersonTravelActivity"></activity>
+        <activity android:name=".activities.PersonTravelActivity"/>
     </application>
 
 </manifest>

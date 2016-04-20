@@ -92,6 +92,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
     private String nickName;
     private int sex;
     private String photoPath;
+    private Call<JSONObject> call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +111,14 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                     .into(headCIV);
         }
         super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (call != null && call.isExecuted()) {
+            call.cancel();
+        }
     }
 
     @Override
@@ -176,7 +185,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                     }
                     map.put(ConstantTool.SEX, sex);
                     map.put(ConstantTool.TOKEN, user.getToken());
-                    Call<JSONObject> call = RetrofitTool.getService().setProfile(user.getUserId(), map);
+                    call = RetrofitTool.getService().setProfile(user.getUserId(), map);
                     mDlg = ProgressDialog.show(PersonalActivity.this, null, "修改中......", true);
                     call.enqueue(new Callback<JSONObject>() {
                         @Override
@@ -218,7 +227,9 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                         public void onFailure(Call<JSONObject> call, Throwable t) {
                             mDlg.cancel();
                             LogTool.e(TAG, t.getMessage());
-                            ToastTool.show(PersonalActivity.this, t.getMessage());
+                            if (!call.isCanceled()) {
+                                ToastTool.show(PersonalActivity.this, t.getMessage());
+                            }
                         }
                     });
                 }

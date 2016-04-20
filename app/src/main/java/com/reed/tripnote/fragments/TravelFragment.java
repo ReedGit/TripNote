@@ -56,6 +56,7 @@ public class TravelFragment extends Fragment {
     private LinearLayoutManager mManager;
     private int size = 0;
     private int page = 1;
+    private Call<JSONObject> call;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +74,14 @@ public class TravelFragment extends Fragment {
             getData(1);
         }
         return mView;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (call != null && call.isExecuted()) {
+            call.cancel();
+        }
     }
 
     private void initListener() {
@@ -119,7 +128,7 @@ public class TravelFragment extends Fragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 int itemLastIndex = mAdapter.getItemCount() - 1;
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && visibleLastIndex == itemLastIndex) {
-                    if (travelBeans.size() < size){
+                    if (travelBeans.size() < size) {
                         page++;
                         mAdapter.setIsLoading(true);
                         mAdapter.notifyDataSetChanged();
@@ -140,7 +149,7 @@ public class TravelFragment extends Fragment {
     }
 
     private void getData(int page) {
-        Call<JSONObject> call = RetrofitTool.getService().getTravels(page);
+        call = RetrofitTool.getService().getTravels(page);
         call.enqueue(new Callback<JSONObject>() {
             @Override
             public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
@@ -162,7 +171,8 @@ public class TravelFragment extends Fragment {
                         return;
                     }
                     size = result.getInt(ConstantTool.SIZE);
-                    List<TravelBean> travels = FormatTool.gson.fromJson(String.valueOf(result.getJSONArray(ConstantTool.DATA)), new TypeToken<List<TravelBean>>(){}.getType());
+                    List<TravelBean> travels = FormatTool.gson.fromJson(String.valueOf(result.getJSONArray(ConstantTool.DATA)), new TypeToken<List<TravelBean>>() {
+                    }.getType());
                     travelBeans.addAll(travels);
                     mAdapter.setTravelBeans(travelBeans);
                     mAdapter.notifyDataSetChanged();
@@ -178,7 +188,9 @@ public class TravelFragment extends Fragment {
                 }
                 mAdapter.setIsLoading(false);
                 mAdapter.notifyDataSetChanged();
-                ToastTool.show(getActivity().getApplicationContext(), "服务器出现问题: " + t.getMessage());
+                if (!call.isCanceled()) {
+                    ToastTool.show(getActivity(), "服务器出现问题: " + t.getMessage());
+                }
             }
         });
     }

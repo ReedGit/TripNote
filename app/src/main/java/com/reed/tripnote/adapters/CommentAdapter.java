@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.reed.tripnote.R;
-import com.reed.tripnote.ViewHolders.CommentViewHolder;
-import com.reed.tripnote.ViewHolders.FootViewHolder;
+import com.reed.tripnote.viewHolders.CommentViewHolder;
+import com.reed.tripnote.viewHolders.FootViewHolder;
 import com.reed.tripnote.beans.CommentBean;
 
 import java.util.List;

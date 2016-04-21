@@ -163,11 +163,11 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                     nickName = nicknameEt.getText().toString().trim();
                     introduction = introductionEt.getText().toString().trim();
                     if (TextUtils.isEmpty(email)) {
-                        ToastTool.show(PersonalActivity.this, "邮箱不能为空");
+                        ToastTool.show("邮箱不能为空");
                         return false;
                     }
                     if (!FormatTool.isEmail(email)) {
-                        ToastTool.show(PersonalActivity.this, "邮箱格式不正确");
+                        ToastTool.show("邮箱格式不正确");
                         return false;
                     }
                     Map<String, Object> map = new HashMap<>();
@@ -192,7 +192,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                         public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                             mDlg.cancel();
                             if (response.code() != 200) {
-                                ToastTool.show(PersonalActivity.this, response.message());
+                                ToastTool.show(response.message());
                                 LogTool.e(TAG, "请求出错：" + response.message());
                                 return;
                             }
@@ -200,7 +200,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                             JSONObject result = response.body();
                             try {
                                 if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
-                                    ToastTool.show(PersonalActivity.this, result.getString(ConstantTool.MSG));
+                                    ToastTool.show(result.getString(ConstantTool.MSG));
                                     return;
                                 }
                                 isEditable = false;
@@ -215,8 +215,8 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                                 user.setIntroduction(introduction);
                                 user.setNickName(nickName);
                                 user.setEmail(email);
-                                UserManager.loginUser(PersonalActivity.this, user);
-                                ToastTool.show(PersonalActivity.this, "修改成功");
+                                UserManager.loginUser(user);
+                                ToastTool.show("修改成功");
                                 finish();
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -228,7 +228,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                             mDlg.cancel();
                             LogTool.e(TAG, t.getMessage());
                             if (!call.isCanceled()) {
-                                ToastTool.show(PersonalActivity.this, t.getMessage());
+                                ToastTool.show(t.getMessage());
                             }
                         }
                     });
@@ -317,7 +317,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
             public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                 mDlg.cancel();
                 if (response.code() != 200) {
-                    ToastTool.show(PersonalActivity.this, response.message());
+                    ToastTool.show(response.message());
                     LogTool.e(TAG, "上传头像出错：" + response.message());
                     return;
                 }
@@ -325,13 +325,13 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                 JSONObject result = response.body();
                 try {
                     if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
-                        ToastTool.show(PersonalActivity.this, result.getString(ConstantTool.MSG));
+                        ToastTool.show(result.getString(ConstantTool.MSG));
                         return;
                     }
                     String headImage = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.DATA)), UserBean.class).getHeadImage();
                     user.setHeadImage(headImage);
-                    UserManager.loginUser(PersonalActivity.this, user);
-                    ToastTool.show(PersonalActivity.this, "修改成功");
+                    UserManager.loginUser(user);
+                    ToastTool.show("修改成功");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -340,8 +340,10 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onFailure(Call<JSONObject> call, Throwable t) {
-                mDlg.cancel();
-                ToastTool.show(PersonalActivity.this, t.getMessage());
+                if (mDlg.isShowing()) {
+                    mDlg.cancel();
+                }
+                ToastTool.show(t.getMessage());
                 LogTool.e(TAG, t.getMessage());
             }
         });

@@ -66,11 +66,11 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_forget:
                 String email = emailET.getText().toString().trim();
                 if (TextUtils.isEmpty(email)) {
-                    ToastTool.show(ForgetActivity.this, R.string.email_hint);
+                    ToastTool.show(R.string.email_hint);
                     return;
                 }
                 if (!FormatTool.isEmail(email)) {
-                    ToastTool.show(ForgetActivity.this, "邮箱格式不正确");
+                    ToastTool.show("邮箱格式不正确");
                     return;
                 }
                 call = RetrofitTool.getService().reset(email);
@@ -83,10 +83,10 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
                         JSONObject result = response.body();
                         try {
                             if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
-                                ToastTool.show(ForgetActivity.this, result.getString(ConstantTool.MSG));
+                                ToastTool.show(result.getString(ConstantTool.MSG));
                                 return;
                             }
-                            ToastTool.show(ForgetActivity.this, "邮件已经发送成功");
+                            ToastTool.show("邮件已经发送成功");
                             finish();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -97,7 +97,7 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
                     public void onFailure(Call<JSONObject> call, Throwable t) {
                         mDlg.cancel();
                         if (!call.isCanceled()) {
-                            ToastTool.show(ForgetActivity.this, "服务器出现问题: " + t.getMessage());
+                            ToastTool.show("服务器出现问题: " + t.getMessage());
                         }
                     }
                 });

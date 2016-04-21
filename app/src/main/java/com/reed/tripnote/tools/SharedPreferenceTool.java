@@ -3,6 +3,7 @@ package com.reed.tripnote.tools;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.reed.tripnote.App;
 import com.reed.tripnote.beans.UserBean;
 
 /**
@@ -14,19 +15,18 @@ public class SharedPreferenceTool {
     private SharedPreferences pref;
     private static SharedPreferenceTool prefTool;
 
-    public SharedPreferenceTool(Context context, String name) {
-        pref = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+    public SharedPreferenceTool(String name) {
+        pref = App.getContext().getSharedPreferences(name, Context.MODE_PRIVATE);
     }
 
-    public static synchronized SharedPreferenceTool getInstance(Context context, String name) {
+    public static synchronized SharedPreferenceTool getInstance(String name) {
         if (prefTool == null) {
-            prefTool = new SharedPreferenceTool(context, name);
+            prefTool = new SharedPreferenceTool(name);
         }
         return prefTool;
     }
 
     public void putUserPref(UserBean user) {
-        LogTool.i("info","存储：" + user.toString());
         SharedPreferences.Editor editor = pref.edit();
         editor.putLong(ConstantTool.USER_ID, user.getUserId());
         editor.putString(ConstantTool.EMAIL, user.getEmail());
@@ -42,7 +42,6 @@ public class SharedPreferenceTool {
     public UserBean getUserPref() {
         UserBean user = new UserBean();
         user.setUserId(pref.getLong(ConstantTool.USER_ID, -1));
-        LogTool.i("info", user.getUserId() + "");
         if (user.getUserId() == -1) {
             return null;
         }
@@ -53,7 +52,6 @@ public class SharedPreferenceTool {
         user.setNickName(pref.getString(ConstantTool.NICKNAME, null));
         user.setSex(pref.getInt(ConstantTool.SEX, 2));
         user.setToken(pref.getString(ConstantTool.TOKEN, null));
-        LogTool.i("info", user.toString());
         return user;
     }
 

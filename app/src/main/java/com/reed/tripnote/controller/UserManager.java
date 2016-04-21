@@ -13,15 +13,15 @@ import com.reed.tripnote.tools.SharedPreferenceTool;
  */
 public class UserManager {
 
-    public static void loginUser(Context context, UserBean user) {
-        ((App) context.getApplicationContext()).setUser(user);
-        SharedPreferenceTool prefTool = SharedPreferenceTool.getInstance(context, ConstantTool.USER);
+    public static void loginUser(UserBean user) {
+        ((App) App.getContext()).setUser(user);
+        SharedPreferenceTool prefTool = SharedPreferenceTool.getInstance(ConstantTool.USER);
         prefTool.putUserPref(user);
     }
 
-    public static void exitLogin(Context context) {
-        ((App) context.getApplicationContext()).setUser(null);
-        SharedPreferenceTool prefTool = SharedPreferenceTool.getInstance(context, ConstantTool.USER);
+    public static void exitLogin() {
+        ((App) App.getContext()).setUser(null);
+        SharedPreferenceTool prefTool = SharedPreferenceTool.getInstance(ConstantTool.USER);
         prefTool.empty();
     }
 

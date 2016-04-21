@@ -1,4 +1,4 @@
-package com.reed.tripnote.ViewHolders;
+package com.reed.tripnote.viewHolders;
 
 import android.content.Context;
 import android.content.Intent;
@@ -49,20 +49,28 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
 
     public void bindData(Context context, final TravelBean travelBean) {
         titleTV.setText(travelBean.getTitle());
+
         String date = FormatTool.transformToDateString(travelBean.getStartTime());
         if (travelBean.getEndTime() != null) {
             date += " / " + CalculateTool.calculateDay(travelBean.getStartTime(), travelBean.getEndTime()) + "天";
         }
         dateTV.setText(date);
+
         authorTV.setText(travelBean.getNickname());
-        firstImageView.setImageResource(R.mipmap.background);
+
         if (!TextUtils.isEmpty(travelBean.getIntroduction())) {
             String introduction = "\u3000\u3000" + travelBean.getIntroduction();
             introductionTV.setText(introduction);
         }
+
         if (!TextUtils.isEmpty(travelBean.getUserImage())){
             Glide.with(context).load(ConstantTool.imageUrl + travelBean.getUserImage()).placeholder(R.mipmap.default_head).into(headCIV);
         }
+
+        if (!TextUtils.isEmpty(travelBean.getCoverImage())) {
+            Glide.with(context).load(ConstantTool.imageUrl + travelBean.getCoverImage()).placeholder(R.mipmap.background).into(firstImageView);
+        }
+
         authorLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

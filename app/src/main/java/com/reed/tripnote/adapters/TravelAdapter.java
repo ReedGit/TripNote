@@ -7,13 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.reed.tripnote.R;
-import com.reed.tripnote.ViewHolders.FootViewHolder;
-import com.reed.tripnote.ViewHolders.TravelViewHolder;
+import com.reed.tripnote.viewHolders.FootViewHolder;
+import com.reed.tripnote.viewHolders.TravelViewHolder;
 import com.reed.tripnote.beans.TravelBean;
 
 import java.util.List;
-
-import butterknife.OnItemClick;
 
 /**
  * 游记Adapter

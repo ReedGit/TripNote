@@ -118,7 +118,7 @@ public class ModifyPassword extends AppCompatActivity {
                     public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                         mDlg.cancel();
                         if (response.code() != 200) {
-                            ToastTool.show(ModifyPassword.this, response.message());
+                            ToastTool.show(response.message());
                             LogTool.e(TAG, "请求出错：" + response.message());
                             return;
                         }
@@ -126,12 +126,12 @@ public class ModifyPassword extends AppCompatActivity {
                         JSONObject result = response.body();
                         try {
                             if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
-                                ToastTool.show(ModifyPassword.this, result.getString(ConstantTool.MSG));
+                                ToastTool.show(result.getString(ConstantTool.MSG));
                                 return;
                             }
                             user.setPassword(MD5Tool.compute(newPassword));
-                            UserManager.loginUser(ModifyPassword.this, user);
-                            ToastTool.show(ModifyPassword.this, "修改成功");
+                            UserManager.loginUser(user);
+                            ToastTool.show("修改成功");
                             finish();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -143,7 +143,7 @@ public class ModifyPassword extends AppCompatActivity {
                         mDlg.cancel();
                         LogTool.e(TAG, t.getMessage());
                         if (!call.isCanceled()) {
-                            ToastTool.show(ModifyPassword.this, t.getMessage());
+                            ToastTool.show(t.getMessage());
                         }
                     }
                 });

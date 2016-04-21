@@ -14,6 +14,7 @@ public class TravelBean implements Serializable {
     private String label;
     private String nickname;
     private String userImage;
+    private String coverImage;
 
     public long getTravelId() {
         return travelId;
@@ -87,6 +88,14 @@ public class TravelBean implements Serializable {
         this.userImage = userImage;
     }
 
+    public String getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
+    }
+
     @Override
     public String toString() {
         return "TravelBean{" +
@@ -99,6 +108,7 @@ public class TravelBean implements Serializable {
                 ", label='" + label + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", userImage='" + userImage + '\'' +
+                ", coverImage='" + coverImage + '\'' +
                 '}';
     }
 }

@@ -114,7 +114,7 @@ public class CommentActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         String remark = commentET.getText().toString();
                         if (TextUtils.isEmpty(remark)) {
-                            ToastTool.show(CommentActivity.this, "评论不能为空");
+                            ToastTool.show("评论不能为空");
                         } else {
                             addComment(remark);
                         }
@@ -199,17 +199,17 @@ public class CommentActivity extends AppCompatActivity {
                     mDlg.cancel();
                 }
                 if (response.code() != 200) {
-                    ToastTool.show(CommentActivity.this, response.message());
+                    ToastTool.show(response.message());
                     LogTool.e(TAG, response.message());
                     return;
                 }
                 JSONObject result = response.body();
                 try {
                     if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
-                        ToastTool.show(CommentActivity.this, result.getString(ConstantTool.MSG));
+                        ToastTool.show(result.getString(ConstantTool.MSG));
                         return;
                     }
-                    ToastTool.show(CommentActivity.this, "评论成功");
+                    ToastTool.show("评论成功");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -221,7 +221,7 @@ public class CommentActivity extends AppCompatActivity {
                     mDlg.cancel();
                 }
                 if (!call.isCanceled()) {
-                    ToastTool.show(CommentActivity.this, "服务器出现问题: " + t.getMessage());
+                    ToastTool.show("服务器出现问题: " + t.getMessage());
                 }
             }
         });
@@ -238,7 +238,7 @@ public class CommentActivity extends AppCompatActivity {
                 mAdapter.setIsLoading(false);
                 mAdapter.notifyDataSetChanged();
                 if (response.code() != 200) {
-                    ToastTool.show(CommentActivity.this, response.message());
+                    ToastTool.show(response.message());
                     LogTool.e(TAG, "请求出错：" + response.message());
                     return;
                 }
@@ -246,7 +246,7 @@ public class CommentActivity extends AppCompatActivity {
                 JSONObject result = response.body();
                 try {
                     if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
-                        ToastTool.show(CommentActivity.this, result.getString(ConstantTool.MSG));
+                        ToastTool.show(result.getString(ConstantTool.MSG));
                         return;
                     }
                     size = result.getInt(ConstantTool.SIZE);
@@ -268,7 +268,7 @@ public class CommentActivity extends AppCompatActivity {
                 mAdapter.setIsLoading(false);
                 mAdapter.notifyDataSetChanged();
                 if (!call.isCanceled()) {
-                    ToastTool.show(CommentActivity.this, "服务器出现问题: " + t.getMessage());
+                    ToastTool.show("服务器出现问题: " + t.getMessage());
                 }
             }
         });

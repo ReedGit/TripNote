@@ -117,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                         mDlg.cancel();
                         if (response.code() != 200) {
-                            ToastTool.show(RegisterActivity.this, response.message());
+                            ToastTool.show(response.message());
                             LogTool.e(TAG, "请求出错：" + response.message());
                             return;
                         }
@@ -125,10 +125,10 @@ public class RegisterActivity extends AppCompatActivity {
                         JSONObject result = response.body();
                         try {
                             if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
-                                ToastTool.show(RegisterActivity.this, result.getString(ConstantTool.MSG));
+                                ToastTool.show(result.getString(ConstantTool.MSG));
                                 return;
                             }
-                            ToastTool.show(RegisterActivity.this, "注册成功");
+                            ToastTool.show("注册成功");
                             finish();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -140,7 +140,7 @@ public class RegisterActivity extends AppCompatActivity {
                         mDlg.cancel();
                         LogTool.e(TAG, t.getMessage());
                         if (!call.isCanceled()) {
-                            ToastTool.show(RegisterActivity.this, "服务器出现问题: " + t.getMessage());
+                            ToastTool.show("服务器出现问题: " + t.getMessage());
                         }
                     }
                 });

@@ -123,7 +123,7 @@ public class SearchResultActivity extends AppCompatActivity {
                 mAdapter.setIsLoading(false);
                 mAdapter.notifyDataSetChanged();
                 if (response.code() != 200) {
-                    ToastTool.show(SearchResultActivity.this, response.message());
+                    ToastTool.show(response.message());
                     LogTool.e(TAG, "请求出错：" + response.message());
                     return;
                 }
@@ -131,7 +131,7 @@ public class SearchResultActivity extends AppCompatActivity {
                 JSONObject result = response.body();
                 try {
                     if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
-                        ToastTool.show(SearchResultActivity.this, result.getString(ConstantTool.MSG));
+                        ToastTool.show(result.getString(ConstantTool.MSG));
                         return;
                     }
                     size = result.getInt(ConstantTool.SIZE);
@@ -149,7 +149,7 @@ public class SearchResultActivity extends AppCompatActivity {
             public void onFailure(Call<JSONObject> call, Throwable t) {
                 mAdapter.setIsLoading(false);
                 mAdapter.notifyDataSetChanged();
-                ToastTool.show(SearchResultActivity.this, "服务器出现问题: " + t.getMessage());
+                ToastTool.show("服务器出现问题: " + t.getMessage());
             }
         });
     }

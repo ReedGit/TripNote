@@ -50,7 +50,7 @@ public class CreateContentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_publish:
-                ToastTool.show(CreateContentActivity.this, "发布成功");
+                ToastTool.show("发布成功");
                 break;
         }
         return super.onOptionsItemSelected(item);

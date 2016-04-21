@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                         mDlg.cancel();
                         if (response.code() != 200) {
-                            ToastTool.show(LoginActivity.this, response.message());
+                            ToastTool.show(response.message());
                             LogTool.e(TAG, "请求出错：" + response.message());
                             return;
                         }
@@ -128,13 +128,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         JSONObject result = response.body();
                         try {
                             if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
-                                ToastTool.show(LoginActivity.this, result.getString(ConstantTool.MSG));
+                                ToastTool.show(result.getString(ConstantTool.MSG));
                                 return;
                             }
                             UserBean user = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.DATA)), UserBean.class);
                             user.setPassword(MD5Tool.compute(password));
                             LogTool.i(TAG,user.toString());
-                            UserManager.loginUser(LoginActivity.this, user);
+                            UserManager.loginUser(user);
                             finish();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onFailure(Call<JSONObject> call, Throwable t) {
                         mDlg.cancel();
-                        ToastTool.show(LoginActivity.this, "服务器出现问题: " + t.getMessage());
+                        ToastTool.show("服务器出现问题: " + t.getMessage());
                     }
                 });
                 break;

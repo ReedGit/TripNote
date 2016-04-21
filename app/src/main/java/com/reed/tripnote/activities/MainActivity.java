@@ -3,7 +3,6 @@ package com.reed.tripnote.activities;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -109,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.create_note:
                 if (user == null) {
-                    ToastTool.show(MainActivity.this, R.string.please_login);
+                    ToastTool.show(R.string.please_login);
                     intentToLogin();
                 } else {
                     Intent intent = new Intent(MainActivity.this, CreateTravelActivity.class);
@@ -124,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
             if ((System.currentTimeMillis() - exitTime) > 2000) {
-                ToastTool.show(MainActivity.this, "再按一次退出程序");
+                ToastTool.show("再按一次退出程序");
                 exitTime = System.currentTimeMillis();
             } else {
                 finish();
@@ -147,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.drawer_trip_note:
                 if (user == null) {
-                    ToastTool.show(MainActivity.this, R.string.please_login);
+                    ToastTool.show(R.string.please_login);
                     intentToLogin();
                 } else {
                     item.setChecked(true);
@@ -157,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.drawer_collection:
                 if (user == null) {
-                    ToastTool.show(MainActivity.this, R.string.please_login);
+                    ToastTool.show(R.string.please_login);
                     intentToLogin();
                 } else {
                     item.setChecked(true);

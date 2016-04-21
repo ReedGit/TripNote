@@ -152,7 +152,7 @@ public class CollectionFragment extends Fragment {
                 mAdapter.setIsLoading(false);
                 mAdapter.notifyDataSetChanged();
                 if (response.code() != 200) {
-                    ToastTool.show(getActivity(), response.message());
+                    ToastTool.show(response.message());
                     LogTool.e(TAG, "请求出错：" + response.message());
                     return;
                 }
@@ -160,7 +160,7 @@ public class CollectionFragment extends Fragment {
                 JSONObject result = response.body();
                 try {
                     if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
-                        ToastTool.show(getActivity(), result.getString(ConstantTool.MSG));
+                        ToastTool.show(result.getString(ConstantTool.MSG));
                         return;
                     }
                     size = result.getInt(ConstantTool.SIZE);
@@ -182,7 +182,7 @@ public class CollectionFragment extends Fragment {
                 mAdapter.setIsLoading(false);
                 mAdapter.notifyDataSetChanged();
                 if (!call.isCanceled()) {
-                    ToastTool.show(getActivity(), "服务器出现问题: " + t.getMessage());
+                    ToastTool.show("服务器出现问题: " + t.getMessage());
                 }
             }
         });

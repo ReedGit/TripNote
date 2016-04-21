@@ -34,13 +34,17 @@ public class App extends Application {
         this.user = user;
     }
 
-    private Context context;
+    private static Context context;
+
+    public static Context getContext() {
+        return context;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         context = this;
-        user = SharedPreferenceTool.getInstance(this, ConstantTool.USER).getUserPref();
+        user = SharedPreferenceTool.getInstance(ConstantTool.USER).getUserPref();
         if (user == null) {
             return;
         }
@@ -54,20 +58,20 @@ public class App extends Application {
                 public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                     if (response.code() != 200) {
                         LogTool.e(TAG, response.message());
-                        ToastTool.show(context, response.message());
+                        ToastTool.show(response.message());
                         return;
                     }
                     JSONObject result = response.body();
                     try {
                         if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
-                            ToastTool.show(context, "用户信息过期，请重新登录");
+                            ToastTool.show("用户信息过期，请重新登录");
                             LogTool.i(TAG, result.toString());
-                            UserManager.exitLogin(context);
+                            UserManager.exitLogin();
                             return;
                         }
                         UserBean user = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.DATA)), UserBean.class);
                         user.setPassword(password);
-                        UserManager.loginUser(context, user);
+                        UserManager.loginUser(user);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -79,7 +83,7 @@ public class App extends Application {
                 }
             });
         } else {
-            UserManager.exitLogin(context);
+            UserManager.exitLogin();
         }
 
     }

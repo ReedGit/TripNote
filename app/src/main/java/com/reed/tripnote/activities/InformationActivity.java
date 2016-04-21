@@ -176,7 +176,7 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
                 JSONObject result = response.body();
                 try {
                     if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
-                        ToastTool.show(InformationActivity.this, result.getString(ConstantTool.MSG));
+                        ToastTool.show(result.getString(ConstantTool.MSG));
                         return;
                     }
                     author = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.DATA)), UserBean.class);
@@ -190,7 +190,7 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
                 mDlg.cancel();
                 LogTool.e(TAG, "服务器出现问题: " + t.getMessage());
                 if (!call.isCanceled()) {
-                    ToastTool.show(InformationActivity.this, "服务器出现问题: " + t.getMessage());
+                    ToastTool.show("服务器出现问题: " + t.getMessage());
                 }
             }
         });

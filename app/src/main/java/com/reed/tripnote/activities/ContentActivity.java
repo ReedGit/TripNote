@@ -158,7 +158,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
                 if (TextUtils.isEmpty(travel.getIntroduction())){
                     introduction = "对不起，该游记没有提供简介";
                 } else {
-                    introduction = "\u3000\u3000" + travel.getIntroduction();
+                    introduction = travel.getIntroduction();
                 }
                 introductionTV.setText(introduction);
                 dialog.setContentView(view);
@@ -239,7 +239,6 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (aMap != null) {
-            LogTool.i(TAG, "marker id =====" + marker.getObject());
             Intent intent = new Intent(ContentActivity.this, ContentDetailActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable(ConstantTool.CONTENT, (ContentBean) marker.getObject());

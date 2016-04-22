@@ -69,6 +69,8 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
 
         if (!TextUtils.isEmpty(travelBean.getCoverImage())) {
             Glide.with(context).load(ConstantTool.imageUrl + travelBean.getCoverImage()).placeholder(R.mipmap.background).into(firstImageView);
+        } else {
+            firstImageView.setImageResource(R.mipmap.background);
         }
 
         authorLL.setOnClickListener(new View.OnClickListener() {

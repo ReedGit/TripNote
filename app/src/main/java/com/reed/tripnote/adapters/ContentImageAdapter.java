@@ -45,6 +45,7 @@ public class ContentImageAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_image, parent, false);
         }
         ImageView imageView = (ImageView) convertView.findViewById(R.id.iv_item_pic);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageResource(image[position]);
         return convertView;
     }

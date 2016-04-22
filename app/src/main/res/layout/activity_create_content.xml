@@ -6,33 +6,56 @@
     android:background="#F9FBE7"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_toolbar"/>
 
-    <TextView
-        android:id="@+id/tv_create_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textColor="#000000"
-        android:textSize="16sp"/>
+    <include layout="@layout/layout_toolbar" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#EBEBEB"/>
+        android:layout_height="wrap_content" >
 
-    <EditText
-        android:id="@+id/et_create_article"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@null"
-        android:gravity="top"
-        android:padding="10dp"
-        android:hint="@string/article_hint"
-        android:minLines="1"
-        android:scrollbars="vertical"
-        android:textColor="#000000"
-        android:textSize="16sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_collapseMode="pin">
+
+            <TextView
+                android:id="@+id/tv_create_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#EBEBEB" />
+
+            <EditText
+                android:id="@+id/et_create_article"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="@string/article_hint"
+                android:minLines="6"
+                android:padding="10dp"
+                android:scrollbars="vertical"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcv_create_image"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:clipToPadding="false"
+                android:paddingLeft="10dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 
 </LinearLayout>

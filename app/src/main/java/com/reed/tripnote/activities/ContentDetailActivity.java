@@ -1,12 +1,19 @@
 package com.reed.tripnote.activities;
 
+import android.app.Dialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.reed.tripnote.R;
 import com.reed.tripnote.adapters.ContentImageAdapter;
 import com.reed.tripnote.beans.ContentBean;
@@ -61,5 +68,23 @@ public class ContentDetailActivity extends AppCompatActivity {
         String time = FormatTool.transformToDateString(content.getTime()) + " / 第" + content.getDay() + "天";
         timeTV.setText(time);
         imageGV.setAdapter(mAdapter);
+        imageGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Dialog dialog = new Dialog(ContentDetailActivity.this, R.style.Dialog_Fullscreen);
+                View dlgView = LayoutInflater.from(ContentDetailActivity.this).inflate(R.layout.image_browser, null, false);
+                ImageView imageView = (ImageView) dlgView.findViewById(R.id.iv_message_browser);
+                LinearLayout linearLayout = (LinearLayout) dlgView.findViewById(R.id.ll_message_browser);
+                Glide.with(ContentDetailActivity.this).load(mAdapter.getItem(position)).into(imageView);
+                dialog.setContentView(dlgView);
+                dialog.show();
+                linearLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+            }
+        });
     }
 }

@@ -31,7 +31,7 @@ public class ContentImageAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return position;
+        return image[position];
     }
 
     @Override

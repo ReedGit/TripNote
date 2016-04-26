@@ -32,7 +32,7 @@ public class ContentData {
         contents = new ArrayList<>();
         ContentBean content1 = new ContentBean();
         content1.setContentId(1);
-        content1.setArticle("夫子庙好棒");
+        content1.setArticle("夫子庙好棒\n\n\n\n\n\n\n\n\n\n\n\n\n");
         content1.setDay(1);
         content1.setLocation("江苏省南京市");
         content1.setTime(FormatTool.transformToDate("2016-04-06 11:00:00"));

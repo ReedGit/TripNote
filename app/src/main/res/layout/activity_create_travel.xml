@@ -32,7 +32,7 @@
                     android:layout_marginRight="26dp"
                     android:layout_marginTop="20dp"
                     android:scaleType="fitXY"
-                    android:src="@mipmap/background"/>
+                    android:src="@drawable/add_image_press"/>
 
 
                 <EditText

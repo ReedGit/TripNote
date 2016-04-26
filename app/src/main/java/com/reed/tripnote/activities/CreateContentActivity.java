@@ -1,12 +1,10 @@
 package com.reed.tripnote.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -19,8 +17,6 @@ import android.widget.TextView;
 import com.reed.tripnote.R;
 import com.reed.tripnote.adapters.AddImageAdapter;
 import com.reed.tripnote.tools.ConstantTool;
-import com.reed.tripnote.tools.ToastTool;
-import com.reed.tripnote.views.FullyGridLayoutManager;
 import com.wq.photo.widget.PickConfig;
 
 import java.util.ArrayList;
@@ -39,7 +35,7 @@ public class CreateContentActivity extends AppCompatActivity {
     public EditText articleET;
     @Bind(R.id.rcv_create_image)
     public RecyclerView imageRCV;
-    private FullyGridLayoutManager mManager;
+    private GridLayoutManager mManager;
     private AddImageAdapter mAdapter;
     private String coordinate;
     private String location;
@@ -95,7 +91,7 @@ public class CreateContentActivity extends AppCompatActivity {
         createToolbar.setNavigationIcon(R.mipmap.toolbar_back);
         setSupportActionBar(createToolbar);
         mAdapter = new AddImageAdapter();
-        mManager = new FullyGridLayoutManager(this, 3);
+        mManager = new GridLayoutManager(this, 3);
         imageRCV.setLayoutManager(mManager);
         imageRCV.setAdapter(mAdapter);
         imageRCV.setItemAnimator(new DefaultItemAnimator());

@@ -35,7 +35,10 @@ import com.reed.tripnote.beans.UserBean;
 import com.reed.tripnote.data.ContentData;
 import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.tools.LogTool;
+import com.reed.tripnote.tools.RetrofitTool;
+import com.reed.tripnote.tools.ToastTool;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -44,6 +47,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 游记内容详情
@@ -80,6 +85,10 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     private List<ContentBean> contents = new ArrayList<>();
     private List<LatLng> lats = new ArrayList<>();
     private Call<JSONObject> call;
+    private boolean isLike = false;
+    private boolean isCollect = false;
+    private int likeNum = 0;
+    private int collectNum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +181,20 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_content_collection:
+                if (user == null) {
+                    Intent collectIntent = new Intent(ContentActivity.this, LoginActivity.class);
+                    startActivity(collectIntent);
+                } else {
+                    if (isCollect) {
+                        collectionFAB.setImageResource(R.drawable.ic_favorite_outline_24dp);
+                        collectionFAB.setLabelText(String.valueOf(collectNum - 1));
+                        doCancelCollect();
+                    } else {
+                        collectionFAB.setImageResource(R.drawable.ic_favorite_24dp);
+                        collectionFAB.setLabelText(String.valueOf(collectNum + 1));
+                        doCollection();
+                    }
+                }
                 break;
             case R.id.fab_content_comment:
                 contentFAM.close(true);
@@ -180,6 +203,20 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
                 startActivity(intent);
                 break;
             case R.id.fab_content_liked:
+                if (user == null) {
+                    Intent likeIntent = new Intent(ContentActivity.this, LoginActivity.class);
+                    startActivity(likeIntent);
+                } else {
+                    if (isLike) {
+                        likeFAB.setImageResource(R.drawable.ic_like_24dp);
+                        likeFAB.setLabelText(String.valueOf(likeNum - 1));
+                        doCancelLike();
+                    } else {
+                        likeFAB.setImageResource(R.drawable.ic_liked_24dp);
+                        likeFAB.setLabelText(String.valueOf(likeNum + 1));
+                        doLiked();
+                    }
+                }
                 break;
         }
     }
@@ -312,6 +349,113 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
 
     private void getData() {
 
+    }
+
+    private void doLiked() {
+        Call<JSONObject> call = RetrofitTool.getService().like(travel.getTravelId(), user.getUserId());
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                if (!successReq(response)) {
+                    ToastTool.show("点赞失败");
+                    likeFAB.setImageResource(R.drawable.ic_like_24dp);
+                    likeFAB.setLabelText(String.valueOf(likeNum - 1));
+                } else {
+                    isLike = true;
+                    likeNum++;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void doCollection() {
+        Call<JSONObject> call = RetrofitTool.getService().collect(travel.getTravelId(), user.getUserId());
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                if (!successReq(response)) {
+                    ToastTool.show("收藏失败");
+                    collectionFAB.setImageResource(R.drawable.ic_favorite_outline_24dp);
+                    collectionFAB.setLabelText(String.valueOf(collectNum - 1));
+                } else {
+                    isCollect = true;
+                    collectNum++;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void doCancelLike() {
+        Call<JSONObject> call = RetrofitTool.getService().cancelLike(travel.getTravelId(), user.getUserId());
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                if (!successReq(response)) {
+                    ToastTool.show("取消失败");
+                    likeFAB.setImageResource(R.drawable.ic_liked_24dp);
+                    likeFAB.setLabelText(String.valueOf(likeNum + 1));
+                } else {
+                    isLike = false;
+                    likeNum--;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void doCancelCollect() {
+        Call<JSONObject> call = RetrofitTool.getService().cancelCollect(travel.getTravelId(), user.getUserId());
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                if (!successReq(response)) {
+                    ToastTool.show("取消失败");
+                    collectionFAB.setImageResource(R.drawable.ic_favorite_24dp);
+                    collectionFAB.setLabelText(String.valueOf(collectNum + 1));
+                } else {
+                    isCollect = false;
+                    collectNum--;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private boolean successReq(Response<JSONObject> response) {
+        if (response.code() != 200) {
+            ToastTool.show(response.message());
+            LogTool.e(TAG, response.message());
+            return false;
+        }
+        JSONObject result = response.body();
+        try {
+            if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
+                ToastTool.show(result.getString(ConstantTool.MSG));
+                return false;
+            }
+            return true;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

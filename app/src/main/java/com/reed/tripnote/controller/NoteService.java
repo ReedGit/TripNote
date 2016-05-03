@@ -88,4 +88,20 @@ public interface NoteService {
     @GET("comment/list")
     Call<JSONObject> getComments(@Query("travelId") long travelId, @Query("page") int page);
 
+    @FormUrlEncoded
+    @POST("like/like")
+    Call<JSONObject> like(@Field("travelId") long travelId, @Field("userId") long userId);
+
+    @FormUrlEncoded
+    @POST("like/cancel")
+    Call<JSONObject> cancelLike(@Field("travelId") long travelId, @Field("userId") long userId);
+
+    @FormUrlEncoded
+    @POST("collection/collect")
+    Call<JSONObject> collect(@Field("travelId") long travelId, @Field("userId") long userId);
+
+    @FormUrlEncoded
+    @POST("collection/cancel")
+    Call<JSONObject> cancelCollect(@Field("travelId") long travelId, @Field("userId") long userId);
+
 }

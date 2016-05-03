@@ -1,109 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@mipmap/background"
-        android:orientation="vertical"
-        android:paddingLeft="21dp"
-        android:paddingRight="21dp">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/about_head" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:text="@string/about_name"
-            android:textColor="#000000"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="256dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="@string/about_motto"
-            android:textColor="#607D8B"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginTop="95dp"
-            android:text="@string/about_university"
-            android:textColor="#000000"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginTop="8dp"
-            android:text="@string/about_academy"
-            android:textColor="#000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/about_major"
-            android:textColor="#000000"
-            android:textSize="15sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FAFAFA"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_about_wei_bo"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="21dp"
-            android:layout_marginRight="21dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/text_press"
-            android:drawableLeft="@mipmap/wei_bo"
-            android:drawablePadding="20dp"
-            android:drawableStart="@mipmap/wei_bo"
-            android:text="@string/about_weiBo"
-            android:textColor="#0277BD"
-            android:textSize="16sp" />
+            android:background="@mipmap/background"
+            android:orientation="vertical"
+            android:paddingLeft="21dp"
+            android:paddingRight="21dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="21dp"
-            android:layout_marginRight="21dp"
-            android:layout_marginTop="20dp"
-            android:drawableLeft="@drawable/ic_mail_24dp"
-            android:drawablePadding="16dp"
-            android:drawableStart="@drawable/ic_mail_24dp"
-            android:text="@string/about_email"
-            android:textColor="#FF6F00"
-            android:textSize="16sp" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/default_head" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:text="@string/about_name"
+                android:textColor="#000000"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="256dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:gravity="center_horizontal"
+                android:text="@string/about_motto"
+                android:textColor="#607D8B"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="36dp"
+                android:text="@string/about_university"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="8dp"
+                android:text="@string/about_academy"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/about_major"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
+            android:background="#FAFAFA"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_about_wei_bo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="21dp"
+                android:layout_marginRight="21dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/text_press"
+                android:drawableLeft="@mipmap/wei_bo"
+                android:drawablePadding="20dp"
+                android:drawableStart="@mipmap/wei_bo"
+                android:text="@string/about_weiBo"
+                android:textColor="#0277BD"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="21dp"
+                android:layout_marginRight="21dp"
+                android:layout_marginTop="20dp"
+                android:drawableLeft="@drawable/ic_mail_24dp"
+                android:drawablePadding="16dp"
+                android:drawableStart="@drawable/ic_mail_24dp"
+                android:text="@string/about_email"
+                android:textColor="#FF6F00"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="#EBEBEB" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginRight="21dp"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:text="@string/thanks"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tv_about_wei_bo_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="21dp"
+                android:layout_marginRight="21dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/text_press"
+                android:drawableLeft="@mipmap/wei_bo"
+                android:drawablePadding="20dp"
+                android:drawableStart="@mipmap/wei_bo"
+                android:text="@string/about_weiBo_logo"
+                android:textColor="#0277BD"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_about_wei_bo_guide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="21dp"
+                android:layout_marginRight="21dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/text_press"
+                android:drawableLeft="@mipmap/wei_bo"
+                android:drawablePadding="20dp"
+                android:drawableStart="@mipmap/wei_bo"
+                android:text="@string/about_weiBo_guide"
+                android:textColor="#0277BD"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

@@ -37,11 +37,13 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindData(Context context, CommentBean comment) {
-        nameTV.setText(comment.getNickname());
+        nameTV.setText(comment.getNickName());
         dateTV.setText(FormatTool.simpleTransformToString(comment.getTime()));
         remarkTV.setText(comment.getRemark());
         if (!TextUtils.isEmpty(comment.getUserImage())) {
             Glide.with(context).load(ConstantTool.imageUrl + comment.getUserImage()).placeholder(R.mipmap.default_head).into(commentCIV);
+        } else {
+            commentCIV.setImageResource(R.mipmap.default_head);
         }
     }
 }

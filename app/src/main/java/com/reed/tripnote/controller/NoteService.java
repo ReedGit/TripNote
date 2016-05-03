@@ -1,6 +1,5 @@
 package com.reed.tripnote.controller;
 
-import com.reed.tripnote.beans.UserBean;
 
 import org.json.JSONObject;
 
@@ -8,7 +7,6 @@ import java.util.Map;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -67,9 +65,9 @@ public interface NoteService {
     Call<JSONObject> userCollection(@Query("userId") long userId, @Query("page") int page);
 
     //the api for creating a travel
-    @FormUrlEncoded
+    @Multipart
     @POST("travel/create")
-    Call<JSONObject> createTravel(@FieldMap Map<String, Object> map);
+    Call<JSONObject> createTravel(@PartMap Map<String, Object> map, @PartMap Map<String, RequestBody> coverMap);
 
     //the api for users who collected the travel
     @GET("collection/users")

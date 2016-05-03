@@ -33,7 +33,7 @@ public class CommentData {
         for (int i = 0; i < 5; i++) {
             CommentBean commentBean = new CommentBean();
             commentBean.setCommentId(1);
-            commentBean.setNickname("Reed");
+            commentBean.setNickName("Reed");
             commentBean.setRemark("写的真好");
             commentBean.setTime(FormatTool.transformToDate("2016-04-11 10:10:00"));
             comments.add(commentBean);

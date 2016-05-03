@@ -14,6 +14,9 @@ public class UserBean {
     private int sex;
     private String introduction;
     private String token;
+    private int liked;
+    private int collection;
+    private int travels;
 
     public long getUserId() {
         return userId;
@@ -79,6 +82,30 @@ public class UserBean {
         this.token = token;
     }
 
+    public int getLiked() {
+        return liked;
+    }
+
+    public void setLiked(int liked) {
+        this.liked = liked;
+    }
+
+    public int getCollection() {
+        return collection;
+    }
+
+    public void setCollection(int collection) {
+        this.collection = collection;
+    }
+
+    public int getTravels() {
+        return travels;
+    }
+
+    public void setTravels(int travels) {
+        this.travels = travels;
+    }
+
     @Override
     public String toString() {
         return "UserBean{" +
@@ -90,6 +117,9 @@ public class UserBean {
                 ", sex=" + sex +
                 ", introduction='" + introduction + '\'' +
                 ", token='" + token + '\'' +
+                ", liked=" + liked +
+                ", collection=" + collection +
+                ", travels=" + travels +
                 '}';
     }
 }

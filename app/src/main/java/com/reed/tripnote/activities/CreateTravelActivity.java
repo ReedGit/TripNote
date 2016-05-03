@@ -39,6 +39,8 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -119,7 +121,12 @@ public class CreateTravelActivity extends AppCompatActivity {
                     map.put("title", title);
                     map.put("introduction", introduction);
                     map.put("userId", user.getUserId());
-                    call = RetrofitTool.getService().createTravel(map);
+                    Map<String, RequestBody> coverMap = new HashMap<>();
+                    if (!TextUtils.isEmpty(photoPath)) {
+                        RequestBody file = RequestBody.create(MediaType.parse("image/*"), new File(photoPath));
+                        coverMap.put("coverImage\";filename=\"coverImage.jpg", file);
+                    }
+                    call = RetrofitTool.getService().createTravel(map, coverMap);
                     mDlg = ProgressDialog.show(CreateTravelActivity.this, null, "请稍后......", true);
                     call.enqueue(new Callback<JSONObject>() {
                         @Override
@@ -133,7 +140,7 @@ public class CreateTravelActivity extends AppCompatActivity {
                             LogTool.i(TAG, response.body().toString());
                             JSONObject result = response.body();
                             try {
-                                if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK){
+                                if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
                                     ToastTool.show(result.getString(ConstantTool.MSG));
                                     return;
                                 }
@@ -165,7 +172,7 @@ public class CreateTravelActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initView(){
+    private void initView() {
         travelToolbar.setTitle(R.string.create_note);
         travelToolbar.setNavigationIcon(R.mipmap.toolbar_back);
         setSupportActionBar(travelToolbar);

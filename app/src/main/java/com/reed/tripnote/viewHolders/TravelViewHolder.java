@@ -16,6 +16,7 @@ import com.reed.tripnote.beans.TravelBean;
 import com.reed.tripnote.tools.CalculateTool;
 import com.reed.tripnote.tools.ConstantTool;
 import com.reed.tripnote.tools.FormatTool;
+import com.reed.tripnote.tools.LogTool;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -48,6 +49,7 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindData(Context context, final TravelBean travelBean) {
+        LogTool.i("=======", travelBean.toString());
         titleTV.setText(travelBean.getTitle());
 
         String date = FormatTool.transformToDateString(travelBean.getStartTime());
@@ -61,10 +63,14 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
         if (!TextUtils.isEmpty(travelBean.getIntroduction())) {
             String introduction = "\u3000\u3000" + travelBean.getIntroduction();
             introductionTV.setText(introduction);
+        } else {
+            introductionTV.setText("");
         }
 
-        if (!TextUtils.isEmpty(travelBean.getUserImage())){
-            Glide.with(context).load(ConstantTool.imageUrl + travelBean.getUserImage()).placeholder(R.mipmap.default_head).into(headCIV);
+        if (!TextUtils.isEmpty(travelBean.getHeadImage())){
+            Glide.with(context).load(ConstantTool.imageUrl + travelBean.getHeadImage()).placeholder(R.mipmap.default_head).into(headCIV);
+        } else {
+            headCIV.setImageResource(R.mipmap.default_head);
         }
 
         if (!TextUtils.isEmpty(travelBean.getCoverImage())) {

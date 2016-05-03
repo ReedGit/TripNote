@@ -13,8 +13,15 @@ public class TravelBean implements Serializable {
     private String introduction;
     private String label;
     private String nickname;
-    private String userImage;
+    private String headImage;
     private String coverImage;
+    private int days;
+    private Date createTime;
+    private int liked;//喜欢数
+    private int collection;//收藏数
+    private int comment;//评论数
+
+
 
     public long getTravelId() {
         return travelId;
@@ -80,20 +87,60 @@ public class TravelBean implements Serializable {
         this.nickname = nickname;
     }
 
-    public String getUserImage() {
-        return userImage;
-    }
-
-    public void setUserImage(String userImage) {
-        this.userImage = userImage;
-    }
-
     public String getCoverImage() {
         return coverImage;
     }
 
     public void setCoverImage(String coverImage) {
         this.coverImage = coverImage;
+    }
+
+    public int getComment() {
+        return comment;
+    }
+
+    public void setComment(int comment) {
+        this.comment = comment;
+    }
+
+    public String getHeadImage() {
+        return headImage;
+    }
+
+    public void setHeadImage(String headImage) {
+        this.headImage = headImage;
+    }
+
+    public int getDays() {
+        return days;
+    }
+
+    public void setDays(int days) {
+        this.days = days;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public int getLiked() {
+        return liked;
+    }
+
+    public void setLiked(int liked) {
+        this.liked = liked;
+    }
+
+    public int getCollection() {
+        return collection;
+    }
+
+    public void setCollection(int collection) {
+        this.collection = collection;
     }
 
     @Override
@@ -107,8 +154,13 @@ public class TravelBean implements Serializable {
                 ", introduction='" + introduction + '\'' +
                 ", label='" + label + '\'' +
                 ", nickname='" + nickname + '\'' +
-                ", userImage='" + userImage + '\'' +
+                ", headImage='" + headImage + '\'' +
                 ", coverImage='" + coverImage + '\'' +
+                ", days=" + days +
+                ", createTime=" + createTime +
+                ", liked=" + liked +
+                ", collection=" + collection +
+                ", comment=" + comment +
                 '}';
     }
 }

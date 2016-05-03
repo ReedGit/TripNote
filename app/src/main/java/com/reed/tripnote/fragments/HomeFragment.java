@@ -64,6 +64,7 @@ public class HomeFragment extends Fragment {
             ButterKnife.bind(this, mView);
             mAdapter = new TravelAdapter();
             mManager = new LinearLayoutManager(getActivity());
+            mAdapter.setTravelBeans(travelBeans);
             homeRecycler.setLayoutManager(mManager);
             homeRecycler.setAdapter(mAdapter);
             homeRecycler.setItemAnimator(new DefaultItemAnimator());
@@ -158,8 +159,7 @@ public class HomeFragment extends Fragment {
                     }
                     size = result.getInt(ConstantTool.SIZE);
                     List<TravelBean> travels = FormatTool.gson.fromJson(String.valueOf(result.getJSONArray(ConstantTool.DATA)), new TypeToken<List<TravelBean>>(){}.getType());
-                    travelBeans.addAll(travels);
-                    mAdapter.setTravelBeans(travelBeans);
+                    travelBeans.addAll(travelBeans.size(), travels);
                     mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();

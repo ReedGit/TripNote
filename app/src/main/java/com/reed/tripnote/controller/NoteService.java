@@ -3,8 +3,10 @@ package com.reed.tripnote.controller;
 
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -17,6 +19,7 @@ import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 /**
  * retrofit service interface
@@ -57,25 +60,31 @@ public interface NoteService {
     @GET("travel/explore")
     Call<JSONObject> getTravels(@Query("page") int page);
 
+    @GET("travel/travels/{userId}")
+    Call<JSONObject> getUserTravel(@Path("userId") long userId, @Query("page") int page);
+
     //the api for searching the travel by the key
     @GET("travel/search")
     Call<JSONObject> searchTravel(@Query("q") String q, @Query("page") int page);
 
-    @GET("collection/travels")
-    Call<JSONObject> userCollection(@Query("userId") long userId, @Query("page") int page);
+    //the api for delete user's travel
+    @GET("travel/delete")
+    Call<JSONObject> deleteTravel(@QueryMap Map<String, Object> map);
 
     //the api for creating a travel
     @Multipart
     @POST("travel/create")
     Call<JSONObject> createTravel(@PartMap Map<String, Object> map, @PartMap Map<String, RequestBody> coverMap);
 
-    //the api for users who collected the travel
-    @GET("collection/users")
-    Call<JSONObject> usersForCollection(@Query("travelId") long travelId);
+    @GET("travel/content/detail")
+    Call<JSONObject> getContent(@Query("travelId") long travelId);
 
-    //the api for users who liked the travel
-    @GET("like/users")
-    Call<JSONObject> usersForLike(@Query("travelId") long travelId);
+    @GET("travel/total/{travelId}")
+    Call<JSONObject> getCount(@Path("travelId") long travelId, @QueryMap Map<String, Object> map);
+
+    @Multipart
+    @POST("travel/content/create")
+    Call<JSONObject> createContent(@PartMap Map<String, Object> map, @Part() List<MultipartBody.Part> imageMap);
 
     //the api for adding comment
     @FormUrlEncoded
@@ -94,6 +103,9 @@ public interface NoteService {
     @POST("like/cancel")
     Call<JSONObject> cancelLike(@Field("travelId") long travelId, @Field("userId") long userId);
 
+    @GET("like/travels")
+    Call<JSONObject> userLike(@Query("userId") long userId, @Query("page") int page);
+
     @FormUrlEncoded
     @POST("collection/collect")
     Call<JSONObject> collect(@Field("travelId") long travelId, @Field("userId") long userId);
@@ -101,5 +113,9 @@ public interface NoteService {
     @FormUrlEncoded
     @POST("collection/cancel")
     Call<JSONObject> cancelCollect(@Field("travelId") long travelId, @Field("userId") long userId);
+
+    //the api for getting the travels collected by user
+    @GET("collection/travels")
+    Call<JSONObject> userCollection(@Query("userId") long userId, @Query("page") int page);
 
 }

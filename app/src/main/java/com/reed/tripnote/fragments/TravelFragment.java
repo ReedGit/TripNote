@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.reflect.TypeToken;
+import com.reed.tripnote.App;
 import com.reed.tripnote.R;
 import com.reed.tripnote.activities.ContentActivity;
 import com.reed.tripnote.adapters.TravelAdapter;
@@ -29,7 +30,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -107,14 +110,14 @@ public class TravelFragment extends Fragment {
         });
         mAdapter.setOnItemLongClickListener(new TravelAdapter.OnItemLongClickListener() {
             @Override
-            public void onItemLongClick(View view, int position) {
+            public void onItemLongClick(View view, final int position) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage("确认删除“" + travelBeans.get(position).getTitle() + "”？")
                         .setCancelable(true)
                         .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
+                                deleteTravel(position);
                             }
                         })
                         .setNegativeButton(R.string.cancel, null);
@@ -149,7 +152,7 @@ public class TravelFragment extends Fragment {
     }
 
     private void getData(int page) {
-        call = RetrofitTool.getService().getTravels(page);
+        call = RetrofitTool.getService().getUserTravel(((App) getActivity().getApplicationContext()).getUser().getUserId(), page);
         call.enqueue(new Callback<JSONObject>() {
             @Override
             public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
@@ -191,6 +194,45 @@ public class TravelFragment extends Fragment {
                 if (!call.isCanceled()) {
                     ToastTool.show("服务器出现问题: " + t.getMessage());
                 }
+            }
+        });
+    }
+
+    private void deleteTravel(final int position) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(ConstantTool.TOKEN, ((App) getActivity().getApplicationContext()).getUser().getToken());
+        map.put(ConstantTool.USER_ID, ((App) getActivity().getApplicationContext()).getUser().getUserId());
+        map.put(ConstantTool.TRAVEL_ID, travelBeans.get(position).getTravelId());
+        Call<JSONObject> call = RetrofitTool.getService().deleteTravel(map);
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                if (response.code() != 200) {
+                    ToastTool.show(response.message());
+                    LogTool.e(TAG, "请求出错：" + response.message());
+                    return;
+                }
+                LogTool.i(TAG, response.body().toString());
+                JSONObject result = response.body();
+                try {
+                    ToastTool.show(result.getString(ConstantTool.MSG));
+                    if (result.getInt(ConstantTool.CODE) == ConstantTool.RESULT_OK) {
+                        size--;
+                        travelBeans.remove(position);
+                        mAdapter.notifyItemRemoved(position);
+                        if (position != travelBeans.size()) {
+                            mAdapter.notifyItemChanged(position, travelBeans.size() - position);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+
             }
         });
     }

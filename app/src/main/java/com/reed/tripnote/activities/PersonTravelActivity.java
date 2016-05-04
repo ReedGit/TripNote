@@ -10,22 +10,32 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.reed.tripnote.R;
 import com.reed.tripnote.adapters.TravelAdapter;
 import com.reed.tripnote.beans.TravelBean;
-import com.reed.tripnote.data.TravelData;
 import com.reed.tripnote.tools.ConstantTool;
+import com.reed.tripnote.tools.FormatTool;
+import com.reed.tripnote.tools.LogTool;
+import com.reed.tripnote.tools.RetrofitTool;
+import com.reed.tripnote.tools.ToastTool;
 import com.reed.tripnote.views.DividerItemDecoration;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PersonTravelActivity extends AppCompatActivity {
+
+    private static final String TAG = PersonTravelActivity.class.getSimpleName();
 
     @Bind(R.id.toolbar)
     public Toolbar mToolbar;
@@ -37,22 +47,26 @@ public class PersonTravelActivity extends AppCompatActivity {
     private TravelAdapter mAdapter;
     private LinearLayoutManager mManager;
     private int visibleLastIndex = 0;
-    private List<TravelBean> travels;
+    private List<TravelBean> travels = new ArrayList<>();
     private long userId;
     private String from;
     private String nickName;
     private Call<JSONObject> call;
+
+    private int size = 0;
+    private int page = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_travel);
         ButterKnife.bind(this);
-        userId = getIntent().getLongExtra(ConstantTool.USER_ID, 0);
+        userId = getIntent().getLongExtra(ConstantTool.USER_ID, -1);
         from = getIntent().getStringExtra(ConstantTool.FROM);
         nickName = getIntent().getStringExtra(ConstantTool.NICKNAME);
         initView();
         initListener();
+        getData(1);
     }
 
     private void initView(){
@@ -75,7 +89,6 @@ public class PersonTravelActivity extends AppCompatActivity {
         mRecycler.setAdapter(mAdapter);
         mRecycler.setItemAnimator(new DefaultItemAnimator());
         mRecycler.addItemDecoration(new DividerItemDecoration(this));
-        travels = TravelData.getInstance().getTravels();
         mAdapter.setTravelBeans(travels);
         mAdapter.notifyDataSetChanged();
     }
@@ -100,6 +113,15 @@ public class PersonTravelActivity extends AppCompatActivity {
                 super.onScrollStateChanged(recyclerView, newState);
                 int itemLastIndex = mAdapter.getItemCount() - 1;
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && visibleLastIndex == itemLastIndex) {
+                    if (travels.size() < size) {
+                        page++;
+                        mAdapter.setIsLoading(true);
+                        mAdapter.notifyDataSetChanged();
+                        getData(page);
+                    } else {
+                        mAdapter.setIsAll(true);
+                        mAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 
@@ -117,6 +139,63 @@ public class PersonTravelActivity extends AppCompatActivity {
                 bundle.putSerializable(ConstantTool.TRAVEL, travels.get(position));
                 intent.putExtras(bundle);
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void getData(int page){
+        switch (from) {
+            case ConstantTool.COLLECTION:
+                call = RetrofitTool.getService().getUserTravel(userId, page);
+                break;
+            case ConstantTool.LIKE:
+                call = RetrofitTool.getService().userLike(userId, page);
+                break;
+            case ConstantTool.TRAVEL:
+                call = RetrofitTool.getService().userCollection(userId, page);
+                break;
+        }
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                if (mSrf.isRefreshing()) {
+                    mSrf.setRefreshing(false);
+                }
+                mAdapter.setIsLoading(false);
+                mAdapter.notifyDataSetChanged();
+                if (response.code() != 200) {
+                    ToastTool.show(response.message());
+                    LogTool.e(TAG, "请求出错：" + response.message());
+                    return;
+                }
+                LogTool.i(TAG, response.body().toString());
+                JSONObject result = response.body();
+                try {
+                    if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
+                        ToastTool.show(result.getString(ConstantTool.MSG));
+                        return;
+                    }
+                    size = result.getInt(ConstantTool.SIZE);
+                    List<TravelBean> travelBeans = FormatTool.gson.fromJson(String.valueOf(result.getJSONArray(ConstantTool.DATA)), new TypeToken<List<TravelBean>>() {
+                    }.getType());
+                    travelBeans.addAll(travels);
+                    mAdapter.setTravelBeans(travels);
+                    mAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+                if (mSrf.isRefreshing()) {
+                    mSrf.setRefreshing(false);
+                }
+                mAdapter.setIsLoading(false);
+                mAdapter.notifyDataSetChanged();
+                if (!call.isCanceled()) {
+                    ToastTool.show("服务器出现问题: " + t.getMessage());
+                }
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.reed.tripnote.activities;
 
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -27,13 +28,14 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.PolylineOptions;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.gson.reflect.TypeToken;
 import com.reed.tripnote.App;
 import com.reed.tripnote.R;
 import com.reed.tripnote.beans.ContentBean;
 import com.reed.tripnote.beans.TravelBean;
 import com.reed.tripnote.beans.UserBean;
-import com.reed.tripnote.data.ContentData;
 import com.reed.tripnote.tools.ConstantTool;
+import com.reed.tripnote.tools.FormatTool;
 import com.reed.tripnote.tools.LogTool;
 import com.reed.tripnote.tools.RetrofitTool;
 import com.reed.tripnote.tools.ToastTool;
@@ -42,7 +44,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -84,11 +88,12 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     private UserBean user;
     private List<ContentBean> contents = new ArrayList<>();
     private List<LatLng> lats = new ArrayList<>();
-    private Call<JSONObject> call;
+    private Call<JSONObject> contentCall;
     private boolean isLike = false;
     private boolean isCollect = false;
     private int likeNum = 0;
     private int collectNum = 0;
+    private int commentNum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,11 +103,18 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
         travel = (TravelBean) getIntent().getSerializableExtra(ConstantTool.TRAVEL);
         user = ((App) getApplication()).getUser();
         contentMap.onCreate(savedInstanceState);
+        likeNum = travel.getLiked();
+        collectNum = travel.getCollection();
+        commentNum = travel.getComment();
+        likeFAB.setLabelText(String.valueOf(likeNum));
+        collectionFAB.setLabelText(String.valueOf(collectNum));
+        commentFAB.setLabelText(String.valueOf(commentNum));
         init();
     }
 
     @Override
     protected void onResume() {
+        getData();
         super.onResume();
         contentMap.onResume();
     }
@@ -117,8 +129,8 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     @Override
     protected void onStop() {
         super.onStop();
-        if (call != null && call.isExecuted()) {
-            call.cancel();
+        if (contentCall != null && contentCall.isExecuted()) {
+            contentCall.cancel();
         }
     }
 
@@ -159,12 +171,12 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
                 break;
             case R.id.information:
                 Dialog dialog = new Dialog(ContentActivity.this);
-                dialog.setTitle("游记简介");
                 dialog.setCanceledOnTouchOutside(true);
+                dialog.setTitle("游记简介");
                 View view = LayoutInflater.from(ContentActivity.this).inflate(R.layout.dlg_travel, null, false);
                 TextView introductionTV = (TextView) view.findViewById(R.id.tv_travel_introduction);
                 String introduction;
-                if (TextUtils.isEmpty(travel.getIntroduction())){
+                if (TextUtils.isEmpty(travel.getIntroduction())) {
                     introduction = "对不起，该游记没有提供简介";
                 } else {
                     introduction = travel.getIntroduction();
@@ -301,21 +313,6 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
                 finish();
             }
         });
-        contents = ContentData.getInstance().getContents();
-        for (ContentBean content : contents) {
-            double longitude = Double.parseDouble(content.getCoordinate().split(",")[0]);
-            double latitude = Double.parseDouble(content.getCoordinate().split(",")[1]);
-            LatLng lat = new LatLng(latitude, longitude);
-            addMarkersToMap(lat, content);
-            lats.add(lat);
-        }
-        aMap.addPolyline((new PolylineOptions())
-                .addAll(lats)
-                .width(5)
-                .setDottedLine(false)
-                .geodesic(true)
-                .color(Color.BLACK)
-        );
     }
 
     /**
@@ -348,6 +345,76 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     }
 
     private void getData() {
+        contentCall = RetrofitTool.getService().getContent(travel.getTravelId());
+        contentCall.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                if (successReq(response)) {
+                    JSONObject result = response.body();
+                    try {
+                        contents = FormatTool.gson.fromJson(String.valueOf(result.getJSONArray(ConstantTool.CONTENT)), new TypeToken<ContentBean>() {
+                        }.getType());
+                        for (ContentBean content : contents) {
+                            double longitude = Double.parseDouble(content.getCoordinate().split(",")[0]);
+                            double latitude = Double.parseDouble(content.getCoordinate().split(",")[1]);
+                            LatLng lat = new LatLng(latitude, longitude);
+                            addMarkersToMap(lat, content);
+                            lats.add(lat);
+                        }
+                        aMap.addPolyline((new PolylineOptions())
+                                .addAll(lats)
+                                .width(5)
+                                .setDottedLine(false)
+                                .geodesic(true)
+                                .color(Color.BLACK)
+                        );
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+
+            }
+        });
+        Map<String, Object> map = new HashMap<>();
+        if (user != null) {
+            map.put("userId", user.getUserId());
+        }
+        Call<JSONObject> countCall = RetrofitTool.getService().getCount(travel.getTravelId(), map);
+        countCall.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                if (successReq(response)) {
+                    JSONObject result = response.body();
+                    try {
+                        JSONObject data = result.getJSONObject(ConstantTool.DATA);
+                        commentNum = data.getInt("comments");
+                        likeNum = data.getInt("likes");
+                        collectNum = data.getInt("collections");
+                        if (result.has("addition")) {
+                            JSONObject addition = result.getJSONObject(ConstantTool.ADDITION);
+                            isCollect = addition.getBoolean("isCollect");
+                            isLike = addition.getBoolean("isLike");
+                        }
+                        collectionFAB.setImageResource(isCollect ? R.drawable.ic_favorite_24dp : R.drawable.ic_favorite_outline_24dp);
+                        likeFAB.setImageResource(isLike ? R.drawable.ic_liked_24dp : R.drawable.ic_like_24dp);
+                        collectionFAB.setLabelText(String.valueOf(collectNum));
+                        likeFAB.setLabelText(String.valueOf(likeNum));
+                        commentFAB.setLabelText(String.valueOf(commentNum));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+
+            }
+        });
 
     }
 

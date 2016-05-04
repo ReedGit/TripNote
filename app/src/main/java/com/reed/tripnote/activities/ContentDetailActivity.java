@@ -51,7 +51,7 @@ public class ContentDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         travelName = getIntent().getStringExtra(ConstantTool.TRAVEL_NAME);
         content = (ContentBean) getIntent().getSerializableExtra(ConstantTool.CONTENT);
-        mAdapter = new ContentImageAdapter(this);
+        mAdapter = new ContentImageAdapter(this, content.getImageurl());
         initView();
     }
 
@@ -87,4 +87,5 @@ public class ContentDetailActivity extends AppCompatActivity {
             }
         });
     }
+
 }

@@ -76,28 +76,11 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
         userId = getIntent().getLongExtra(ConstantTool.USER_ID, 0);
         ButterKnife.bind(this);
         initView();
-        travelTV.setText("0");
-        likeTV.setText("0");
-        collectionTV.setText("0");
-        if (user != null && user.getUserId() == userId) {
-            author = user;
-        } else {
-            getUserInfo(userId);
-        }
+        getUserInfo(userId);
     }
 
     @Override
     protected void onResume() {
-        if (author != null) {
-            if (!TextUtils.isEmpty(author.getHeadImage())) {
-                Glide.with(this).load(ConstantTool.imageUrl + author.getHeadImage())
-                        .placeholder(R.mipmap.default_head)
-                        .into(headCIV);
-            }
-            informationCTL.setTitle(TextUtils.isEmpty(author.getNickName()) ? "" : author.getNickName());
-            informationCTL.setCollapsedTitleTextColor(Color.WHITE);
-            introductionTV.setText(TextUtils.isEmpty(author.getIntroduction()) ? "你还没有给自己写点介绍呢" : author.getIntroduction());
-        }
         super.onResume();
     }
 
@@ -180,6 +163,7 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
                         return;
                     }
                     author = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.DATA)), UserBean.class);
+                    setInfo();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -194,6 +178,20 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
+    }
+
+    private void setInfo() {
+        if (!TextUtils.isEmpty(author.getHeadImage())) {
+            Glide.with(this).load(ConstantTool.imageUrl + author.getHeadImage())
+                    .placeholder(R.mipmap.default_head)
+                    .into(headCIV);
+        }
+        informationCTL.setTitle(TextUtils.isEmpty(author.getNickName()) ? "" : author.getNickName());
+        informationCTL.setCollapsedTitleTextColor(Color.WHITE);
+        introductionTV.setText(TextUtils.isEmpty(author.getIntroduction()) ? "你还没有给自己写点介绍呢" : author.getIntroduction());
+        travelTV.setText(String.valueOf(author.getTravels()));
+        likeTV.setText(String.valueOf(author.getLiked()));
+        collectionTV.setText(String.valueOf(author.getCollection()));
     }
 
 }

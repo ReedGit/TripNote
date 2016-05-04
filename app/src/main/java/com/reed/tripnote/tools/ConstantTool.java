@@ -10,10 +10,6 @@ public class ConstantTool {
     public static final String baseUrl = serverUrl + "trip/";
     public static final String imageUrl = serverUrl + "trip";
 
-    public static final String COORDINATE = "coordinate";
-
-    public static final String LOCATION = "location";
-
     public static final String USER = "user";
     public static final String TRAVEL = "travel";
     public static final String CONTENT = "content";
@@ -26,6 +22,8 @@ public class ConstantTool {
     public static final String SEX = "sex";
     public static final String INTRODUCTION = "introduction";
     public static final String TOKEN = "token";
+    public static final String LIKED = "LIKED";
+    public static final String TRAVELS = "travels";
     public static final String NEW_PASSWORD = "newpassword";
 
     public static final String CODE = "status";
@@ -45,4 +43,10 @@ public class ConstantTool {
 
     public static final String TRAVEL_ID = "travelId";
     public static final String REMARK = "remark";
+
+    public static final String DAY = "day";
+    public static final String ARTICLE = "article";
+    public static final String LOCATION = "location";
+    public static final String COORDINATE = "coordinate";
+    public static final String CREATE_TIME = "createTime";
 }

@@ -49,7 +49,6 @@ public class TravelViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindData(Context context, final TravelBean travelBean) {
-        LogTool.i("=======", travelBean.toString());
         titleTV.setText(travelBean.getTitle());
 
         String date = FormatTool.transformToDateString(travelBean.getStartTime());

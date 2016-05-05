@@ -150,10 +150,12 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     public boolean onCreateOptionsMenu(Menu menu) {
         if (travel != null) {
             getMenuInflater().inflate(R.menu.travel_menu, menu);
-            if (user != null && user.getUserId() == travel.getUserId()) {
+            if (user != null && user.getUserId() == travel.getUserId() && travel.getEndTime() == null) {
                 menu.getItem(1).setVisible(true);
+                menu.getItem(2).setVisible(true);
             } else {
                 menu.getItem(1).setVisible(false);
+                menu.getItem(2).setVisible(false);
             }
         }
         return true;
@@ -167,6 +169,8 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
                 intent.putExtra(ConstantTool.TRAVEL_NAME, travel.getTitle());
                 intent.putExtra(ConstantTool.COORDINATE, coordinate);
                 intent.putExtra(ConstantTool.LOCATION, address);
+                intent.putExtra(ConstantTool.CREATE_TIME, FormatTool.transformToString(travel.getStartTime()));
+                intent.putExtra(ConstantTool.TRAVEL_ID, travel.getTravelId());
                 startActivity(intent);
                 break;
             case R.id.information:
@@ -184,6 +188,9 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
                 introductionTV.setText(introduction);
                 dialog.setContentView(view);
                 dialog.show();
+                break;
+            case R.id.finish:
+                finishTravel();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -351,12 +358,13 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
             public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                 if (successReq(response)) {
                     JSONObject result = response.body();
+                    LogTool.i(TAG, "结果：=====>>>>" + result.toString());
                     try {
-                        contents = FormatTool.gson.fromJson(String.valueOf(result.getJSONArray(ConstantTool.CONTENT)), new TypeToken<ContentBean>() {
+                        contents = FormatTool.gson.fromJson(String.valueOf(result.getJSONArray(ConstantTool.CONTENT)), new TypeToken<List<ContentBean>>() {
                         }.getType());
                         for (ContentBean content : contents) {
-                            double longitude = Double.parseDouble(content.getCoordinate().split(",")[0]);
-                            double latitude = Double.parseDouble(content.getCoordinate().split(",")[1]);
+                            double latitude = Double.parseDouble(content.getCoordinate().split(",")[0].trim());
+                            double longitude = Double.parseDouble(content.getCoordinate().split(",")[1].trim());
                             LatLng lat = new LatLng(latitude, longitude);
                             addMarkersToMap(lat, content);
                             lats.add(lat);
@@ -523,6 +531,24 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
             e.printStackTrace();
         }
         return false;
+    }
+
+    private void finishTravel() {
+        Call<JSONObject> call = RetrofitTool.getService().finishTravel(travel.getTravelId());
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                if (successReq(response)) {
+                    ToastTool.show("行程已结束");
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+
+            }
+        });
     }
 
 }

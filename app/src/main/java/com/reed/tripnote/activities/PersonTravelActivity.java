@@ -103,7 +103,11 @@ public class PersonTravelActivity extends AppCompatActivity {
         mSrf.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mSrf.setRefreshing(false);
+                travels.clear();
+                mAdapter.setIsLoading(false);
+                mAdapter.setIsAll(false);
+                page = 1;
+                getData(1);
             }
         });
         mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -146,13 +150,13 @@ public class PersonTravelActivity extends AppCompatActivity {
     private void getData(int page){
         switch (from) {
             case ConstantTool.COLLECTION:
-                call = RetrofitTool.getService().getUserTravel(userId, page);
+                call = RetrofitTool.getService().userCollection(userId, page);
                 break;
             case ConstantTool.LIKE:
                 call = RetrofitTool.getService().userLike(userId, page);
                 break;
             case ConstantTool.TRAVEL:
-                call = RetrofitTool.getService().userCollection(userId, page);
+                call = RetrofitTool.getService().getUserTravel(userId, page);
                 break;
         }
         call.enqueue(new Callback<JSONObject>() {
@@ -178,7 +182,7 @@ public class PersonTravelActivity extends AppCompatActivity {
                     size = result.getInt(ConstantTool.SIZE);
                     List<TravelBean> travelBeans = FormatTool.gson.fromJson(String.valueOf(result.getJSONArray(ConstantTool.DATA)), new TypeToken<List<TravelBean>>() {
                     }.getType());
-                    travelBeans.addAll(travels);
+                    travels.addAll(travelBeans);
                     mAdapter.setTravelBeans(travels);
                     mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {

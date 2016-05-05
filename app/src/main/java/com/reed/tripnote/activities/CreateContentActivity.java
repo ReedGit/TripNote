@@ -76,6 +76,7 @@ public class CreateContentActivity extends AppCompatActivity {
         location = getIntent().getStringExtra(ConstantTool.LOCATION);
         travelId = getIntent().getLongExtra(ConstantTool.TRAVEL_ID, -1);
         createTime = FormatTool.transformToDate(getIntent().getStringExtra(ConstantTool.CREATE_TIME));
+        LogTool.i(TAG, "创建时间=====>>>>" + createTime + ", object====>" + (createTime == null));
         initView();
         initListener();
     }
@@ -163,8 +164,7 @@ public class CreateContentActivity extends AppCompatActivity {
         map.put(ConstantTool.COORDINATE, coordinate);
         map.put(ConstantTool.LOCATION, location);
         map.put(ConstantTool.DAY, CalculateTool.calculateDay(createTime, new Date()));
-        List<MultipartBody.Part> body = filesToMultipartBodyParts();
-        Call<JSONObject> call = RetrofitTool.getService().createContent(map, body);
+        Call<JSONObject> call = RetrofitTool.getService().createContent(map, filesToMultipartBodyParts());
         mDlg = ProgressDialog.show(CreateContentActivity.this, null, "上传中......", true);
         call.enqueue(new Callback<JSONObject>() {
             @Override
@@ -201,13 +201,12 @@ public class CreateContentActivity extends AppCompatActivity {
         });
     }
 
-    public List<MultipartBody.Part> filesToMultipartBodyParts() {
-        List<MultipartBody.Part> parts = new ArrayList<>();
+    public Map<String, RequestBody> filesToMultipartBodyParts() {
+        Map<String, RequestBody> imageMap = new HashMap<>();
         for (String path : paths) {
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), new File(path));
-            MultipartBody.Part part = MultipartBody.Part.createFormData("image", new File(path).getName(), requestBody);
-            parts.add(part);
+            imageMap.put("image\";filename=\""+ new File(path).getName(), requestBody);
         }
-        return parts;
+        return imageMap;
     }
 }

@@ -76,6 +76,9 @@ public interface NoteService {
     @POST("travel/create")
     Call<JSONObject> createTravel(@PartMap Map<String, Object> map, @PartMap Map<String, RequestBody> coverMap);
 
+    @GET("travel/finish/{travelId}")
+    Call<JSONObject> finishTravel(@Path("travelId") long travelId);
+
     @GET("travel/content/detail")
     Call<JSONObject> getContent(@Query("travelId") long travelId);
 
@@ -84,7 +87,7 @@ public interface NoteService {
 
     @Multipart
     @POST("travel/content/create")
-    Call<JSONObject> createContent(@PartMap Map<String, Object> map, @Part() List<MultipartBody.Part> imageMap);
+    Call<JSONObject> createContent(@PartMap Map<String, Object> map, @PartMap Map<String, RequestBody> imageMap);
 
     //the api for adding comment
     @FormUrlEncoded

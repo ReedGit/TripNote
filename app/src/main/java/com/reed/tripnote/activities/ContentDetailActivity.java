@@ -63,6 +63,12 @@ public class ContentDetailActivity extends AppCompatActivity {
         }
         detailToolbar.setNavigationIcon(R.mipmap.toolbar_back);
         setSupportActionBar(detailToolbar);
+        detailToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         contentTV.setText(content.getArticle());
         locationTV.setText(content.getLocation());
         String time = FormatTool.transformToDateString(content.getTime()) + " / 第" + content.getDay() + "天";
@@ -75,7 +81,7 @@ public class ContentDetailActivity extends AppCompatActivity {
                 View dlgView = LayoutInflater.from(ContentDetailActivity.this).inflate(R.layout.image_browser, null, false);
                 ImageView imageView = (ImageView) dlgView.findViewById(R.id.iv_message_browser);
                 LinearLayout linearLayout = (LinearLayout) dlgView.findViewById(R.id.ll_message_browser);
-                Glide.with(ContentDetailActivity.this).load(mAdapter.getItem(position)).into(imageView);
+                Glide.with(ContentDetailActivity.this).load(ConstantTool.imageUrl + mAdapter.getItem(position)).into(imageView);
                 dialog.setContentView(dlgView);
                 dialog.show();
                 linearLayout.setOnClickListener(new View.OnClickListener() {

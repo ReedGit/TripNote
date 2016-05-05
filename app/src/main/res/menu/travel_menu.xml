@@ -14,4 +14,10 @@
         android:title="@string/add"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/finish"
+        android:icon="@drawable/ic_done_24dp"
+        android:title="@string/finish_travel"
+        app:showAsAction="never"/>
+
 </menu>

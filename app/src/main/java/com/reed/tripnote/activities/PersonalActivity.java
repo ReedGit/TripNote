@@ -176,7 +176,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                         map.put(ConstantTool.INTRODUCTION, introduction);
                     }
                     if (!TextUtils.isEmpty(nickName)) {
-                        map.put(ConstantTool.NICKNAME, nickName);
+                        map.put("nickname", nickName);
                     }
                     if (maleRB.isChecked()) {
                         sex = UserBean.MALE;

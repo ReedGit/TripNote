@@ -21,6 +21,9 @@ import com.reed.tripnote.tools.ToastTool;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+import java.util.Random;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -110,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                     rePasswordEt.setError("两次输入密码不一致");
                     return;
                 }
-                call = RetrofitTool.getService().register(email, MD5Tool.compute(password));
+                call = RetrofitTool.getService().register(email, MD5Tool.compute(password), "user" + new Random().nextInt(9999));
                 mDlg = ProgressDialog.show(RegisterActivity.this, null, "加载中", true);
                 call.enqueue(new Callback<JSONObject>() {
                     @Override

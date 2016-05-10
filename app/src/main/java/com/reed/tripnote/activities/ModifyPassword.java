@@ -76,14 +76,14 @@ public class ModifyPassword extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.personal_menu, menu);
+        getMenuInflater().inflate(R.menu.publish, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.modify_information:
+            case R.id.menu_publish:
                 String oldPassword = oldET.getText().toString().trim();
                 final String newPassword = newET.getText().toString().trim();
                 String rePassword = confirmET.getText().toString().trim();

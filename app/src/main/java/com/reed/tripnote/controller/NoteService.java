@@ -35,7 +35,7 @@ public interface NoteService {
     //the api for user's register
     @FormUrlEncoded
     @POST("user/register")
-    Call<JSONObject> register(@Field("email") String email, @Field("password") String password);
+    Call<JSONObject> register(@Field("email") String email, @Field("password") String password, @Field("nickname") String nickname);
 
     //the api for user to modify personal's information
     @FormUrlEncoded

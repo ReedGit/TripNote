@@ -294,7 +294,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
     //点击标记事件
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (aMap != null) {
+        if (aMap != null && marker.getObject() != null) {
             Intent intent = new Intent(ContentActivity.this, ContentDetailActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable(ConstantTool.CONTENT, (ContentBean) marker.getObject());
@@ -362,6 +362,7 @@ public class ContentActivity extends AppCompatActivity implements LocationSource
                     try {
                         contents = FormatTool.gson.fromJson(String.valueOf(result.getJSONArray(ConstantTool.CONTENT)), new TypeToken<List<ContentBean>>() {
                         }.getType());
+                        lats.clear();
                         for (ContentBean content : contents) {
                             double latitude = Double.parseDouble(content.getCoordinate().split(",")[0].trim());
                             double longitude = Double.parseDouble(content.getCoordinate().split(",")[1].trim());

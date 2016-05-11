@@ -64,7 +64,7 @@ public interface NoteService {
     Call<JSONObject> getUserTravel(@Path("userId") long userId, @Query("page") int page);
 
     //the api for searching the travel by the key
-    @GET("travel/search")
+    @GET("travel/title")
     Call<JSONObject> searchTravel(@Query("q") String q, @Query("page") int page);
 
     //the api for delete user's travel

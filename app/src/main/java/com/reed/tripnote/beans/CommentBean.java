@@ -10,7 +10,7 @@ public class CommentBean {
     private String remark;
     private long travelId;
     private String nickName;
-    private String userImage;
+    private String headImage;
     private String title;
 
     public long getCommentId() {
@@ -53,12 +53,12 @@ public class CommentBean {
         this.travelId = travelId;
     }
 
-    public String getUserImage() {
-        return userImage;
+    public String getHeadImage() {
+        return headImage;
     }
 
-    public void setUserImage(String userImage) {
-        this.userImage = userImage;
+    public void setHeadImage(String headImage) {
+        this.headImage = headImage;
     }
 
     public String getTitle() {
@@ -86,7 +86,7 @@ public class CommentBean {
                 ", remark='" + remark + '\'' +
                 ", travelId=" + travelId +
                 ", nickName='" + nickName + '\'' +
-                ", userImage='" + userImage + '\'' +
+                ", headImage='" + headImage + '\'' +
                 ", title='" + title + '\'' +
                 '}';
     }

@@ -61,7 +61,7 @@ public class SearchResultActivity extends AppCompatActivity {
         initListener();
         if (Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             query = getIntent().getStringExtra(SearchManager.QUERY);
-            setTitle(getString(R.string.search) + "：" + query);
+            setTitle("搜索：" + query);
         }
         getData(1);
     }

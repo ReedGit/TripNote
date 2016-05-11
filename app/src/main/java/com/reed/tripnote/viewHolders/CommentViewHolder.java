@@ -40,8 +40,8 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
         nameTV.setText(comment.getNickName());
         dateTV.setText(FormatTool.simpleTransformToString(comment.getTime()));
         remarkTV.setText(comment.getRemark());
-        if (!TextUtils.isEmpty(comment.getUserImage())) {
-            Glide.with(context).load(ConstantTool.imageUrl + comment.getUserImage()).placeholder(R.mipmap.default_head).into(commentCIV);
+        if (!TextUtils.isEmpty(comment.getHeadImage())) {
+            Glide.with(context).load(ConstantTool.imageUrl + comment.getHeadImage()).placeholder(R.mipmap.default_head).into(commentCIV);
         } else {
             commentCIV.setImageResource(R.mipmap.default_head);
         }

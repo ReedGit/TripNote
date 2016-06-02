@@ -1,49 +1,49 @@
 package com.reed.tripnote.activities;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
+        import android.app.Activity;
+        import android.app.ProgressDialog;
+        import android.content.DialogInterface;
+        import android.content.Intent;
+        import android.net.Uri;
+        import android.provider.MediaStore;
+        import android.support.v7.app.AlertDialog;
+        import android.support.v7.app.AppCompatActivity;
+        import android.os.Bundle;
+        import android.support.v7.widget.Toolbar;
+        import android.text.TextUtils;
+        import android.view.Menu;
+        import android.view.MenuItem;
+        import android.view.View;
+        import android.widget.EditText;
+        import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.reed.tripnote.App;
-import com.reed.tripnote.R;
-import com.reed.tripnote.beans.TravelBean;
-import com.reed.tripnote.beans.UserBean;
-import com.reed.tripnote.tools.ConstantTool;
-import com.reed.tripnote.tools.FormatTool;
-import com.reed.tripnote.tools.LogTool;
-import com.reed.tripnote.tools.PathUtil;
-import com.reed.tripnote.tools.ProviderPathUtil;
-import com.reed.tripnote.tools.RetrofitTool;
-import com.reed.tripnote.tools.ToastTool;
+        import com.bumptech.glide.Glide;
+        import com.reed.tripnote.App;
+        import com.reed.tripnote.R;
+        import com.reed.tripnote.beans.TravelBean;
+        import com.reed.tripnote.beans.UserBean;
+        import com.reed.tripnote.tools.ConstantTool;
+        import com.reed.tripnote.tools.FormatTool;
+        import com.reed.tripnote.tools.LogTool;
+        import com.reed.tripnote.tools.PathUtil;
+        import com.reed.tripnote.tools.ProviderPathUtil;
+        import com.reed.tripnote.tools.RetrofitTool;
+        import com.reed.tripnote.tools.ToastTool;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+        import org.json.JSONException;
+        import org.json.JSONObject;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+        import java.io.File;
+        import java.util.HashMap;
+        import java.util.Map;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+        import butterknife.Bind;
+        import butterknife.ButterKnife;
+        import okhttp3.MediaType;
+        import okhttp3.RequestBody;
+        import retrofit2.Call;
+        import retrofit2.Callback;
+        import retrofit2.Response;
 
 public class CreateTravelActivity extends AppCompatActivity {
 

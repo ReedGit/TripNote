@@ -1,34 +1,34 @@
 package com.reed.tripnote.activities;
 
-import android.app.ProgressDialog;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
+        import android.app.ProgressDialog;
+        import android.graphics.Color;
+        import android.os.Bundle;
+        import android.support.design.widget.TextInputEditText;
+        import android.support.v7.app.AppCompatActivity;
+        import android.support.v7.widget.Toolbar;
+        import android.text.TextUtils;
+        import android.view.View;
+        import android.widget.Button;
 
-import com.reed.tripnote.R;
-import com.reed.tripnote.tools.ConstantTool;
-import com.reed.tripnote.tools.FormatTool;
-import com.reed.tripnote.tools.LogTool;
-import com.reed.tripnote.tools.MD5Tool;
-import com.reed.tripnote.tools.RetrofitTool;
-import com.reed.tripnote.tools.ToastTool;
+        import com.reed.tripnote.R;
+        import com.reed.tripnote.tools.ConstantTool;
+        import com.reed.tripnote.tools.FormatTool;
+        import com.reed.tripnote.tools.LogTool;
+        import com.reed.tripnote.tools.MD5Tool;
+        import com.reed.tripnote.tools.RetrofitTool;
+        import com.reed.tripnote.tools.ToastTool;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+        import org.json.JSONException;
+        import org.json.JSONObject;
 
-import java.util.Date;
-import java.util.Random;
+        import java.util.Date;
+        import java.util.Random;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+        import butterknife.Bind;
+        import butterknife.ButterKnife;
+        import retrofit2.Call;
+        import retrofit2.Callback;
+        import retrofit2.Response;
 
 /**
  * 注册页面

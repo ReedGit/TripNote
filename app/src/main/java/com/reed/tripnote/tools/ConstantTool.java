@@ -6,7 +6,7 @@ package com.reed.tripnote.tools;
  */
 public class ConstantTool {
 
-    public static final String serverUrl = "http://120.26.207.77:8080/";
+    public static final String serverUrl = "http://192.157.231.230:8080/";
     public static final String baseUrl = serverUrl + "trip/";
     public static final String imageUrl = serverUrl + "trip";
 

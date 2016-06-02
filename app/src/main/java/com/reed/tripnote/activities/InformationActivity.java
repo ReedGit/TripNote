@@ -157,12 +157,14 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
                     return;
                 }
                 JSONObject result = response.body();
+                LogTool.i(TAG, "result======>>>>>" + result.toString());
                 try {
                     if (result.getInt(ConstantTool.CODE) != ConstantTool.RESULT_OK) {
                         ToastTool.show(result.getString(ConstantTool.MSG));
                         return;
                     }
                     author = FormatTool.gson.fromJson(String.valueOf(result.getJSONObject(ConstantTool.DATA)), UserBean.class);
+                    LogTool.i(TAG, "author======>>>>>" + author.toString());
                     setInfo();
                 } catch (JSONException e) {
                     e.printStackTrace();
